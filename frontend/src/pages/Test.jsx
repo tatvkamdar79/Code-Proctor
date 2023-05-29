@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import CodeExecutionPanel from "../components/CodeExecutionPanel";
 import screenfull from "screenfull";
+import axios from "axios";
 
 const Test = () => {
   const { testName } = useParams();
@@ -105,6 +106,20 @@ const Test = () => {
     return () => {
       screenfull.off("change", handleExit);
     };
+  }, []);
+
+  const fetchIpAddress = async () => {
+    try {
+      const response = await axios.get("https://api.ipify.org/?format=json");
+      const ipAddress = response.data.ip;
+      console.log("IP-ADDRESS: ", ipAddress);
+    } catch (error) {
+      console.error("Error fetching IP address:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchIpAddress();
   }, []);
 
   return (
