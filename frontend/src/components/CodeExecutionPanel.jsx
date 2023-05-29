@@ -7,7 +7,7 @@ import { baseURL, PHP_SERVER_URL } from "../config/config";
 import Peer from "peerjs";
 import { diff_match_patch } from "diff-match-patch";
 import { Resizable } from "re-resizable";
-import { FaGripVertical } from "react-icons/fa";
+import { GrDrag } from "react-icons/gr";
 
 const CodeExecutionPanel = () => {
   const [id, setId] = useState("");
@@ -83,7 +83,6 @@ const CodeExecutionPanel = () => {
     statement:
       "Given an unsorted array of n elements, find if the element k is present in the array or not.",
     sampleTestCases: [
-      { input: "1\n2\n3", output: "6" },
       { input: "1\n2\n3", output: "6" },
       { input: "1\n2\n3", output: "6" },
     ],
@@ -439,9 +438,9 @@ const CodeExecutionPanel = () => {
         }}
         className
       >
-        <div className="flex h-screen overflow-y-scroll overflow-x-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+        <div className="flex overflow-y-scroll overflow-x-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
           <div
-            className="w-full flex flex-col px-3 bg-[#f3f7f7] py-5 gap-y-7"
+            className="h-screen w-full flex flex-col px-3 bg-[#f3f7f7] py-5 gap-y-7"
             id="question"
           >
             <section>
@@ -491,8 +490,11 @@ const CodeExecutionPanel = () => {
               ))}
             </section>
           </div>
-          <div className="flex h-screen w-3 place-items-center text-center justify-center bg-gray-200 hover:bg-gray-400">
-            ||
+          <div className="flex flex-col h-screen w-3 place-items-center text-center justify-center bg-gray-200 hover:bg-gray-300">
+            <GrDrag />
+            <GrDrag />
+            <GrDrag />
+            <GrDrag />
           </div>
         </div>
       </Resizable>
@@ -504,6 +506,8 @@ const CodeExecutionPanel = () => {
         body={body}
         setBody={handleUpdateBody}
         fontSize={fontSize}
+        output={output}
+        setOutput={setOutput}
       >
         <div className="flex justify-start gap-x-10 py-2 px-5">
           <div className="flex justify-center place-items-center gap-x-2">

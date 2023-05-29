@@ -5,41 +5,9 @@ import CodeExecutionPanel from "../components/CodeExecutionPanel";
 
 const Test = () => {
   const { testName } = useParams();
-  const [selected, setSelected] = useState(0);
+
   const totalTime = 1800;
-  const [remainingTime, setRemainingTime] = useState(totalTime);
-  const [showTime, setShowTime] = useState(true);
-  const [timeBasedColor, setTimeBasedColor] = useState("");
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setRemainingTime((prevTime) => prevTime - 1);
-    }, 1000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  useEffect(() => {
-    const percentage = (remainingTime / totalTime) * 100;
-
-    // Calculate the RGB values for the gradient
-    const red = 255 - Math.round((255 * percentage) / 100);
-    const green = Math.round((255 * percentage) / 100);
-
-    const color = `rgb(${red}, ${green}, 0)`;
-
-    console.log(color);
-
-    setTimeBasedColor(color);
-  }, [remainingTime]);
-
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
+  const [selected, setSelected] = useState(0);
 
   // The following details will be fetched from Api calls adn then stored in localStorgae until the durationof the exam
   const questions = [
@@ -84,47 +52,8 @@ const Test = () => {
 
   return (
     <div className="flex h-screen">
-      {/* TEST NAV BAR */}
-      <section className="border w-20 bg-[#e7eeef]">
-        <ul className="flex flex-col justify-center place-items-center font-semibold font-serif text-black">
-          <li
-            className={`w-full h-14 flex justify-center place-items-center text-center`}
-            style={{ backgroundColor: timeBasedColor }}
-            onClick={() => setShowTime((showTime) => !showTime)}
-          >
-            {showTime ? formatTime(remainingTime) : "Show Timer"}
-          </li>
-          <li
-            className={`w-full h-14 flex place-items-center justify-center cursor-pointer ${
-              selected === "ALL" &&
-              "bg-[#f3f7f7] border-l-[4px] border-[#0a7bbf]"
-            }`}
-            onClick={() => setSelected("ALL")}
-          >
-            ALL
-          </li>
-          <li
-            className={`w-full h-14 flex place-items-center justify-center cursor-pointer ${
-              selected === "INSTRUCTIONS" &&
-              "bg-[#f3f7f7] border-l-[4px] border-[#0a7bbf]"
-            }`}
-            onClick={() => setSelected("INSTRUCTIONS")}
-          >
-            <AiOutlineInfoCircle size={25} />
-          </li>
-          {questions.map((question, index) => (
-            <li
-              className={`w-full h-14 flex place-items-center justify-center cursor-pointer ${
-                selected === index &&
-                "bg-[#f3f7f7] border-l-[4px] border-[#0a7bbf]"
-              }`}
-              onClick={() => setSelected(index)}
-            >
-              {index + 1}
-            </li>
-          ))}
-        </ul>
-      </section>
+      {/* TEST NAVBAR */}
+      {TestNavbar({ totalTime, selected, setSelected, questions })}
 
       {selected === "ALL" && ViewAllQuestionsList(questions, setSelected)}
 
@@ -134,6 +63,83 @@ const Test = () => {
         <CodeExecutionPanel />
       )}
     </div>
+  );
+};
+
+const TestNavbar = ({ totalTime, selected, setSelected, questions }) => {
+  const [showTime, setShowTime] = useState(true);
+  const [remainingTime, setRemainingTime] = useState(totalTime);
+  const [timeBasedColor, setTimeBasedColor] = useState("");
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRemainingTime((prevTime) => prevTime - 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    const percentage = (remainingTime / totalTime) * 100;
+
+    // Calculate the RGB values for the gradient
+    const red = 255 - Math.round((255 * percentage) / 100);
+    const green = Math.round((255 * percentage) / 100);
+
+    const color = `rgb(${red}, ${green}, ${(red + green) * 0.4})`;
+
+    console.log(color);
+
+    setTimeBasedColor(color);
+  }, [remainingTime]);
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+  return (
+    <section className="border w-20 bg-[#e7eeef]">
+      <ul className="flex flex-col justify-center place-items-center font-semibold font-serif text-black">
+        <li
+          className={`w-full h-14 flex justify-center place-items-center text-center text-white`}
+          style={{ backgroundColor: timeBasedColor }}
+          onClick={() => setShowTime((showTime) => !showTime)}
+        >
+          {showTime ? formatTime(remainingTime) : "Show Timer"}
+        </li>
+        <li
+          className={`w-full h-14 flex place-items-center justify-center cursor-pointer ${
+            selected === "ALL" && "bg-[#f3f7f7] border-l-[4px] border-[#0a7bbf]"
+          }`}
+          onClick={() => setSelected("ALL")}
+        >
+          ALL
+        </li>
+        <li
+          className={`w-full h-14 flex place-items-center justify-center cursor-pointer ${
+            selected === "INSTRUCTIONS" &&
+            "bg-[#f3f7f7] border-l-[4px] border-[#0a7bbf]"
+          }`}
+          onClick={() => setSelected("INSTRUCTIONS")}
+        >
+          <AiOutlineInfoCircle size={25} />
+        </li>
+        {questions.map((question, index) => (
+          <li
+            className={`w-full h-14 flex place-items-center justify-center cursor-pointer ${
+              selected === index &&
+              "bg-[#f3f7f7] border-l-[4px] border-[#0a7bbf]"
+            }`}
+            onClick={() => setSelected(index)}
+          >
+            {index + 1}
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 };
 
@@ -176,10 +182,10 @@ const TestInstructions = (allInstructions) => {
             className="flex flex-col justify-evenly gap-y-4 border border-gray-300 p-6 bg-slate-100 shadow-lg shadow-gray-300"
             style={{ minHeight: "224px" }}
           >
-            <p className="w-11/12 mx-auto text-5xl font-semibold">
+            <p className="w-full mx-auto text-5xl font-semibold">
               {instructionType}
             </p>
-            <ul className="flex flex-col gap-y-2 font-semibold text-gray-700">
+            <ul className="w-[95%] mx-auto flex flex-col gap-y-2 font-semibold text-sky-900">
               {instructions.map((instruction, index) => (
                 <li className="flex gap-x-1">
                   <span>{index + 1}.</span>
