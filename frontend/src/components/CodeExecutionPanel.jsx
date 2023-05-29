@@ -106,7 +106,7 @@ const CodeExecutionPanel = ({ question }) => {
         const { stdout, stderr, build_stderr } = res.data;
         let output = "";
         if (stdout) output += stdout;
-        if (question.outputs[index] == output) {
+        if (question.outputs[index] === output) {
           score += 1;
         }
         console.log(output, question.outputs[index]);
@@ -115,8 +115,8 @@ const CodeExecutionPanel = ({ question }) => {
       setSubmissionStatusForTCs([]);
     };
     let isCompleted =
-      submissionStatusForTCs.filter((status) => status != compeletedStatus)
-        .length == 0;
+      submissionStatusForTCs.filter((status) => status !== compeletedStatus)
+        .length === 0;
     if (submissionCheckerId && isCompleted) {
       clearInterval(submissionCheckerId);
       setSubmissionCheckerId(null);
@@ -125,7 +125,7 @@ const CodeExecutionPanel = ({ question }) => {
   }, [submissionStatusForTCs]);
 
   useEffect(() => {
-    if (submissionCheckerId && submissionStatus == compeletedStatus) {
+    if (submissionCheckerId && submissionStatus === compeletedStatus) {
       clearInterval(submissionCheckerId);
       setSubmissionCheckerId(null);
 
@@ -361,11 +361,11 @@ const CodeExecutionPanel = ({ question }) => {
         let isAlone = false,
           isMobilePresent = false;
         for (const keyword of keywords) {
-          if (keyword.keyword == "one person") {
+          if (keyword.keyword === "one person") {
             isAlone = true;
           } else if (
-            keyword.keyword == "mobile phone" ||
-            keyword.keyword == "smart phone"
+            keyword.keyword === "mobile phone" ||
+            keyword.keyword === "smart phone"
           ) {
             isMobilePresent = true;
             break;
@@ -513,7 +513,7 @@ const CodeExecutionPanel = ({ question }) => {
             >
               {languages.map((lang, index) => {
                 return (
-                  <option key={index} value={lang} selected={lang == language}>
+                  <option key={index} value={lang} selected={lang === language}>
                     {lang}
                   </option>
                 );

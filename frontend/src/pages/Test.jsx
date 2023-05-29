@@ -65,6 +65,7 @@ const Test = () => {
     sampleTestCases: [
       { input: "1\n2\n3", output: "6" },
       { input: "1\n2\n3", output: "6" },
+      { input: "1\n2\n3", output: "6" },
     ],
     inputs: ["1", "2", "3"],
     outputs: ["1", "2", "3"],
@@ -83,15 +84,15 @@ const Test = () => {
   const handleFullscreenExit = () => {
     // Perform actions when exiting full-screen mode
     console.log("Exitted full screen");
-    if (window.confirm("DO NOT EXIT FULL SCREEN MODE")) {
-      enterFullscreen();
-    } else {
-      if (window.confirm("FINAL WARNING!! YOUR TEST WILL BE SUBMITTED")) {
-        enterFullscreen();
-      } else {
-        navigate("/");
-      }
-    }
+    // if (window.confirm("DO NOT EXIT FULL SCREEN MODE")) {
+    //   enterFullscreen();
+    // } else {
+    //   if (window.confirm("FINAL WARNING!! YOUR TEST WILL BE SUBMITTED")) {
+    //     enterFullscreen();
+    //   } else {
+    //     navigate("/");
+    //   }
+    // }
   };
 
   useEffect(() => {
@@ -124,7 +125,9 @@ const Test = () => {
 
   return (
     <div className="flex h-screen" id="test">
-      <button onClick={enterFullscreen}>Enter Full Screen</button>
+      <button onClick={enterFullscreen} id="fs">
+        Enter Full Screen
+      </button>
       {/* TEST NAVBAR */}
       {TestNavbar({ totalTime, selected, setSelected, questions })}
 
