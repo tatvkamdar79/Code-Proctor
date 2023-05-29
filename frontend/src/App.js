@@ -10,6 +10,7 @@ import Room from "./pages/room";
 import Test from "./pages/Test";
 import CreateTest from "./pages/CreateTest";
 import TestPage from "./pages/TestPage";
+import PreTest from "./pages/PreTest";
 import routes, { roomProps } from "./routes";
 
 const App = () => {
@@ -50,6 +51,7 @@ const App = () => {
         <Route path="/joinroom" element={<JoinRoom />} />
         <Route path="/room/:id" element={<Room />} />
 
+        <Route path="/preTest" element={<PreTest />} />
         <Route path="/test/:testName" element={<Test />} />
         <Route exact path="/createTest" element={<CreateTest />} />
         <Route path="/codingTest" element={<TestPage />} />
