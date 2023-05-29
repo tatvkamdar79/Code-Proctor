@@ -9,7 +9,7 @@ import { diff_match_patch } from "diff-match-patch";
 import { Resizable } from "re-resizable";
 import { GrDrag } from "react-icons/gr";
 
-const CodeExecutionPanel = () => {
+const CodeExecutionPanel = ({ question }) => {
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -76,19 +76,6 @@ const CodeExecutionPanel = () => {
   const [isMuted, setIsMuted] = useState(false);
 
   const dmp = new diff_match_patch();
-
-  // Question
-  const question = {
-    title: "Title of the question",
-    statement:
-      "Given an unsorted array of n elements, find if the element k is present in the array or not.",
-    sampleTestCases: [
-      { input: "1\n2\n3", output: "6" },
-      { input: "1\n2\n3", output: "6" },
-    ],
-    inputs: ["1", "2", "3"],
-    outputs: ["1", "2", "3"],
-  };
 
   useEffect(() => {
     const resizeCallback = () => setWindowWidth(window.innerWidth);
@@ -450,19 +437,24 @@ const CodeExecutionPanel = () => {
             </section>
 
             <section>
-              <p className="font-normal text-gray-500">{question.statement}</p>
+              <p className="font-normal text-gray-500">
+                {question.problemStatement}
+              </p>
             </section>
 
             <section>
               <p className="text-xl font-semibold text-gray-800">
                 Constraints :
               </p>
-              <ul className="flex flex-col gap-y-1 italic pl-8 text-gray-500 list-disc">
-                <li>1 &le; arr &le; 100 </li>
-                <li>1 &ge; n &le; 300</li>
-                <li>
-                  minNumberOfTurns &le; 6*10<sup>5</sup>
-                </li>
+              <ul className="flex flex-col gap-y-1 italic pl-8 text-gray-600 list-disc">
+                {question.constraints.map((constraint, index) => {
+                  {
+                    return React.createElement("li", {
+                      dangerouslySetInnerHTML: { __html: constraint },
+                      key: index,
+                    });
+                  }
+                })}
               </ul>
             </section>
 
