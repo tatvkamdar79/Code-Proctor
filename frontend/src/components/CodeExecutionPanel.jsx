@@ -308,7 +308,7 @@ const CodeExecutionPanel = ({ question }) => {
 
     // Get the captured photo as a base64-encoded data URL
     let photoDataUrl = canvas.toDataURL("image/jpeg");
-    console.log(photoDataUrl.length);
+    // console.log(photoDataUrl.length);
 
     // Do something with the photo data, e.g., display it on the page or send it to a server
 
