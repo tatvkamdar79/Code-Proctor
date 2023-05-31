@@ -19,7 +19,10 @@ export default function PreTest() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div
+      className="flex h-screen scroll-smooth"
+      style={{ scrollBehavior: "smooth" }}
+    >
       <div className="w-2/5 flex flex-col items-center justify-center h-screen gap-y-16">
         <div className="flex flex-col gap-y-2">
           <h1 className="text-center text-5xl font-bold">Welcome to</h1>

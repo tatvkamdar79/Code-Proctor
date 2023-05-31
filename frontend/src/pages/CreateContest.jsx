@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import CreateContestAddQuestions from "../components/ContestComponents/CreateContestAddQuestions";
-import CreateContestCalculationFormula from "../components/ContestComponents/CreateContestCalculationFormula";
-import CreateContestDetails from "../components/ContestComponents/CreateContestDetails";
-import CreateContestNavbar from "../components/ContestComponents/CreateContestNavbar";
+import AddQuestions from "../components/ContestComponents/AddQuestions";
+import CalculationFormula from "../components/ContestComponents/CalculationFormula";
+import Details from "../components/ContestComponents/Details";
+import ContestNavbar from "../components/ContestComponents/ContestNavbar";
 
 const CreateContest = () => {
   const DETAILS = "DETAILS";
@@ -40,13 +40,13 @@ const CreateContest = () => {
         </p>
       </section>
 
-      <CreateContestNavbar selection={selection} setSelection={setSelection} />
+      <ContestNavbar selection={selection} setSelection={setSelection} />
 
-      {selection === DETAILS && <CreateContestDetails />}
+      {selection === DETAILS && <Details />}
 
-      {selection === QUESTIONS && <CreateContestAddQuestions />}
+      {selection === QUESTIONS && <AddQuestions />}
 
-      {selection === CALCULATION_FORMULA && <CreateContestCalculationFormula />}
+      {selection === CALCULATION_FORMULA && <CalculationFormula />}
     </div>
   );
 };
