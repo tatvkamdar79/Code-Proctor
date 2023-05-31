@@ -12,6 +12,7 @@ import CreateTest from "./pages/CreateTest";
 import TestPage from "./pages/TestPage";
 import PreTest from "./pages/PreTest";
 import routes, { roomProps } from "./routes";
+import CreateGroup from "./pages/CreateGroup";
 
 const App = () => {
   const [previousRooms, setPreviousRooms] = useState([]);
@@ -53,6 +54,8 @@ const App = () => {
 
         <Route path="/preTest" element={<PreTest />} />
         <Route path="/test/:testName" element={<Test />} />
+        <Route path="/createGroup" element={<CreateGroup />} />
+
         <Route exact path="/createTest" element={<CreateTest />} />
         <Route path="/codingTest" element={<TestPage />} />
 
