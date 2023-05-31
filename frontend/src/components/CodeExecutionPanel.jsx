@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Editor from "../components/Editor";
+import Editor from "./Editor";
 import { languageToEditorMode } from "../config/mappings";
 import API from "../utils/API";
 import axios from "axios";

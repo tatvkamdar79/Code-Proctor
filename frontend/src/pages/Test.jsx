@@ -84,15 +84,15 @@ const Test = () => {
   const handleFullscreenExit = () => {
     // Perform actions when exiting full-screen mode
     console.log("Exitted full screen");
-    // if (window.confirm("DO NOT EXIT FULL SCREEN MODE")) {
-    //   enterFullscreen();
-    // } else {
-    //   if (window.confirm("FINAL WARNING!! YOUR TEST WILL BE SUBMITTED")) {
-    //     enterFullscreen();
-    //   } else {
-    //     navigate("/");
-    //   }
-    // }
+    if (window.confirm("DO NOT EXIT FULL SCREEN MODE")) {
+      enterFullscreen();
+    } else {
+      if (window.confirm("FINAL WARNING!! YOUR TEST WILL BE SUBMITTED")) {
+        enterFullscreen();
+      } else {
+        navigate("/");
+      }
+    }
   };
 
   useEffect(() => {
