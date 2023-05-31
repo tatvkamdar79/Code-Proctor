@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreateChallangeDetails = () => {
+  const navigate = useNavigate();
   const [contestName, setContestName] = useState("");
   const [eventType, setEventType] = useState("FUN");
   const [companyName, setCompanyName] = useState("");
@@ -8,11 +10,25 @@ const CreateChallangeDetails = () => {
   const [startTime, setStartTime] = useState("");
   const [duration, setDuration] = useState("");
 
+  const handleGetStarted = () => {
+    if (true) {
+      navigate("/contest/manage/a");
+    }
+  };
+
   const options = {
     year: "numeric",
     month: "long",
     day: "numeric",
   };
+
+  useEffect(() => {
+    setContestName("Contest Name");
+    setEventType("RECRUITMENT");
+    setCompanyName("DBOX");
+    setStartTime("00:00");
+    setDuration(2);
+  }, []);
 
   // const formattedDate = currentDate.toLocaleString(undefined, options);
 
@@ -50,92 +66,95 @@ const CreateChallangeDetails = () => {
   }, [contestDate]);
 
   return (
-    <section className="w-11/12 mx-auto">
-      <form onSubmit={handleSubmit} className="mt-4">
-        <div className="mb-4">
+    <section className="w-5/6 lg:w-2/3 ml-10 lg:mx-auto">
+      <form onSubmit={handleSubmit} className="p-4">
+        <div className="py-2">
           <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-semibold text-xl">Contest Name:</p>
+            <p className="w-60 font-medium text-gray-600">Contest Name</p>
             <input
               type="text"
               value={contestName}
               onChange={(e) => setContestName(e.target.value)}
               required
-              className="w-full px-4 py-2 mt-2 border rounded-md"
+              className="w-60 px-4 py-2 border rounded-md"
             />
           </label>
         </div>
-        <hr className="w-full my-2 h-0.5 mx-auto bg-gray-100 border-0 rounded dark:bg-gray-700" />
-        <div className="mb-4">
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
           <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-semibold text-xl">Event Type:</p>
+            <p className="w-60 font-medium text-gray-600">Event Type</p>
             <select
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border rounded-md"
+              className="w-60 px-4 py-2 border outline-gray-400 rounded-md"
             >
               <option value="FUN">FUN</option>
               <option value="RECRUITMENT">RECRUITMENT</option>
             </select>
           </label>
         </div>
-        <hr className="w-full my-2 h-0.5 mx-auto bg-gray-100 border-0 rounded dark:bg-gray-700" />
-        <div className="mb-4">
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
           <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-semibold text-xl">Company Name:</p>
+            <p className="w-60 font-medium text-gray-600">Company Name</p>
             <input
               type="text"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border rounded-md"
+              className="w-60 px-4 py-2 border rounded-md"
             />
           </label>
         </div>
-        <hr className="w-full my-2 h-0.5 mx-auto bg-gray-100 border-0 rounded dark:bg-gray-700" />
-        <div className="mb-4">
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
           <label className="flex place-items-center gap-x-7">
-            <p className="w-48 font-semibold text-xl">Contest Date:</p>
+            <p className="w-60 font-medium text-gray-600">Contest Date</p>
             <input
               type="date"
               name=""
               id=""
-              className="border border-black font-semibold pl-3 text-lg"
+              className="border border-gray-300 outline-gray-400 pl-3"
               onChange={(e) => setContestDate(e.target.value)}
             />
           </label>
         </div>
-        <hr className="w-full my-2 h-0.5 mx-auto bg-gray-100 border-0 rounded dark:bg-gray-700" />
-        <div className="mb-4">
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
           <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-semibold text-xl">
-              Start Time (IST, 24 hour time):
+            <p className="w-60 font-medium text-gray-600">
+              Start Time (IST, 24 hour time)
             </p>
             <input
               type="text"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border rounded-md"
+              className="w-60 px-4 py-2 border rounded-md"
             />
           </label>
         </div>
 
-        <hr className="w-full my-2 h-0.5 mx-auto bg-gray-100 border-0 rounded dark:bg-gray-700" />
-        <div className="mb-4">
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
           <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-semibold text-xl">Duration (In hours):</p>
+            <p className="w-60 font-medium text-gray-600">
+              Duration (In hours)
+            </p>
             <input
               type="text"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="w-full px-4 py-2 mt-2 border rounded-md"
+              className="w-60 px-4 py-2 border rounded-md"
             />
           </label>
         </div>
-        <hr className="w-full my-2 h-0.5 mx-auto bg-gray-100 border-0 rounded dark:bg-gray-700" />
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
         <button
           type="submit"
-          className="px-6 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+          className="px-6 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-300 font-mono my-4"
+          onClick={handleGetStarted}
         >
-          Create Test
+          Get Started
         </button>
       </form>
     </section>

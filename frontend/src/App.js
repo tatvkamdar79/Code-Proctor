@@ -12,9 +12,11 @@ import CreateTest from "./pages/CreateTest";
 import TestPage from "./pages/TestPage";
 import PreTest from "./pages/PreTest";
 import routes, { roomProps } from "./routes";
-import CreateContest from "./pages/CreateContest";
+import ManageContest from "./pages/ManageContest";
 import CreateChallange from "./pages/CreateChallange";
 import CreateGroup from "./pages/CreateGroup";
+import Details from "./components/ContestComponents/Details";
+import CreateContest from "./pages/ManageContest";
 
 const App = () => {
   const [previousRooms, setPreviousRooms] = useState([]);
@@ -59,7 +61,10 @@ const App = () => {
         <Route path="/createGroup" element={<CreateGroup />} />
 
         <Route exact path="/createTest" element={<CreateTest />} />
-        <Route exact path="/createContest" element={<CreateContest />} />
+
+        {/* <Route exact path="/contest/create" element={<CreateContest />} /> */}
+        <Route exact path="/contest/create" element={<CreateContest />} />
+        <Route path="/contest/manage/a" element={<ManageContest />} />
         <Route exact path="/createChallange" element={<CreateChallange />} />
         <Route path="/codingTest" element={<TestPage />} />
 

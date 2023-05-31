@@ -1,52 +1,174 @@
-import React, { useState } from "react";
-import AddQuestions from "../components/ContestComponents/AddQuestions";
-import CalculationFormula from "../components/ContestComponents/CalculationFormula";
-import Details from "../components/ContestComponents/Details";
-import ContestNavbar from "../components/ContestComponents/ContestNavbar";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreateContest = () => {
-  const DETAILS = "DETAILS";
-  const QUESTIONS = "QUESTIONS";
-  const CALCULATION_FORMULA = "CALCULATION_FORMULA";
-  const NOTIFICATIONS = "NOTIFICATIONS";
-  const ADD_PARTICIPANTS = "ADD_PARTICIPANTS";
-
-  const [selection, setSelection] = useState(DETAILS);
+  const navigate = useNavigate();
   const [contestName, setContestName] = useState("");
   const [eventType, setEventType] = useState("FUN");
-  const [companyName, setCompanyName] = useState("DARWINBOX");
+  const [companyName, setCompanyName] = useState("");
+  const [contestDate, setContestDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [duration, setDuration] = useState("");
+
+  const handleGetStarted = () => {
+    if (true) {
+      navigate("/contest/manage/a");
+    }
+  };
+
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  // const formattedDate = currentDate.toLocaleString(undefined, options);
+
+  const convertDateFormat = (dateString) => {
+    const parts = dateString.split("/"); // Split the date string into parts
+    console.log("Parts is", parts);
+    // Rearrange the parts in the desired order (yyyy-mm-dd)
+    const year = parts[2].split(",")[0];
+    const formattedDate = `${year}-${parts[1]}-${parts[0]}`;
+    console.log(formattedDate);
+    return formattedDate;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Perform any necessary actions with the form data
-    console.log("Submitted data:", {
-      contestName,
-      eventType,
-      companyName,
-    });
-
-    // Reset the form fields
-    setContestName("");
-    setEventType("FUN");
-    setCompanyName("DARWINBOX");
+    console.log("SUBMIT");
+    const date = convertDateFormat(new Date().toLocaleString());
+    console.log(contestDate, date);
+    const d1 = contestDate.split("-");
+    const d2 = date.split("-");
+    let greater = 0;
+    for (let i = 0; i < 3; i++) {
+      console.log(greater);
+      console.log(Number(d1[i]), Number(d2[i]));
+      if (Number(d1[i]) < Number(d2[i]) && greater == 0) {
+        alert("Please enter a valid date");
+      } else if (Number(d1[i]) > Number(d2[i])) {
+        greater = 1;
+      }
+    }
   };
 
+  useEffect(() => {
+    console.log(contestDate);
+  }, [contestDate]);
+
   return (
-    <div className="w-full lg:w-5/6 mx-auto">
-      <section className="w-11/12 mx-auto">
-        <p className="text-gray-500 font-semibold">
-          {"www.blablabla.com/test/" + contestName}
+    <div className="w-5/6 lg:w-2/3 ml-10 lg:mx-auto">
+      <div className="w-2/3 flex flex-col gap-y-3">
+        <p className="text-2xl font-medium text-gray-700">Create Contest</p>
+        <p className="font-normal text-gray-400 italic">
+          Host your own coding contest on HackerRank. You can practice and
+          compete with friends from your organization or school. Select from our
+          library of over 1,500 coding challenges or create your own.
         </p>
-      </section>
+        <p className="italic text-gray-400">
+          Get started by providing the initial details for your contest.
+        </p>
+      </div>
+      <form onSubmit={handleSubmit} className="p-4">
+        <div className="py-2">
+          <label className="flex place-items-center gap-x-7">
+            <p className="w-60 font-medium text-gray-600">
+              Contest Name: <span className="text-red-500">*</span>
+            </p>
+            <input
+              type="text"
+              value={contestName}
+              onChange={(e) => setContestName(e.target.value)}
+              required
+              className="w-60 px-4 py-2 border rounded-md"
+            />
+          </label>
+        </div>
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
+          <label className="flex place-items-center gap-x-7">
+            <p className="w-60 font-medium text-gray-600">
+              Event Type: <span className="text-red-500">*</span>
+            </p>
+            <select
+              value={eventType}
+              onChange={(e) => setEventType(e.target.value)}
+              className="w-60 px-4 py-2 border rounded-md"
+            >
+              <option value="FUN">FUN</option>
+              <option value="RECRUITMENT">RECRUITMENT</option>
+            </select>
+          </label>
+        </div>
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
+          <label className="flex place-items-center gap-x-7">
+            <p className="w-60 font-medium text-gray-600">
+              Company Name: <span className="text-red-500">*</span>
+            </p>
+            <input
+              type="text"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              className="w-60 px-4 py-2 border rounded-md"
+            />
+          </label>
+        </div>
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
+          <label className="flex place-items-center gap-x-7">
+            <p className="w-60 font-medium text-gray-600">
+              Contest Date<span className="text-red-500">*</span>
+            </p>
+            <input
+              type="date"
+              name=""
+              id=""
+              className="border border-gray-300 pl-3"
+              onChange={(e) => setContestDate(e.target.value)}
+            />
+          </label>
+        </div>
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
+          <label className="flex place-items-center gap-x-7">
+            <p className="w-60 font-medium text-gray-600">
+              Start Time (IST, 24 hour time):{" "}
+              <span className="text-red-500">*</span>
+            </p>
+            <input
+              type="text"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              className="w-60 px-4 py-2 border rounded-md"
+            />
+          </label>
+        </div>
 
-      <ContestNavbar selection={selection} setSelection={setSelection} />
-
-      {selection === DETAILS && <Details />}
-
-      {selection === QUESTIONS && <AddQuestions />}
-
-      {selection === CALCULATION_FORMULA && <CalculationFormula />}
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <div className="py-2">
+          <label className="flex place-items-center gap-x-7">
+            <p className="w-60 font-medium text-gray-600">
+              Duration (In hours): <span className="text-red-500">*</span>
+            </p>
+            <input
+              type="text"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              className="w-60 px-4 py-2 border rounded-md"
+            />
+          </label>
+        </div>
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <button
+          type="submit"
+          className="px-6 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-300 font-mono my-4"
+          onClick={handleGetStarted}
+        >
+          Get Started
+        </button>
+      </form>
     </div>
   );
 };
