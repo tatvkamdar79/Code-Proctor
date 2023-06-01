@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CreateContest = () => {
   const navigate = useNavigate();
@@ -8,7 +8,109 @@ const CreateContest = () => {
   const [companyName, setCompanyName] = useState("");
   const [contestDate, setContestDate] = useState("");
   const [startTime, setStartTime] = useState("");
+  const [contestEndDate, setContestEndDate] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [duration, setDuration] = useState("");
+  const [showStartTime, setShowStartTime] = useState(false);
+  const [showEndTime, setShowEndTime] = useState(false);
+  const possibleTimes = [
+    "00:00",
+    "00:15",
+    "00:30",
+    "00:45",
+    "01:00",
+    "01:15",
+    "01:30",
+    "01:45",
+    "02:00",
+    "02:15",
+    "02:30",
+    "02:45",
+    "03:00",
+    "03:15",
+    "03:30",
+    "03:45",
+    "04:00",
+    "04:15",
+    "04:30",
+    "04:45",
+    "05:00",
+    "05:15",
+    "05:30",
+    "05:45",
+    "06:00",
+    "06:15",
+    "06:30",
+    "06:45",
+    "07:00",
+    "07:15",
+    "07:30",
+    "07:45",
+    "08:00",
+    "08:15",
+    "08:30",
+    "08:45",
+    "09:00",
+    "09:15",
+    "09:30",
+    "09:45",
+    "10:00",
+    "10:15",
+    "10:30",
+    "10:45",
+    "11:00",
+    "11:15",
+    "11:30",
+    "11:45",
+    "12:00",
+    "12:15",
+    "12:30",
+    "12:45",
+    "13:00",
+    "13:15",
+    "13:30",
+    "13:45",
+    "14:00",
+    "14:15",
+    "14:30",
+    "14:45",
+    "15:00",
+    "15:15",
+    "15:30",
+    "15:45",
+    "16:00",
+    "16:15",
+    "16:30",
+    "16:45",
+    "17:00",
+    "17:15",
+    "17:30",
+    "17:45",
+    "18:00",
+    "18:15",
+    "18:30",
+    "18:45",
+    "19:00",
+    "19:15",
+    "19:30",
+    "19:45",
+    "20:00",
+    "20:15",
+    "20:30",
+    "20:45",
+    "21:00",
+    "21:15",
+    "21:30",
+    "21:45",
+    "22:00",
+    "22:15",
+    "22:30",
+    "22:45",
+    "23:00",
+    "23:15",
+    "23:30",
+    "23:45",
+  ];
 
   const handleGetStarted = () => {
     if (true) {
@@ -37,25 +139,47 @@ const CreateContest = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("SUBMIT");
-    const date = convertDateFormat(new Date().toLocaleString());
-    console.log(contestDate, date);
+    // console.log(contestDate, date);
     const d1 = contestDate.split("-");
-    const d2 = date.split("-");
-    let greater = 0;
+    const d2 = contestEndDate.split("-");
+    console.log(d1, d2);
+    let isDateCorrect = 1,
+      greater = 0;
     for (let i = 0; i < 3; i++) {
       console.log(greater);
       console.log(Number(d1[i]), Number(d2[i]));
-      if (Number(d1[i]) < Number(d2[i]) && greater == 0) {
-        alert("Please enter a valid date");
-      } else if (Number(d1[i]) > Number(d2[i])) {
+      if (Number(d2[i]) < Number(d1[i]) && greater == 0) {
+        // alert("Please enter a valid date");
+        isDateCorrect = 0;
+      } else if (Number(d2[i]) > Number(d1[i])) {
         greater = 1;
       }
+    }
+
+    const time1 = startTime.split(":");
+    const time2 = endTime.split(":");
+    let isTimeCorrect = 1;
+    if (isDateCorrect && greater == 0) {
+      if (
+        Number(time1[0]) <= Number(time2[0]) &&
+        Number(time1[1]) <= Number(time2[1])
+      ) {
+      } else {
+        isTimeCorrect = 0;
+      }
+    }
+    if (isDateCorrect == 0 || isTimeCorrect == 0) {
+      alert("Fill the time and date fields properly");
     }
   };
 
   useEffect(() => {
     console.log(contestDate);
   }, [contestDate]);
+
+  useEffect(() => {
+    console.log(contestEndDate);
+  }, [contestEndDate]);
 
   return (
     <div className="w-5/6 lg:w-2/3 ml-10 lg:mx-auto">
@@ -119,7 +243,7 @@ const CreateContest = () => {
         <div className="py-2">
           <label className="flex place-items-center gap-x-7">
             <p className="w-60 font-medium text-gray-600">
-              Contest Date<span className="text-red-500">*</span>
+              Contest Start Date<span className="text-red-500">*</span>
             </p>
             <input
               type="date"
@@ -132,39 +256,83 @@ const CreateContest = () => {
         </div>
         {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
         <div className="py-2">
-          <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-medium text-gray-600">
+          <label className="flex gap-x-7">
+            <p className="w-60 mt-3 font-medium text-gray-600">
               Start Time (IST, 24 hour time):{" "}
               <span className="text-red-500">*</span>
             </p>
-            <input
-              type="text"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              className="w-60 px-4 py-2 border rounded-md"
-            />
+            <div>
+              <input
+                type="text"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="w-60 px-4 py-2 border rounded-md"
+                onClick={() => setShowStartTime(true)}
+                onBlur={() => setTimeout(() => setShowStartTime(false), 200)}
+              />
+              <ul
+                className={`${
+                  !showStartTime && "hidden"
+                } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+              >
+                {possibleTimes.map((time) => (
+                  <li onClick={(e) => setStartTime(e.target.innerText)}>
+                    {time}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </label>
         </div>
-
-        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
         <div className="py-2">
           <label className="flex place-items-center gap-x-7">
             <p className="w-60 font-medium text-gray-600">
-              Duration (In hours): <span className="text-red-500">*</span>
+              Contest End Date<span className="text-red-500">*</span>
             </p>
             <input
-              type="text"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              className="w-60 px-4 py-2 border rounded-md"
+              type="date"
+              name=""
+              id=""
+              className="border border-gray-300 pl-3"
+              onChange={(e) => setContestEndDate(e.target.value)}
             />
           </label>
         </div>
+        <div className="py-2">
+          <label className="flex gap-x-7">
+            <p className="w-60 mt-3 font-medium text-gray-600">
+              End Time (IST, 24 hour time):{" "}
+              <span className="text-red-500">*</span>
+            </p>
+            <div>
+              <input
+                type="text"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="w-60 px-4 py-2 border rounded-md"
+                onClick={() => setShowEndTime(true)}
+                onBlur={() => setTimeout(() => setShowEndTime(false), 200)}
+              />
+              <ul
+                className={`${
+                  !showEndTime && "hidden"
+                } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+              >
+                {possibleTimes.map((time) => (
+                  <li onClick={(e) => setEndTime(e.target.innerText)}>
+                    {time}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </label>
+        </div>
+        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
         {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
         <button
           type="submit"
           className="px-6 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-300 font-mono my-4"
-          onClick={handleGetStarted}
+          // onClick={handleGetStarted}
         >
           Get Started
         </button>

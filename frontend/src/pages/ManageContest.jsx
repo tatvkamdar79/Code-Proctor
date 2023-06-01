@@ -3,7 +3,12 @@ import AddQuestions from "../components/ContestComponents/AddQuestions";
 import CalculationFormula from "../components/ContestComponents/CalculationFormula";
 import Details from "../components/ContestComponents/Details";
 import ContestNavbar from "../components/ContestComponents/ContestNavbar";
+<<<<<<< HEAD
 import Leaderboard from "../components/ContestComponents/Leaderboard";
+=======
+import CreateGroup from "./CreateGroup";
+import AddParticipants from "./AddParticipants";
+>>>>>>> a63d223fd5e88019be01e33fa37401a947d04025
 
 const CreateContest = () => {
   const DETAILS = "DETAILS";
@@ -33,7 +38,7 @@ const CreateContest = () => {
     setEventType("FUN");
     setCompanyName("DARWINBOX");
   };
-
+  const x = 1;
   return (
     <div className="w-full lg:w-5/6 mx-auto">
       <section className="w-11/12 mx-auto">
@@ -41,16 +46,16 @@ const CreateContest = () => {
           {"www.blablabla.com/test/" + contestName}
         </p>
       </section>
-
       <ContestNavbar selection={selection} setSelection={setSelection} />
-
       {selection === DETAILS && <Details />}
-
       {selection === QUESTIONS && <AddQuestions />}
-
       {selection === CALCULATION_FORMULA && <CalculationFormula />}
+<<<<<<< HEAD
 
       {selection === LEADERBOARD && <Leaderboard />}
+=======
+      {selection === ADD_PARTICIPANTS && <AddParticipants contestId={x} />}
+>>>>>>> a63d223fd5e88019be01e33fa37401a947d04025
     </div>
   );
 };
