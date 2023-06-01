@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
-const CreateGroup = () => {
+const AddParticipants = ({ contestId }) => {
   const previousGroups = [
     "gp1",
     "gp2",
@@ -36,10 +37,13 @@ const CreateGroup = () => {
     setUsersToBeAdded(newUsersState);
   };
 
-  const handleCreateGroup = () => {
-    if (newGroupName == "" || usersToBeAdded.length == 0) {
+  const handleSaveUsers = () => {
+    if (usersToBeAdded.length == 0) {
       alert("Please fill the form correctly and make sure users are added");
     }
+    // TODO: Save users to database for this particular test
+    const properUsers = usersToBeAdded.filter((user) => user.email.length > 0);
+    console.log(properUsers);
   };
 
   const handleAddFromExistingGroup = () => {
@@ -48,23 +52,12 @@ const CreateGroup = () => {
 
   return (
     <div>
-      <h1 className="text-4xl text-center mt-14">Create Group</h1>
+      <h1 className="text-4xl text-center mt-14">
+        Add Particpants to the Contest
+      </h1>
       <br /> <br />
       <div className="container border border-gray-400 rounded-lg p-4 mx-auto w-2/3">
         <br />
-        <div className="flex place-items-center py-2 gap-x-5 mb-5">
-          <h3 className="text-3xl ml-5">Group Name</h3>
-          <input
-            className="w-2/3 border-2 border-[#d4d9dd] outline-none pl-3 py-1"
-            type="text"
-            placeholder="Enter Group Name"
-            value={newGroupName}
-            onChange={(e) => {
-              setNewGroupName(e.target.value);
-            }}
-          />
-        </div>
-
         <h3 className="text-2xl mb-7 ml-5">Add users</h3>
         <div className="flex flex-col gap-y-5 mb-5">
           {usersToBeAdded.map((user, idx) => {
@@ -95,7 +88,7 @@ const CreateGroup = () => {
         </div>
         <div className="text-center mt-3" id="userFieldsContainer">
           <button
-            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
             style={{ alignItems: "end" }}
             onClick={addUserField}
           >
@@ -108,14 +101,20 @@ const CreateGroup = () => {
       <div className="text-end" style={{ marginRight: "340px" }}>
         <button
           type="submit"
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
-          onClick={handleCreateGroup}
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+          onClick={handleSaveUsers}
+        >
+          Save Users
+        </button>
+        <Link
+          to="/createGroup"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-[11px] px-4 rounded-md shadow mr-5"
         >
           Create Group
-        </button>
+        </Link>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+          className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
           onClick={handleAddFromExistingGroup}
         >
           Add from existing Group
@@ -193,4 +192,4 @@ const Modal = ({ isOpen, onClose, groups, setUsersToBeAdded }) => {
   );
 };
 
-export default CreateGroup;
+export default AddParticipants;

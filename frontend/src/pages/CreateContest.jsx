@@ -110,7 +110,6 @@ const CreateContest = () => {
     "23:15",
     "23:30",
     "23:45",
-    "24:00",
   ];
 
   const handleGetStarted = () => {
