@@ -16,7 +16,7 @@ import ManageContest from "./pages/ManageContest";
 import CreateChallange from "./pages/CreateChallange";
 import CreateGroup from "./pages/CreateGroup";
 import Details from "./components/ContestComponents/Details";
-import CreateContest from "./pages/ManageContest";
+import CreateContest from "./pages/CreateContest";
 
 const App = () => {
   const [previousRooms, setPreviousRooms] = useState([]);
