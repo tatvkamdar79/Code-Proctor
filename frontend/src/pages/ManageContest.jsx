@@ -3,11 +3,13 @@ import AddQuestions from "../components/ContestComponents/AddQuestions";
 import CalculationFormula from "../components/ContestComponents/CalculationFormula";
 import Details from "../components/ContestComponents/Details";
 import ContestNavbar from "../components/ContestComponents/ContestNavbar";
+import Leaderboard from "../components/ContestComponents/Leaderboard";
 
 const CreateContest = () => {
   const DETAILS = "DETAILS";
   const QUESTIONS = "QUESTIONS";
   const CALCULATION_FORMULA = "CALCULATION_FORMULA";
+  const LEADERBOARD = "LEADERBOARD";
   const NOTIFICATIONS = "NOTIFICATIONS";
   const ADD_PARTICIPANTS = "ADD_PARTICIPANTS";
 
@@ -47,6 +49,8 @@ const CreateContest = () => {
       {selection === QUESTIONS && <AddQuestions />}
 
       {selection === CALCULATION_FORMULA && <CalculationFormula />}
+
+      {selection === LEADERBOARD && <Leaderboard />}
     </div>
   );
 };
