@@ -18,6 +18,7 @@ import CreateGroup from "./pages/CreateGroup";
 import Details from "./components/ContestComponents/Details";
 import CreateContest from "./pages/CreateContest";
 import ShowStages from "./pages/ShowStages";
+import IndividualContestProgressReport from "./components/ContestComponents/IndividualContestProgressReport";
 
 const App = () => {
   const [previousRooms, setPreviousRooms] = useState([]);
@@ -66,9 +67,15 @@ const App = () => {
 
         {/* <Route exact path="/contest/create" element={<CreateContest />} /> */}
         <Route exact path="/contest/create" element={<CreateContest />} />
-        <Route path="/contest/manage/a" element={<ManageContest />} />
+        <Route
+          path="/contest/manage/:contestName"
+          element={<ManageContest />}
+        />
         <Route exact path="/createChallange" element={<CreateChallange />} />
-        <Route path="/codingTest" element={<TestPage />} />
+        <Route
+          path="/contest/manage/:contestName/:email"
+          element={<IndividualContestProgressReport />}
+        />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
