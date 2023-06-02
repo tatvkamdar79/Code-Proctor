@@ -270,10 +270,6 @@ const Editor = ({
   }, [submissionStatus]);
 
   useEffect(() => {
-    console.log("Output is: ", output);
-  }, [output]);
-
-  useEffect(() => {
     if (executionStatus === RUNNING_CODE) {
       setOutput("");
     }

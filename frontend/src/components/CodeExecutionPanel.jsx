@@ -9,7 +9,8 @@ import { diff_match_patch } from "diff-match-patch";
 import { Resizable } from "re-resizable";
 import { GrDrag } from "react-icons/gr";
 
-const CodeExecutionPanel = ({ question }) => {
+const CodeExecutionPanel = ({ question, time, setTime, index, setIndex }) => {
+  const [timeSpent, setTimeSpent] = useState(Date.now());
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -76,6 +77,16 @@ const CodeExecutionPanel = ({ question }) => {
   const [isMuted, setIsMuted] = useState(false);
 
   const dmp = new diff_match_patch();
+
+  useEffect(() => {
+    // console.log(question.title, time);
+    return () => {
+      console.log("Printing from ", index + 1);
+      console.log(index, Date.now() - timeSpent, time[index]);
+      setTime(Date.now() - timeSpent);
+      setIndex(index);
+    };
+  }, []);
 
   useEffect(() => {
     const resizeCallback = () => setWindowWidth(window.innerWidth);

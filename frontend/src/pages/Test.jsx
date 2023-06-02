@@ -11,24 +11,83 @@ const Test = () => {
   const navigate = useNavigate();
   const totalTime = 1800;
   const [selected, setSelected] = useState(0);
+  const [questionsComponent, setQuestionsComponent] = useState([]);
 
   // The following details will be fetched from Api calls adn then stored in localStorgae until the durationof the exam
-  const questions = [
+  const [questions, setQuestions] = useState([]);
+  const [totalTimeForEachQuestion, setTotalTimeForEachQuestion] = useState([]);
+  const [helperTimeVariable, setHelperTimeVariable] = useState(0);
+  const [helperQuestionIndex, setHelperQuestionIndex] = useState(0);
+
+  // Remove this
+  const staticQuestions = [
     {
-      questionTitle: "This is a sample Question 1 Title",
-      questionType: "Coding",
+      title: "Title of the question 1",
+      problemStatement:
+        "Given an unsorted array of n elements, find if the element k is present in the array or not.",
+      constraints: [
+        "1 &le; arr &le; 100",
+        "1 &ge; n &le; 300",
+        "minNumberOfTurns &le; 6*10<sup>5</sup>",
+      ],
+      sampleTestCases: [
+        { input: "1\n2\n3", output: "6" },
+        { input: "1\n2\n3", output: "6" },
+        { input: "1\n2\n3", output: "6" },
+      ],
+      inputs: ["1", "2", "3"],
+      outputs: ["1", "2", "3"],
     },
     {
-      questionTitle: "This is a sample Question 2 Title",
-      questionType: "Coding",
+      title: "Title of the question 2",
+      problemStatement:
+        "Given an unsorted array of n elements, find if the element k is present in the array or not.",
+      constraints: [
+        "1 &le; arr &le; 100",
+        "1 &ge; n &le; 300",
+        "minNumberOfTurns &le; 6*10<sup>5</sup>",
+      ],
+      sampleTestCases: [
+        { input: "1\n2\n3", output: "6" },
+        { input: "1\n2\n3", output: "6" },
+        { input: "1\n2\n3", output: "6" },
+      ],
+      inputs: ["1", "2", "3"],
+      outputs: ["1", "2", "3"],
     },
     {
-      questionTitle: "This is a sample Question 3 Title",
-      questionType: "Coding",
+      title: "Title of the question 3",
+      problemStatement:
+        "Given an unsorted array of n elements, find if the element k is present in the array or not.",
+      constraints: [
+        "1 &le; arr &le; 100",
+        "1 &ge; n &le; 300",
+        "minNumberOfTurns &le; 6*10<sup>5</sup>",
+      ],
+      sampleTestCases: [
+        { input: "1\n2\n3", output: "6" },
+        { input: "1\n2\n3", output: "6" },
+        { input: "1\n2\n3", output: "6" },
+      ],
+      inputs: ["1", "2", "3"],
+      outputs: ["1", "2", "3"],
     },
     {
-      questionTitle: "This is a sample Question 4 Title",
-      questionType: "Coding",
+      title: "Title of the question 4",
+      problemStatement:
+        "Given an unsorted array of n elements, find if the element k is present in the array or not.",
+      constraints: [
+        "1 &le; arr &le; 100",
+        "1 &ge; n &le; 300",
+        "minNumberOfTurns &le; 6*10<sup>5</sup>",
+      ],
+      sampleTestCases: [
+        { input: "1\n2\n3", output: "6" },
+        { input: "1\n2\n3", output: "6" },
+        { input: "1\n2\n3", output: "6" },
+      ],
+      inputs: ["1", "2", "3"],
+      outputs: ["1", "2", "3"],
     },
   ];
 
@@ -109,6 +168,49 @@ const Test = () => {
     };
   }, []);
 
+  useEffect(() => {
+    let newQuestionsComponent = [];
+    let idx = 0;
+    for (let question of questions) {
+      newQuestionsComponent.push(
+        <CodeExecutionPanel
+          question={question}
+          time={totalTimeForEachQuestion}
+          index={idx}
+          setTime={setHelperTimeVariable}
+          setIndex={setHelperQuestionIndex}
+        />
+      );
+      idx += 1;
+    }
+    setQuestionsComponent(newQuestionsComponent);
+  }, [questions]);
+
+  useEffect(() => {
+    let newTimeState = [...totalTimeForEachQuestion];
+    newTimeState[helperQuestionIndex] += helperTimeVariable;
+    setTotalTimeForEachQuestion(newTimeState);
+  }, [helperTimeVariable, helperQuestionIndex]);
+
+  useEffect(() => {
+    console.log(totalTimeForEachQuestion);
+  }, [totalTimeForEachQuestion]);
+
+  useEffect(() => {
+    let initialTimeState = [];
+    // TODO: Fetch the questions from API call
+    const questionsForContest = staticQuestions;
+    for (let question of questionsForContest) {
+      initialTimeState.push(0);
+    }
+    setQuestions(questionsForContest);
+    setTotalTimeForEachQuestion(initialTimeState);
+  }, []);
+
+  useEffect(() => {
+    // console.log("Time changed", totalTimeForEachQuestion);
+  }, [totalTimeForEachQuestion]);
+
   const fetchIpAddress = async () => {
     try {
       const response = await axios.get("https://api.ipify.org/?format=json");
@@ -135,9 +237,11 @@ const Test = () => {
 
       {selected === "INSTRUCTIONS" && TestInstructions(allInstructions)}
 
-      {selected !== "ALL" && selected !== "INSTRUCTIONS" && (
-        <CodeExecutionPanel question={question} />
-      )}
+      {questionsComponent.map((component, idx) => {
+        if (selected === idx) {
+          return component;
+        }
+      })}
     </div>
   );
 };
