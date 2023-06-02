@@ -17,6 +17,7 @@ import CreateChallange from "./pages/CreateChallange";
 import CreateGroup from "./pages/CreateGroup";
 import Details from "./components/ContestComponents/Details";
 import CreateContest from "./pages/CreateContest";
+import ShowStages from "./pages/ShowStages";
 import IndividualContestProgressReport from "./components/ContestComponents/IndividualContestProgressReport";
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
         <Route path="/joinroom" element={<JoinRoom />} />
         <Route path="/room/:id" element={<Room />} />
 
+        <Route path="/showStages" element={<ShowStages />} />
         <Route path="/preTest" element={<PreTest />} />
         <Route path="/test/:testName" element={<Test />} />
         <Route path="/createGroup" element={<CreateGroup />} />
