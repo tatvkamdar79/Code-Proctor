@@ -9,7 +9,7 @@ const CreateChallangeNavbar = ({ selection, setSelection }) => {
   const LEADERBOARD = "LEADERBOARD";
 
   return (
-    <section className="grid grid-cols-4 lg:grid-cols-5 place-items-center gap-y-4 bg-gray-50 border border-b-0 p-4 pb-0 text-gray-500">
+    <section className="grid grid-cols-4 lg:grid-cols-6 place-items-center gap-y-4 bg-gray-50 border border-b-0 p-4 pb-0 text-gray-500 mb-10">
       <p
         className={`h-14 w-36 flex justify-center place-items-center mx-auto text-center cursor-pointer select-none rounded-t-md ${
           selection === DETAILS &&

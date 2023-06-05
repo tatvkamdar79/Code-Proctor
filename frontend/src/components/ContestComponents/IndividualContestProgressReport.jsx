@@ -126,8 +126,8 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
   }, []);
 
   return (
-    <div className="absolute top-16 left-0 w-full min-w-[1901px] h-[90vh] place-items-center">
-      <section className="w-4/5 bg-gray-200 h-5/6 flex mx-auto rounded-3xl shadow-xl shadow-gray-500 overflow-hidden relative border-2 border-gray-400">
+    <div className="absolute top-0 left-0 w-full h-full min-w-[1901px] bg-black bg-opacity-20">
+      <section className="place-self-center justify-self-center w-4/5 bg-gray-200 h-5/6 flex mx-auto my-auto rounded-3xl shadow-xl shadow-gray-500 overflow-hidden relative border-2 border-gray-100 mt-[6.5vh]">
         <div
           className="absolute right-0 p-2 border-2 border-t-0 border-r-0 border-gray-300 shadow-md shadow-gray-300 rounded-bl-2xl bg-green-400"
           onClick={() => setOpen(false)}
@@ -137,7 +137,7 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
             className="hover:scale-150 transition-all duration-300 cursor-pointer"
           />
         </div>
-        <div className="flex flex-col w-1/3 border-r bg-neutral-900 text-white overflow-hidden py-5 gap-y-5">
+        <div className="flex flex-col w-1/3 border-r-4 border-green-600 bg-neutral-900 text-white overflow-hidden py-5 gap-y-5">
           <p className="flex justify-start place-items-center font-mono font-semibold w-5/6 mx-auto text-xl underline underline-offset-2">
             Time Analysis
           </p>
