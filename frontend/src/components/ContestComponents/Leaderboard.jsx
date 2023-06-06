@@ -37,7 +37,7 @@ const data = [
   // Add more dummy data rows here
 ];
 
-const Leaderboard = () => {
+const Leaderboard = ({ contest, setContest }) => {
   const [showIndividualReport, setShowIndividualReport] = useState(false);
   const [candidateData, setCandidateData] = useState({});
   const headers = [

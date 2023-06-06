@@ -1,18 +1,31 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { baseURL } from "../../config/config";
+import Instructions from "./Instructions";
 
-const CreateChallangeDetails = () => {
+const CreateChallangeDetails = ({ contest, setContest }) => {
+  // TODO: The format in which dates are coming is weird.
+  console.log(contest);
   const navigate = useNavigate();
-  const [contestName, setContestName] = useState("");
-  const [eventType, setEventType] = useState("FUN");
-  const [companyName, setCompanyName] = useState("");
-  const [contestDate, setContestDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [duration, setDuration] = useState("");
-  const [contestEndDate, setContestEndDate] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [contestName, setContestName] = useState(contest.contestName);
+  const [eventType, setEventType] = useState(contest.eventType);
+  const [companyName, setCompanyName] = useState(contest.companyName);
+  const [contestStartDate, setContestStartDate] = useState(
+    contest.contestStartDate
+  );
+  const [startTime, setStartTime] = useState(contest.startTime);
+  const [contestEndDate, setContestEndDate] = useState(contest.contestEndDate);
+  const [endTime, setEndTime] = useState(contest.endTime);
   const [showStartTime, setShowStartTime] = useState(false);
   const [showEndTime, setShowEndTime] = useState(false);
+  const [instructions, setInstructions] = useState(contest.instructions);
+  const [instructionsTitle, setInstructionsTitle] = useState(
+    contest.instructionsTitle
+  );
+
+  console.log(typeof contest.contestStartDate);
+  // console.log(contest.contestStartDate.split("T"));
 
   const possibleTimes = [
     "00:00",
@@ -125,14 +138,6 @@ const CreateChallangeDetails = () => {
     day: "numeric",
   };
 
-  useEffect(() => {
-    setContestName("Contest Name");
-    setEventType("RECRUITMENT");
-    setCompanyName("DBOX");
-    setStartTime("00:00");
-    setDuration(2);
-  }, []);
-
   // const formattedDate = currentDate.toLocaleString(undefined, options);
 
   const convertDateFormat = (dateString) => {
@@ -145,173 +150,215 @@ const CreateChallangeDetails = () => {
     return formattedDate;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("SUBMIT");
-    const date = convertDateFormat(new Date().toLocaleString());
-    console.log(contestDate, date);
-    const d1 = contestDate.split("-");
-    const d2 = date.split("-");
-    let greater = 0;
+    // console.log(contestStartDate, date);
+    const d1 = contestStartDate.split("-");
+    const d2 = contestEndDate.split("-");
+    console.log(d1, d2);
+    let isDateCorrect = 1,
+      greater = 0;
     for (let i = 0; i < 3; i++) {
       console.log(greater);
       console.log(Number(d1[i]), Number(d2[i]));
-      if (Number(d1[i]) < Number(d2[i]) && greater == 0) {
-        alert("Please enter a valid date");
-      } else if (Number(d1[i]) > Number(d2[i])) {
+      if (Number(d2[i]) < Number(d1[i]) && greater == 0) {
+        // alert("Please enter a valid date");
+        isDateCorrect = 0;
+      } else if (Number(d2[i]) > Number(d1[i])) {
         greater = 1;
       }
     }
+    const time1 = startTime.split(":");
+    const time2 = endTime.split(":");
+    let isTimeCorrect = 1;
+    if (isDateCorrect && greater == 0) {
+      if (
+        Number(time1[0]) <= Number(time2[0]) &&
+        Number(time1[1]) <= Number(time2[1])
+      ) {
+      } else {
+        isTimeCorrect = 0;
+      }
+    }
+    if (isDateCorrect == 0 || isTimeCorrect == 0) {
+      alert("Fill the time and date fields properly");
+      return;
+    }
+
+    const contest = {
+      contestName,
+      eventType,
+      companyName,
+      contestStartDate: String(contestStartDate) + "T" + startTime + ":" + "00",
+      // startTime,
+      contestEndDate: String(contestEndDate) + "T" + endTime + ":" + "00",
+      // endTime,
+      instructions: [],
+      questions: [],
+      contestants: [],
+      route: "contests/create",
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjY0MTd9.wZb6sS3D9rHBneR6lbCOY7LpLJtNsOIhZfc0iXfRptQ",
+    };
+
+    console.log(contest);
+
+    const response = await axios.post(baseURL, contest);
+    console.log(response);
   };
 
-  useEffect(() => {
-    console.log(contestDate);
-  }, [contestDate]);
-
   return (
-    <section className="w-5/6 lg:w-2/3 ml-10 lg:mx-auto">
-      <form onSubmit={handleSubmit} className="p-4">
-        <div className="py-2">
-          <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-medium text-gray-600">
-              Contest Name: <span className="text-red-500">*</span>
-            </p>
-            <input
-              type="text"
-              value={contestName}
-              onChange={(e) => setContestName(e.target.value)}
-              required
-              className="w-60 px-4 py-2 border rounded-md"
-            />
-          </label>
-        </div>
-        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        <div className="py-2">
-          <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-medium text-gray-600">
-              Event Type: <span className="text-red-500">*</span>
-            </p>
-            <select
-              value={eventType}
-              onChange={(e) => setEventType(e.target.value)}
-              className="w-60 px-4 py-2 border rounded-md"
-            >
-              <option value="FUN">FUN</option>
-              <option value="RECRUITMENT">RECRUITMENT</option>
-            </select>
-          </label>
-        </div>
-        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        <div className="py-2">
-          <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-medium text-gray-600">
-              Company Name: <span className="text-red-500">*</span>
-            </p>
-            <input
-              type="text"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              className="w-60 px-4 py-2 border rounded-md"
-            />
-          </label>
-        </div>
-        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        <div className="py-2">
-          <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-medium text-gray-600">
-              Contest Start Date<span className="text-red-500">*</span>
-            </p>
-            <input
-              type="date"
-              name=""
-              id=""
-              className="border border-gray-300 pl-3"
-              onChange={(e) => setContestDate(e.target.value)}
-            />
-          </label>
-        </div>
-        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        <div className="py-2">
-          <label className="flex gap-x-7">
-            <p className="w-60 mt-3 font-medium text-gray-600">
-              Start Time (IST, 24 hour time):{" "}
-              <span className="text-red-500">*</span>
-            </p>
-            <div>
+    <section className="w-full mt-5">
+      <form onSubmit={handleSubmit} className="p-4 w-full flex">
+        <div className="w-3/5">
+          <div className="py-2">
+            <label className="flex place-items-center gap-x-7">
+              <p className="w-60 font-medium text-gray-600">
+                Contest Name: <span className="text-red-500">*</span>
+              </p>
               <input
                 type="text"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+                value={contestName}
+                onChange={(e) => setContestName(e.target.value)}
+                required
                 className="w-60 px-4 py-2 border rounded-md"
-                onClick={() => setShowStartTime(true)}
-                onBlur={() => setTimeout(() => setShowStartTime(false), 200)}
               />
-              <ul
-                className={`${
-                  !showStartTime && "hidden"
-                } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+            </label>
+          </div>
+          {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+          <div className="py-2">
+            <label className="flex place-items-center gap-x-7">
+              <p className="w-60 font-medium text-gray-600">
+                Event Type: <span className="text-red-500">*</span>
+              </p>
+              <select
+                value={eventType}
+                onChange={(e) => setEventType(e.target.value)}
+                className="w-60 px-4 py-2 border rounded-md"
               >
-                {possibleTimes.map((time) => (
-                  <li onClick={(e) => setStartTime(e.target.innerText)}>
-                    {time}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </label>
-        </div>
-        <div className="py-2">
-          <label className="flex place-items-center gap-x-7">
-            <p className="w-60 font-medium text-gray-600">
-              Contest End Date<span className="text-red-500">*</span>
-            </p>
-            <input
-              type="date"
-              name=""
-              id=""
-              className="border border-gray-300 pl-3"
-              onChange={(e) => setContestEndDate(e.target.value)}
-            />
-          </label>
-        </div>
-        <div className="py-2">
-          <label className="flex gap-x-7">
-            <p className="w-60 mt-3 font-medium text-gray-600">
-              End Time (IST, 24 hour time):{" "}
-              <span className="text-red-500">*</span>
-            </p>
-            <div>
+                <option value="FUN">FUN</option>
+                <option value="RECRUITMENT">RECRUITMENT</option>
+              </select>
+            </label>
+          </div>
+          {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+          <div className="py-2">
+            <label className="flex place-items-center gap-x-7">
+              <p className="w-60 font-medium text-gray-600">
+                Company Name: <span className="text-red-500">*</span>
+              </p>
               <input
                 type="text"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
                 className="w-60 px-4 py-2 border rounded-md"
-                onClick={() => setShowEndTime(true)}
-                onBlur={() => setTimeout(() => setShowEndTime(false), 200)}
               />
-              <ul
-                className={`${
-                  !showEndTime && "hidden"
-                } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
-              >
-                {possibleTimes.map((time) => (
-                  <li onClick={(e) => setEndTime(e.target.innerText)}>
-                    {time}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </label>
+            </label>
+          </div>
+          {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+          <div className="py-2">
+            <label className="flex place-items-center gap-x-7">
+              <p className="w-60 font-medium text-gray-600">
+                Contest Start Date<span className="text-red-500">*</span>
+              </p>
+              <input
+                type="date"
+                name=""
+                id=""
+                className="border border-gray-300 pl-3"
+                onChange={(e) => setContestStartDate(e.target.value)}
+              />
+            </label>
+          </div>
+          {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+          <div className="py-2">
+            <label className="flex gap-x-7">
+              <p className="w-60 mt-3 font-medium text-gray-600">
+                Start Time (IST, 24 hour time):{" "}
+                <span className="text-red-500">*</span>
+              </p>
+              <div>
+                <input
+                  type="text"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  className="w-60 px-4 py-2 border rounded-md"
+                  onClick={() => setShowStartTime(true)}
+                  onBlur={() => setTimeout(() => setShowStartTime(false), 200)}
+                />
+                <ul
+                  className={`${
+                    !showStartTime && "hidden"
+                  } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+                >
+                  {possibleTimes.map((time) => (
+                    <li onClick={(e) => setStartTime(e.target.innerText)}>
+                      {time}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </label>
+          </div>
+          <div className="py-2">
+            <label className="flex place-items-center gap-x-7">
+              <p className="w-60 font-medium text-gray-600">
+                Contest End Date<span className="text-red-500">*</span>
+              </p>
+              <input
+                type="date"
+                name=""
+                id=""
+                className="border border-gray-300 pl-3"
+                onChange={(e) => setContestEndDate(e.target.value)}
+              />
+            </label>
+          </div>
+          <div className="py-2">
+            <label className="flex gap-x-7">
+              <p className="w-60 mt-3 font-medium text-gray-600">
+                End Time (IST, 24 hour time):{" "}
+                <span className="text-red-500">*</span>
+              </p>
+              <div>
+                <input
+                  type="text"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                  className="w-60 px-4 py-2 border rounded-md"
+                  onClick={() => setShowEndTime(true)}
+                  onBlur={() => setTimeout(() => setShowEndTime(false), 200)}
+                />
+                <ul
+                  className={`${
+                    !showEndTime && "hidden"
+                  } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+                >
+                  {possibleTimes.map((time) => (
+                    <li onClick={(e) => setEndTime(e.target.innerText)}>
+                      {time}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </label>
+          </div>
+          <button
+            type="submit"
+            className="px-6 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-300 font-mono my-4"
+          >
+            Save Changes
+          </button>
         </div>
-        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        <button
-          type="submit"
-          className="px-6 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-300 font-mono my-4"
-          // onClick={handleGetStarted}
-        >
-          Get Started
-        </button>
+        <div className="w-2/5">
+          <Instructions
+            instructions={instructions}
+            setInstructions={setInstructions}
+            instructionsTitle={instructionsTitle}
+            setInstructionsTitle={setInstructionsTitle}
+          />
+        </div>
       </form>
     </section>
   );

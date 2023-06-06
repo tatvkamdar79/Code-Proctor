@@ -69,7 +69,7 @@ const App = () => {
         {/* <Route exact path="/contest/create" element={<CreateContest />} /> */}
         <Route exact path="/contest/create" element={<CreateContest />} />
         <Route
-          path="/contest/manage/:contestName"
+          path="/contest/manage/:currentContestName"
           element={<ManageContest />}
         />
         <Route exact path="/createChallenge" element={<CreateChallange />} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddQuestions from "../components/ContestComponents/AddQuestions";
 import CalculationFormula from "../components/ContestComponents/CalculationFormula";
 import Details from "../components/ContestComponents/Details";
@@ -6,8 +6,13 @@ import ContestNavbar from "../components/ContestComponents/ContestNavbar";
 import Leaderboard from "../components/ContestComponents/Leaderboard";
 import CreateGroup from "./CreateGroup";
 import AddParticipants from "./AddParticipants";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { baseURL } from "../config/config";
+import Instructions from "../components/ContestComponents/Instructions";
 
-const CreateContest = () => {
+const ManageContest = () => {
+  const { currentContestName } = useParams("currentContestName");
   const DETAILS = "DETAILS";
   const QUESTIONS = "QUESTIONS";
   const CALCULATION_FORMULA = "CALCULATION_FORMULA";
@@ -15,8 +20,9 @@ const CreateContest = () => {
   const NOTIFICATIONS = "NOTIFICATIONS";
   const ADD_PARTICIPANTS = "ADD_PARTICIPANTS";
 
+  const [contest, setContest] = useState({});
   const [selection, setSelection] = useState(DETAILS);
-  const [contestName, setContestName] = useState("");
+  const [contestName, setContestName] = useState(currentContestName);
   const [eventType, setEventType] = useState("FUN");
   const [companyName, setCompanyName] = useState("DARWINBOX");
 
@@ -35,23 +41,46 @@ const CreateContest = () => {
     setEventType("FUN");
     setCompanyName("DARWINBOX");
   };
-  const x = 1;
+
+  useEffect(() => {
+    const data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjAwMTF9.wlgTFIaMwaIAapj1B-5TQp9mR0cZh4mlPW1wdE6uaas",
+      route: "contests/getContestDetails",
+      contestName: currentContestName,
+    };
+    axios
+      .post(baseURL, data)
+      .then((response) => {
+        setContest(response.data.data.contest);
+        // console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div className="w-full lg:w-5/6 mx-auto">
-      <section className="w-11/12 mx-auto">
-        <p className="text-gray-500 font-semibold">
-          {"www.blablabla.com/test/" + contestName}
-        </p>
-      </section>
       <ContestNavbar selection={selection} setSelection={setSelection} />
-      {selection === DETAILS && <Details />}
-      {selection === QUESTIONS && <AddQuestions />}
-      {selection === CALCULATION_FORMULA && <CalculationFormula />}
+      {Object.keys(contest).length > 0 && selection === DETAILS && (
+        <Details contest={contest} setContest={setContest} />
+      )}
+      {selection === QUESTIONS && (
+        <AddQuestions contest={contest} setContest={setContest} />
+      )}
+      {selection === CALCULATION_FORMULA && (
+        <CalculationFormula contest={contest} setContest={setContest} />
+      )}
 
-      {selection === LEADERBOARD && <Leaderboard />}
-      {selection === ADD_PARTICIPANTS && <AddParticipants contestId={x} />}
+      {selection === LEADERBOARD && (
+        <Leaderboard contest={contest} setContest={setContest} />
+      )}
+      {selection === ADD_PARTICIPANTS && (
+        <AddParticipants contest={contest} setContest={setContest} />
+      )}
     </div>
   );
 };
 
-export default CreateContest;
+export default ManageContest;
