@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../config/config";
 import Instructions from "../components/ContestComponents/Instructions";
+import Notifications from "../components/ContestComponents/Notifications";
 
 const ManageContest = () => {
   const { currentContestName } = useParams("currentContestName");
@@ -42,6 +43,7 @@ const ManageContest = () => {
     setCompanyName("DARWINBOX");
   };
 
+
   useEffect(() => {
     const data = {
       authToken:
@@ -60,23 +62,25 @@ const ManageContest = () => {
       });
   }, []);
 
+  const notifications = Notifications({ data: "kjfhkdjxchgjvyzhftg" });
   return (
     <div className="w-full lg:w-5/6 mx-auto">
       <ContestNavbar selection={selection} setSelection={setSelection} />
+
       {Object.keys(contest).length > 0 && selection === DETAILS && (
         <Details contest={contest} setContest={setContest} />
       )}
-      {selection === QUESTIONS && (
+      {Object.keys(contest).length > 0 && selection === QUESTIONS && (
         <AddQuestions contest={contest} setContest={setContest} />
       )}
-      {selection === CALCULATION_FORMULA && (
+      {Object.keys(contest).length > 0 && selection === CALCULATION_FORMULA && (
         <CalculationFormula contest={contest} setContest={setContest} />
       )}
-
-      {selection === LEADERBOARD && (
+      {selection === NOTIFICATIONS && notifications}
+      {Object.keys(contest).length > 0 && selection === LEADERBOARD && (
         <Leaderboard contest={contest} setContest={setContest} />
       )}
-      {selection === ADD_PARTICIPANTS && (
+      {Object.keys(contest).length > 0 && selection === ADD_PARTICIPANTS && (
         <AddParticipants contest={contest} setContest={setContest} />
       )}
     </div>
