@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { baseURL } from "../config/config";
+import axios from "axios";
 
 const AddParticipants = ({ contestId }) => {
-  const previousGroups = [
-    "gp1",
-    "gp2",
-    "gp1",
-    "gp2",
-    "gp1",
-    "gp2",
-    "gp1",
-    "gp2",
-  ];
-  const [usersToBeAdded, setUsersToBeAdded] = useState([{}]);
+  const [previousGroups, setPreviousGroups] = useState([]);
+  const [usersToBeAdded, setUsersToBeAdded] = useState([""]);
   const [newGroupName, setNewGroupName] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,7 +20,7 @@ const AddParticipants = ({ contestId }) => {
   };
 
   const addUserField = () => {
-    const newUsersState = [...usersToBeAdded, { email: "" }];
+    const newUsersState = [...usersToBeAdded, ""];
     setUsersToBeAdded(newUsersState);
   };
 
@@ -42,13 +35,29 @@ const AddParticipants = ({ contestId }) => {
       alert("Please fill the form correctly and make sure users are added");
     }
     // TODO: Save users to database for this particular test
-    const properUsers = usersToBeAdded.filter((user) => user.email.length > 0);
+    const properUsers = usersToBeAdded.filter((user) => user.length > 0);
     console.log(properUsers);
   };
 
   const handleAddFromExistingGroup = () => {
     openModal();
   };
+
+  useEffect(() => {
+    const data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjAwMTF9.wlgTFIaMwaIAapj1B-5TQp9mR0cZh4mlPW1wdE6uaas",
+      route: "groups/getGroups",
+    };
+    axios
+      .post(baseURL, data)
+      .then((response) => {
+        setPreviousGroups(response.data.data.groups);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div>
@@ -69,10 +78,10 @@ const AddParticipants = ({ contestId }) => {
                   type="text"
                   placeholder="Enter email"
                   id={idx}
-                  value={user.email}
+                  value={user}
                   onChange={(e) => {
                     const newState = [...usersToBeAdded];
-                    newState[e.target.id].email = e.target.value;
+                    newState[e.target.id] = e.target.value;
                     setUsersToBeAdded(newState);
                   }}
                 />
@@ -136,16 +145,9 @@ const Modal = ({ isOpen, onClose, groups, setUsersToBeAdded }) => {
   const [groupSelected, setGroupSelected] = useState("");
 
   const handleImport = () => {
-    // TODO: Fetch group details
-    // TODO: Import from "groupSelected" variable
-    const users = [
-      { email: "d1" },
-      { email: "d2" },
-      { email: "d3" },
-      { email: "d4" },
-      { email: "d5" },
-    ];
+    const users = groups[groupSelected].groupMembers;
     setUsersToBeAdded(users);
+    console.log("Import", users);
     onClose();
   };
 
@@ -169,8 +171,8 @@ const Modal = ({ isOpen, onClose, groups, setUsersToBeAdded }) => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md max-h-10 overflow-y-scroll"
               onChange={(e) => setGroupSelected(e.target.value)}
             >
-              {groups.map((group) => {
-                return <option value={group}>{group}</option>;
+              {groups.map((group, idx) => {
+                return <option value={idx}>{group.groupName}</option>;
               })}
             </select>
           </div>

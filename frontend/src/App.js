@@ -71,7 +71,7 @@ const App = () => {
           path="/contest/manage/:contestName"
           element={<ManageContest />}
         />
-        <Route exact path="/createChallange" element={<CreateChallange />} />
+        <Route exact path="/createChallenge" element={<CreateChallange />} />
         <Route
           path="/contest/manage/:contestName/:email"
           element={<IndividualContestProgressReport />}

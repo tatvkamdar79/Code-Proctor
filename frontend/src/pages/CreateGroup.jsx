@@ -1,18 +1,11 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
+import { baseURL } from "../config/config";
 
 const CreateGroup = () => {
-  const previousGroups = [
-    "gp1",
-    "gp2",
-    "gp1",
-    "gp2",
-    "gp1",
-    "gp2",
-    "gp1",
-    "gp2",
-  ];
-  const [usersToBeAdded, setUsersToBeAdded] = useState([{}]);
+  const [previousGroups, setPreviousGroups] = useState([]);
+  const [usersToBeAdded, setUsersToBeAdded] = useState([""]);
   const [newGroupName, setNewGroupName] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +19,7 @@ const CreateGroup = () => {
   };
 
   const addUserField = () => {
-    const newUsersState = [...usersToBeAdded, { email: "" }];
+    const newUsersState = [...usersToBeAdded, ""];
     setUsersToBeAdded(newUsersState);
   };
 
@@ -36,15 +29,53 @@ const CreateGroup = () => {
     setUsersToBeAdded(newUsersState);
   };
 
-  const handleCreateGroup = () => {
+  const handleCreateGroup = async () => {
     if (newGroupName == "" || usersToBeAdded.length == 0) {
       alert("Please fill the form correctly and make sure users are added");
+    }
+    let data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjAwMTF9.wlgTFIaMwaIAapj1B-5TQp9mR0cZh4mlPW1wdE6uaas",
+      route: "groups/checkIfNameIsAvailable",
+      groupName: newGroupName,
+    };
+    try {
+      let response = await axios.post(baseURL, data);
+      console.log(response);
+      if (response.status == 400) {
+        alert("Please enter a unique group name");
+        return;
+      }
+      const properUsers = usersToBeAdded.filter((user) => user.length > 0);
+      data["route"] = "groups/createGroup";
+      data["groupMembers"] = properUsers;
+      response = await axios.post(baseURL, data);
+      // TODO: Handle redirection
+      alert("Group created successfully");
+    } catch (err) {
+      console.log(err);
     }
   };
 
   const handleAddFromExistingGroup = () => {
     openModal();
   };
+
+  useEffect(() => {
+    const data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjAwMTF9.wlgTFIaMwaIAapj1B-5TQp9mR0cZh4mlPW1wdE6uaas",
+      route: "groups/getGroups",
+    };
+    axios
+      .post(baseURL, data)
+      .then((response) => {
+        setPreviousGroups(response.data.data.groups);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div>
@@ -76,10 +107,10 @@ const CreateGroup = () => {
                   type="text"
                   placeholder="Enter email"
                   id={idx}
-                  value={user.email}
+                  value={user}
                   onChange={(e) => {
                     const newState = [...usersToBeAdded];
-                    newState[e.target.id].email = e.target.value;
+                    newState[e.target.id] = e.target.value;
                     setUsersToBeAdded(newState);
                   }}
                 />
@@ -137,16 +168,9 @@ const Modal = ({ isOpen, onClose, groups, setUsersToBeAdded }) => {
   const [groupSelected, setGroupSelected] = useState("");
 
   const handleImport = () => {
-    // TODO: Fetch group details
-    // TODO: Import from "groupSelected" variable
-    const users = [
-      { email: "d1" },
-      { email: "d2" },
-      { email: "d3" },
-      { email: "d4" },
-      { email: "d5" },
-    ];
+    const users = groups[groupSelected].groupMembers;
     setUsersToBeAdded(users);
+    console.log("Import", users);
     onClose();
   };
 
@@ -170,8 +194,8 @@ const Modal = ({ isOpen, onClose, groups, setUsersToBeAdded }) => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md max-h-10 overflow-y-scroll"
               onChange={(e) => setGroupSelected(e.target.value)}
             >
-              {groups.map((group) => {
-                return <option value={group}>{group}</option>;
+              {groups.map((group, idx) => {
+                return <option value={idx}>{group.groupName}</option>;
               })}
             </select>
           </div>

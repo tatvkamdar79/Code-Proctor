@@ -69,9 +69,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// server.listen(9000, () => {
-//   console.log("SERVER IS RUNNING");
-// });
+server.listen(9000, () => {
+  console.log("SERVER IS RUNNING");
+});
 
 // app.get("/", (req, res) => {
 //   res.send("ljkjdflksjfds");
@@ -98,13 +98,14 @@ io.on("connection", (socket) => {
 // });
 
 app.get("/", async (req, res) => {
-  console.log(req.body);
-  const url = req.query.route;
-  try {
-    const response = await axios.get(`http://localhost/index.php/${url}`);
-  } catch (err) {
-    console.log("Error occurred: ");
-  }
+  // console.log(req.body);
+  // const url = req.query.route;
+  // try {
+  //   const response = await axios.get(`http://localhost/index.php/${url}`);
+  // } catch (err) {
+  //   console.log("Error occurred: ");
+  // }
+  console.log("Hello");
 });
 
 app.post("/", async (req, res) => {
