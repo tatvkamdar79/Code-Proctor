@@ -1,12 +1,14 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { baseURL } from "../config/config";
 
 const CreateContest = () => {
   const navigate = useNavigate();
   const [contestName, setContestName] = useState("");
   const [eventType, setEventType] = useState("FUN");
   const [companyName, setCompanyName] = useState("");
-  const [contestDate, setContestDate] = useState("");
+  const [contestStartDate, setContestStartDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [contestEndDate, setContestEndDate] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -112,10 +114,21 @@ const CreateContest = () => {
     "23:45",
   ];
 
-  const handleGetStarted = () => {
-    if (true) {
-      navigate("/contest/manage/a");
-    }
+  const handleGetStarted = (e) => {
+    e.preventDefault();
+    // const contest = {
+    //   contestName,
+    //   eventType,
+    //   companyName,
+    //   contestStartDate,
+    //   startTime,
+    //   contestEndDate,
+    //   endTime,
+    //   instructions: [],
+    //   questions: [],
+    //   contestants: []
+    // }
+    // console.log(contest)
   };
 
   const options = {
@@ -136,11 +149,11 @@ const CreateContest = () => {
     return formattedDate;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("SUBMIT");
-    // console.log(contestDate, date);
-    const d1 = contestDate.split("-");
+    // console.log(contestStartDate, date);
+    const d1 = contestStartDate.split("-");
     const d2 = contestEndDate.split("-");
     console.log(d1, d2);
     let isDateCorrect = 1,
@@ -170,12 +183,34 @@ const CreateContest = () => {
     }
     if (isDateCorrect == 0 || isTimeCorrect == 0) {
       alert("Fill the time and date fields properly");
+      return;
     }
+
+    const contest = {
+      contestName,
+      eventType,
+      companyName,
+      contestStartDate: String(contestStartDate) + "T" + startTime + ":" + "00",
+      // startTime,
+      contestEndDate: String(contestEndDate) + "T" + endTime + ":" + "00",
+      // endTime,
+      instructions: [],
+      questions: [],
+      contestants: [],
+      route: "contests/create",
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjY0MTd9.wZb6sS3D9rHBneR6lbCOY7LpLJtNsOIhZfc0iXfRptQ",
+    };
+
+    console.log(contest);
+
+    const response = await axios.post(baseURL, contest);
+    console.log(response);
   };
 
   useEffect(() => {
-    console.log(contestDate);
-  }, [contestDate]);
+    console.log(contestStartDate);
+  }, [contestStartDate]);
 
   useEffect(() => {
     console.log(contestEndDate);
@@ -250,7 +285,8 @@ const CreateContest = () => {
               name=""
               id=""
               className="border border-gray-300 pl-3"
-              onChange={(e) => setContestDate(e.target.value)}
+              onChange={(e) => setContestStartDate(e.target.value)}
+              required
             />
           </label>
         </div>
@@ -265,6 +301,7 @@ const CreateContest = () => {
               <input
                 type="text"
                 value={startTime}
+                readOnly
                 onChange={(e) => setStartTime(e.target.value)}
                 className="w-60 px-4 py-2 border rounded-md"
                 onClick={() => setShowStartTime(true)}
@@ -327,8 +364,7 @@ const CreateContest = () => {
             </div>
           </label>
         </div>
-        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+        <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" />
         <button
           type="submit"
           className="px-6 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-300 font-mono my-4"

@@ -19,6 +19,7 @@ import Details from "./components/ContestComponents/Details";
 import CreateContest from "./pages/CreateContest";
 import ShowStages from "./pages/ShowStages";
 import IndividualContestProgressReport from "./components/ContestComponents/IndividualContestProgressReport";
+import RecruitmentTimeline from "./pages/RecruitmentTimeline";
 
 const App = () => {
   const [previousRooms, setPreviousRooms] = useState([]);
@@ -75,6 +76,11 @@ const App = () => {
         <Route
           path="/contest/manage/:contestName/:email"
           element={<IndividualContestProgressReport />}
+        />
+
+        <Route
+          path="/recruitment-timeline/create"
+          element={<RecruitmentTimeline />}
         />
 
         <Route path="*" element={<NotFound />} />
