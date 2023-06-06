@@ -40,6 +40,7 @@ const CreateGroup = () => {
       groupName: newGroupName,
     };
     try {
+      // TODO ADD WAITING ANIMATION
       let response = await axios.post(baseURL, data);
       console.log(response);
       if (response.status == 400) {

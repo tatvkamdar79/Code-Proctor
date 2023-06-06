@@ -6,6 +6,7 @@ import ContestNavbar from "../components/ContestComponents/ContestNavbar";
 import Leaderboard from "../components/ContestComponents/Leaderboard";
 import CreateGroup from "./CreateGroup";
 import AddParticipants from "./AddParticipants";
+import Notifications from "../components/ContestComponents/Notifications";
 
 const CreateContest = () => {
   const DETAILS = "DETAILS";
@@ -35,7 +36,7 @@ const CreateContest = () => {
     setEventType("FUN");
     setCompanyName("DARWINBOX");
   };
-  const x = 1;
+  const notifications = Notifications({ data: "kjfhkdjxchgjvyzhftg" });
   return (
     <div className="w-full lg:w-5/6 mx-auto">
       <section className="w-11/12 mx-auto">
@@ -47,9 +48,10 @@ const CreateContest = () => {
       {selection === DETAILS && <Details />}
       {selection === QUESTIONS && <AddQuestions />}
       {selection === CALCULATION_FORMULA && <CalculationFormula />}
-
+      {/* {selection === NOTIFICATIONS && <Notifications />} */}
+      {selection === NOTIFICATIONS && notifications}
       {selection === LEADERBOARD && <Leaderboard />}
-      {selection === ADD_PARTICIPANTS && <AddParticipants contestId={x} />}
+      {selection === ADD_PARTICIPANTS && <AddParticipants contestId={1} />}
     </div>
   );
 };

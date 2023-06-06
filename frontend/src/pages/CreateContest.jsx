@@ -230,7 +230,7 @@ const CreateContest = () => {
         </p>
       </div>
       <form onSubmit={handleSubmit} className="p-4">
-        <div className="py-2">
+        <div className="py-2 w-fit">
           <label className="flex place-items-center gap-x-7">
             <p className="w-60 font-medium text-gray-600">
               Contest Name: <span className="text-red-500">*</span>
@@ -245,7 +245,7 @@ const CreateContest = () => {
           </label>
         </div>
         {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        <div className="py-2">
+        <div className="py-2 w-fit">
           <label className="flex place-items-center gap-x-7">
             <p className="w-60 font-medium text-gray-600">
               Event Type: <span className="text-red-500">*</span>
@@ -261,7 +261,7 @@ const CreateContest = () => {
           </label>
         </div>
         {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        <div className="py-2">
+        <div className="py-2 w-fit">
           <label className="flex place-items-center gap-x-7">
             <p className="w-60 font-medium text-gray-600">
               Company Name: <span className="text-red-500">*</span>
@@ -275,7 +275,7 @@ const CreateContest = () => {
           </label>
         </div>
         {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        <div className="py-2">
+        <div className="py-2 w-fit">
           <label className="flex place-items-center gap-x-7">
             <p className="w-60 font-medium text-gray-600">
               Contest Start Date<span className="text-red-500">*</span>
@@ -291,7 +291,7 @@ const CreateContest = () => {
           </label>
         </div>
         {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-        <div className="py-2">
+        <div className="py-2 w-fit">
           <label className="flex gap-x-7">
             <p className="w-60 mt-3 font-medium text-gray-600">
               Start Time (IST, 24 hour time):{" "}
@@ -304,7 +304,7 @@ const CreateContest = () => {
                 readOnly
                 onChange={(e) => setStartTime(e.target.value)}
                 className="w-60 px-4 py-2 border rounded-md"
-                onClick={() => setShowStartTime(true)}
+                onFocus={() => setShowStartTime(true)}
                 onBlur={() => setTimeout(() => setShowStartTime(false), 200)}
               />
               <ul
@@ -321,7 +321,7 @@ const CreateContest = () => {
             </div>
           </label>
         </div>
-        <div className="py-2">
+        <div className="py-2 w-fit">
           <label className="flex place-items-center gap-x-7">
             <p className="w-60 font-medium text-gray-600">
               Contest End Date<span className="text-red-500">*</span>
@@ -335,7 +335,7 @@ const CreateContest = () => {
             />
           </label>
         </div>
-        <div className="py-2">
+        <div className="py-2 w-fit">
           <label className="flex gap-x-7">
             <p className="w-60 mt-3 font-medium text-gray-600">
               End Time (IST, 24 hour time):{" "}
@@ -347,13 +347,14 @@ const CreateContest = () => {
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
                 className="w-60 px-4 py-2 border rounded-md"
-                onClick={() => setShowEndTime(true)}
+                onFocus={() => setShowEndTime(true)}
                 onBlur={() => setTimeout(() => setShowEndTime(false), 200)}
               />
               <ul
                 className={`${
                   !showEndTime && "hidden"
                 } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+                autoFocus
               >
                 {possibleTimes.map((time) => (
                   <li onClick={(e) => setEndTime(e.target.innerText)}>
