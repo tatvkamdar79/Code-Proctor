@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { baseURL } from "../config/config";
 import axios from "axios";
 
-const AddParticipants = ({ contestId }) => {
+const AddParticipants = ({ contest, setContest }) => {
   const [previousGroups, setPreviousGroups] = useState([]);
   const [usersToBeAdded, setUsersToBeAdded] = useState([""]);
   const [newGroupName, setNewGroupName] = useState("");

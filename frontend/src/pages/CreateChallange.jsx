@@ -1,4 +1,6 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { baseURL } from "../config/config";
 
 const CreateChallange = () => {
   const [questionTitle, setQuestionTitle] = useState("");
@@ -6,7 +8,9 @@ const CreateChallange = () => {
   const [sampleInput, setSampleInput] = useState("");
   const [sampleOutput, setSampleOutput] = useState("");
   const [tags, setTags] = useState([""]);
-
+  const [publicTestCases, setPublicTestCases] = useState([
+    { input: "", output: "" },
+  ]);
   const [hiddenTestCases, setHiddenTestCases] = useState([
     { input: "", output: "" },
     { input: "", output: "" },
@@ -35,9 +39,6 @@ const CreateChallange = () => {
     updatedTags[index] = value;
     setTags(updatedTags);
   };
-  const [publicTestCases, setPublicTestCases] = useState([
-    { input: "", output: "" },
-  ]);
 
   const handleAddHiddenTestCase = () => {
     setHiddenTestCases([...hiddenTestCases, { input: "", output: "" }]);
@@ -85,7 +86,7 @@ const CreateChallange = () => {
     hiddenTestCases,
   ]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (
       !window.confirm(
@@ -99,17 +100,38 @@ const CreateChallange = () => {
       return;
     }
 
+    const correctPublicTestCases = publicTestCases.filter(
+      (tc) => tc.input.length > 0 && tc.output.length > 0
+    );
+    const correctHiddenTestCases = hiddenTestCases.filter(
+      (tc) => tc.input.length > 0 && tc.output.length > 0
+    );
+
+    let sampleTCs = [
+      { input: sampleInput, output: sampleOutput },
+      ...correctPublicTestCases,
+    ];
     const questionData = {
-      questionTitle,
-      questionDescription,
-      sampleInput,
-      sampleOutput,
-      publicTestCases,
-      hiddenTestCases,
+      title: questionTitle,
+      description: questionDescription,
+      sampleTCs: sampleTCs,
+      hiddenTCs: correctHiddenTestCases,
       score,
+      tags,
     };
     setSubmitted(true);
-    // onQuestionSubmit(questionData);
+    const data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjAwMTF9.wlgTFIaMwaIAapj1B-5TQp9mR0cZh4mlPW1wdE6uaas",
+      route: "problems/create",
+      ...questionData,
+    };
+    try {
+      const response = await axios.post(baseURL, data);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -344,7 +366,9 @@ const CreateChallange = () => {
               } focus:outline-none`}
               disabled={submitted}
             >
-              {submitted ? "Added to Test" : "Add Question to Test"}
+              {submitted
+                ? "Added to Question List"
+                : "Add Question to Question List"}
             </button>
           </div>
         </form>

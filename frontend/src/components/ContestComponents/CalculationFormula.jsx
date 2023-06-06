@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const CreateContestCalculationFormula = () => {
+const CreateContestCalculationFormula = ({ contest, setContest }) => {
   const [testCasesWeightage, setTestCasesWeightage] = useState(100);
   const [timeSpentWeightage, setTimeSpentWeightage] = useState(0);
 

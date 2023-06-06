@@ -85,17 +85,20 @@ const CreateQuestion = ({ onQuestionSubmit, questionNumber, question, x }) => {
     if (submitted) {
       return;
     }
-    const questionData = {
-      questionTitle,
-      questionDescription,
-      sampleInput,
-      sampleOutput,
-      publicTestCases,
-      hiddenTestCases,
-      score,
-    };
+    // let sampleTCs = [
+    //   { input: sampleInput, output: sampleOutput },
+    //   ...publicTestCases,
+    // ];
+    // const questionData = {
+    //   title: questionTitle,
+    //   description: questionDescription,
+    //   sampleTCs: sampleTCs,
+    //   hiddenTCs: hiddenTestCases,
+    //   score,
+    //   tags,
+    // };
     setSubmitted(true);
-    onQuestionSubmit(questionData);
+    // onQuestionSubmit(questionData);
   };
 
   return (

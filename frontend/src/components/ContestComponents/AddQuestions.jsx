@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BiSearchAlt, BiSearchAlt2 } from "react-icons/bi";
 
-const CreateContestAddQuestions = () => {
+const CreateContestAddQuestions = ({ contest, setContest }) => {
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
