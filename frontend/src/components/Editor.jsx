@@ -51,31 +51,14 @@ const Editor = ({
   fontSize,
   sampleInput,
   sampleOutput,
-  testCases,
   contestId,
   question,
+  contestantEmail,
 }) => {
-
+  console.count("hello");
   // TODO: Change the questionId and contestId
-  questionId = "647dd3d0aaed96bca30fde53";
-  contestId = "647f17f8932c1195d8041952";
-  sampleInput = "This is sample input";
-  sampleOutput = "jhfkdsjh\njhfkdsjh\njhfkdsjh";
+  let questionId = question._id["$oid"];
 
-  testCases = [
-    { input: "1", output: "1" },
-    { input: "2", output: "2" },
-    { input: "3", output: "3" },
-    { input: "4", output: "4" },
-    { input: "5", output: "5" },
-    { input: "6", output: "6" },
-    { input: "1", output: "1" },
-    { input: "2", output: "2" },
-    { input: "3", output: "3" },
-    { input: "4", output: "4" },
-    { input: "5", output: "5" },
-    { input: "6", output: "6" },
-  ];
   const TEST_RESULTS = "TEST_RESULTS";
   const CUSTOM_INPUT = "CUSTOM_INPUT";
   const RUNNING_CODE = "RUNNING_CODE";
@@ -99,7 +82,9 @@ const Editor = ({
   const [resultForTCs, setResultForTCs] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  let timeWhenQuestionOpened = Date.now();
+  const [timeWhenQuestionOpened, setTimeWhenQuestionOpened] = useState(
+    Date.now()
+  );
 
   const handleSubmitAllTestCases = () => {
     // console.log(submissionStatusForTCs);
@@ -213,7 +198,7 @@ const Editor = ({
         const data = {
           route: "contests/addSubmission",
           // TODO: Change email address
-          contestantEmail: "aman@gmail.com",
+          contestantEmail: contestantEmail,
           contestId: contestId,
           questionId: questionId,
           submissionStatus: resultForDB,
@@ -224,7 +209,7 @@ const Editor = ({
           isCorrect: score == resultForDB.length ? 1 : 0,
           timeSpentOnQuestion: Date.now() - timeWhenQuestionOpened,
         };
-        timeWhenQuestionOpened = Date.now();
+        setTimeWhenQuestionOpened(Date.now());
         try {
           const result = await axios.post(baseURL, data);
           //TODO: Display submitted and send to all questions page

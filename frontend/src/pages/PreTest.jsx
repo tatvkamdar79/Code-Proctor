@@ -67,7 +67,9 @@ export default function PreTest() {
     }
     console.log("Email in");
     enterFullscreen();
-    navigate(`/test/${currentContestName}`, { state: { validated: true } });
+    navigate(`/test/${currentContestName}`, {
+      state: { validated: true, email },
+    });
     // TODO: Handle form submission
   };
 
