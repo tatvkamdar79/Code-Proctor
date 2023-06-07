@@ -5,8 +5,9 @@ import { baseURL } from "../config/config";
 import axios from "axios";
 
 const AddParticipants = ({ contest, setContest }) => {
+  console.log(contest);
   const [previousGroups, setPreviousGroups] = useState([]);
-  const [usersToBeAdded, setUsersToBeAdded] = useState([""]);
+  const [usersToBeAdded, setUsersToBeAdded] = useState(contest.contestants);
   const [newGroupName, setNewGroupName] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,12 +31,25 @@ const AddParticipants = ({ contest, setContest }) => {
     setUsersToBeAdded(newUsersState);
   };
 
-  const handleSaveUsers = () => {
+  const handleSaveUsers = async () => {
     if (usersToBeAdded.length == 0) {
       alert("Please fill the form correctly and make sure users are added");
     }
     // TODO: Save users to database for this particular test
     const properUsers = usersToBeAdded.filter((user) => user.length > 0);
+    const data = {
+      route: "contests/modifyContestants",
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1NDIxMjV9.2TH7h3PNsP-vYO049GsEx4xm2Yj7AmyGVStf7xoxzFE",
+      contestId: contest._id["$oid"],
+      emails: properUsers,
+    };
+    try {
+      const response = await axios.post(baseURL, data);
+      console.log(response.data);
+    } catch (err) {
+      console.log(err);
+    }
     console.log(properUsers);
   };
 
