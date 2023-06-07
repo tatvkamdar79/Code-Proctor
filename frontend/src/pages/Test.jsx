@@ -15,7 +15,7 @@ const Test = () => {
     navigate(`/pretest/${currentContestName}`);
   }
 
-  const contestantEmail = state.email;
+  const contestantEmail = state?.email;
   const totalTime = 1800;
   const [selected, setSelected] = useState("ALL");
   const [questionsComponent, setQuestionsComponent] = useState([]);
@@ -193,6 +193,127 @@ const Test = () => {
   useEffect(() => {
     // console.log("Time changed", totalTimeForEachQuestion);
   }, [totalTimeForEachQuestion]);
+
+  // TODO: Send Image to server.
+  useEffect(() => {
+    // Check if the browser supports getUserMedia (camera access)
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      // Get video stream from the camera
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(function (stream) {
+          // Create a video element to display the camera feed
+          let video = document.createElement("video");
+          video.style.display = "none";
+          video.srcObject = stream;
+          video.autoplay = true;
+          document.body.appendChild(video);
+
+          // Create a canvas element to capture the photo
+          let canvas = document.createElement("canvas");
+          canvas.style.display = "none";
+          document.body.appendChild(canvas);
+
+          setTimeout(() => {
+            // We can store the ID returned from setInterval and clear the interval later if we want.
+            // Click Image every 5 seconds
+            setInterval(() => {
+              clickImageAndCheckIfUserIsCopying(canvas, video);
+            }, 10000);
+          }, 1000);
+        })
+        .catch(function (error) {
+          console.error("Error accessing camera:", error);
+        });
+    } else {
+      console.error("Camera access not supported by the browser");
+    }
+  }, []);
+
+  const clickImageAndCheckIfUserIsCopying = async (canvas, video) => {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw current video frame onto the canvas
+    let context = canvas.getContext("2d");
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Get the captured photo as a base64-encoded data URL
+    let photoDataUrl = canvas.toDataURL("image/jpeg");
+    console.log(photoDataUrl);
+
+    const response = await sendImageToServer(photoDataUrl);
+    console.log(response);
+    const url = response.data.url;
+
+    // const result = axios.post(baseURL, { route: 'tests/storeImage' });
+    // Call this function after getting img link
+
+    checkIfUserIsCopying(url);
+  };
+
+  // TODO: Add the test ID and user details for backend. Make changes in the backend accordingly.
+  const sendImageToServer = async (base64Image) => {
+    const result = await axios.post(
+      baseURL,
+      {
+        base64Image: base64Image,
+        route: `tests/storeImage`,
+        authToken:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1Mzk5NzB9.kdW4g-CH7WYUeQJdnqgBkzhHfNoXcCm9qEpag0r0SwY",
+      },
+      { "Content-Type": "application/json" }
+    );
+    return result;
+  };
+
+  const checkIfUserIsCopying = (imgLink) => {
+    let clientId = "2hqe6WNIjEoRhGdjwW4CwUJc";
+    let clientSecret = "iMejT2OS6jjpcAuAUUHDr2JHMv4OeLDHG4aZC8pRBbOTfddS";
+    const url = "https://api.everypixel.com/v1/keywords";
+    const params = {
+      /* your query parameters */
+      url: imgLink,
+    };
+    console.log("Checking for user..", imgLink);
+    axios
+      .get(url, {
+        params,
+        auth: {
+          username: clientId,
+          password: clientSecret,
+        },
+      })
+      .then((response) => {
+        // Handle response
+        const keywords = response.data.keywords;
+        // "one person" & ! "mobile phone or smart phone"
+        let isAlone = false,
+          isMobilePresent = false;
+        for (const keyword of keywords) {
+          if (keyword.keyword === "one person") {
+            isAlone = true;
+          } else if (
+            keyword.keyword === "mobile phone" ||
+            keyword.keyword === "smart phone"
+          ) {
+            isMobilePresent = true;
+            break;
+          }
+        }
+        // Mark user as copying
+        if (!isAlone || isMobilePresent) {
+          // Send server request and mark as copy
+        } else {
+          // Everything is fine
+        }
+        console.log(keywords);
+      })
+      .catch((error) => {
+        // Handle error
+        console.log(error);
+      });
+  };
 
   const fetchIpAddress = async () => {
     try {
