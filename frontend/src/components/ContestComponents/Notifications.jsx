@@ -4,7 +4,7 @@ import { baseURL } from "../../config/config";
 import { SiMinutemailer } from "react-icons/si";
 
 const Notifications = ({ contest }) => {
-  //   console.log(contest);
+  // console.log(contest);
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
 
@@ -77,7 +77,7 @@ Best regards,
       format = "sampleUpdateContestTimingsEmail";
     }
     const email = {
-      contestId: contest.contestId,
+      contestId: contest._id["$oid"],
       subject,
       body,
       format,

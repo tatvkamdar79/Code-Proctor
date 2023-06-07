@@ -24,15 +24,28 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
     contest?.instructionsTitle
   );
 
+  // TODO: Start Time and End Time are coming incorrectly. For "aman" it is 01:00 and 01:15
   useEffect(() => {
     setContestName(contest?.contestName);
     setEventType(contest?.eventType);
     setCompanyName(contest?.companyName);
-    setContestStartDate(contest?.contestStartDa);
     setStartTime(contest?.startTime);
     setContestEndDate(contest?.contestEndDate);
     setEndTime(contest?.endTime);
     setInstructionsTitle(contest?.instructionsTitle);
+    const startingDate = new Date(
+      contest?.contestStartDate.sec * 1000
+    ).toLocaleString();
+    const endingDate = new Date(
+      contest?.contestEndDate.sec * 1000
+    ).toLocaleString();
+    if (contest) {
+      setContestStartDate(convertDateFormat(startingDate.slice(0, 10)));
+      setContestEndDate(convertDateFormat(endingDate.slice(0, 10)));
+      setStartTime(startingDate.slice(12, 17));
+      setEndTime(endingDate.slice(12, 17));
+    }
+    console.log("Starting date", startingDate);
   }, [contest]);
 
   console.log(typeof contest?.contestStartDate);
@@ -198,6 +211,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
     }
 
     const contest = {
+      contestId: contest._id["$oid"],
       contestName,
       eventType,
       companyName,
@@ -205,10 +219,9 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
       // startTime,
       contestEndDate: String(contestEndDate) + "T" + endTime + ":" + "00",
       // endTime,
-      instructions: [],
-      questions: [],
-      contestants: [],
-      route: "contests/create",
+      instructionsTitle,
+      instructions,
+      route: "contests/modifyContest",
       authToken:
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjY0MTd9.wZb6sS3D9rHBneR6lbCOY7LpLJtNsOIhZfc0iXfRptQ",
     };
@@ -278,6 +291,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
                 name=""
                 id=""
                 className="border border-gray-300 pl-3"
+                value={contestStartDate}
                 onChange={(e) => setContestStartDate(e.target.value)}
               />
             </label>
@@ -321,8 +335,12 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
                 type="date"
                 name=""
                 id=""
+                value={contestEndDate}
                 className="border border-gray-300 pl-3"
-                onChange={(e) => setContestEndDate(e.target.value)}
+                onChange={(e) => {
+                  setContestEndDate(e.target.value);
+                  console.log("Contest end date", e.target.value);
+                }}
               />
             </label>
           </div>

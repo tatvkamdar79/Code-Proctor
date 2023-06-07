@@ -64,7 +64,10 @@ const ManageContest = () => {
       });
   }, []);
 
-  const notifications = Notifications({ data: "kjfhkdjxchgjvyzhftg" });
+  const notifications = Notifications({
+    data: "kjfhkdjxchgjvyzhftg",
+    contest: contest,
+  });
   return (
     <div className="w-full lg:w-5/6 mx-auto">
       <ContestNavbar selection={selection} setSelection={setSelection} />

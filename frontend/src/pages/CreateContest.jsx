@@ -199,7 +199,7 @@ const CreateContest = () => {
       contestants: [],
       route: "contests/create",
       authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjY0MTd9.wZb6sS3D9rHBneR6lbCOY7LpLJtNsOIhZfc0iXfRptQ",
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1NjE5NzN9.0iyte-Pnsml69EMA9YkXnZAz0oLavureJu6Rd4wm3xg",
     };
 
     console.log(contest);
