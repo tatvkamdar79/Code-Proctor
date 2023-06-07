@@ -43,11 +43,10 @@ const ManageContest = () => {
     setCompanyName("DARWINBOX");
   };
 
-
   useEffect(() => {
     const data = {
       authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjAwMTF9.wlgTFIaMwaIAapj1B-5TQp9mR0cZh4mlPW1wdE6uaas",
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
       route: "contests/getContestDetails",
       contestName: currentContestName,
     };
@@ -55,7 +54,7 @@ const ManageContest = () => {
       .post(baseURL, data)
       .then((response) => {
         setContest(response.data.data.contest);
-        // console.log(response.data);
+        console.log(response.data);
       })
       .catch((err) => {
         console.log(err);

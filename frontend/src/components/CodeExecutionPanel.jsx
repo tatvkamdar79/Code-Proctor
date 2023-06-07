@@ -9,7 +9,14 @@ import { diff_match_patch } from "diff-match-patch";
 import { Resizable } from "re-resizable";
 import { GrDrag } from "react-icons/gr";
 
-const CodeExecutionPanel = ({ question, time, setTime, index, setIndex }) => {
+const CodeExecutionPanel = ({
+  question,
+  time,
+  setTime,
+  index,
+  setIndex,
+  contestId,
+}) => {
   const [timeSpent, setTimeSpent] = useState(Date.now());
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
@@ -274,6 +281,7 @@ const CodeExecutionPanel = ({ question, time, setTime, index, setIndex }) => {
     localStorage.setItem("fontSize", fontSize);
   }, [fontSize]);
 
+  // TODO: Send Image to server.
   useEffect(() => {
     // Check if the browser supports getUserMedia (camera access)
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -511,6 +519,8 @@ const CodeExecutionPanel = ({ question, time, setTime, index, setIndex }) => {
         fontSize={fontSize}
         output={output}
         setOutput={setOutput}
+        questionId={question}
+        contestId={contestId}
       >
         <div className="flex justify-start gap-x-10 py-2 px-5">
           <div className="flex justify-center place-items-center gap-x-2">

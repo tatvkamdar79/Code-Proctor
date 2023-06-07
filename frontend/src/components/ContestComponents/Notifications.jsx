@@ -83,7 +83,7 @@ Best regards,
       format,
       route: "contests/sendNotification",
       authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjAwMTF9.wlgTFIaMwaIAapj1B-5TQp9mR0cZh4mlPW1wdE6uaas",
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
     };
     console.log(email);
     const response = await axios.post(baseURL, email);

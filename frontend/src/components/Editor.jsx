@@ -51,6 +51,8 @@ const Editor = ({
   sampleInput,
   sampleOutput,
   testCases,
+  questionId,
+  contestId,
 }) => {
   sampleInput = "This is sample input";
   sampleOutput = "jhfkdsjh\njhfkdsjh\njhfkdsjh";
@@ -90,6 +92,7 @@ const Editor = ({
   const [submissionIdsForTCs, setSubmissionIdsForTCs] = useState([]);
   const [submissionStatusForTCs, setSubmissionStatusForTCs] = useState([]);
   const [resultForTCs, setResultForTCs] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmitAllTestCases = () => {
     // console.log(submissionStatusForTCs);
@@ -189,6 +192,9 @@ const Editor = ({
       setExecutionStatus(COMPLETED);
       setShowConsole(COMPLETED);
       setResultForTCs(results);
+      if (isSubmitting) {
+      }
+      setIsSubmitting(false);
     };
     let isCompleted =
       submissionStatusForTCs.filter((status) => status !== COMPLETED).length ===
@@ -360,9 +366,13 @@ const Editor = ({
               executionStatus === SUBMITTING && "cursor-not-allowed opacity-40"
             }`}
             disabled={executionStatus === SUBMITTING}
+            // onClick={() => {
+            //   setShowConsole(SUBMITTING);
+            //   setExecutionStatus(SUBMITTING);
+            // }}
             onClick={() => {
-              setShowConsole(SUBMITTING);
-              setExecutionStatus(SUBMITTING);
+              setIsSubmitting(true);
+              handleSubmitAllTestCases();
             }}
           >
             Submit
