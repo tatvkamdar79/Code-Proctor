@@ -27,77 +27,9 @@ const Test = () => {
   const [helperTimeVariable, setHelperTimeVariable] = useState(0);
   const [helperQuestionIndex, setHelperQuestionIndex] = useState(0);
 
-  // Remove this
-  const staticQuestions = [
-    {
-      title: "Title of the question 1",
-      problemStatement:
-        "Given an unsorted array of n elements, find if the element k is present in the array or not.",
-      constraints: [
-        "1 &le; arr &le; 100",
-        "1 &ge; n &le; 300",
-        "minNumberOfTurns &le; 6*10<sup>5</sup>",
-      ],
-      sampleTestCases: [
-        { input: "1\n2\n3", output: "6" },
-        { input: "1\n2\n3", output: "6" },
-        { input: "1\n2\n3", output: "6" },
-      ],
-      inputs: ["1", "2", "3"],
-      outputs: ["1", "2", "3"],
-    },
-    {
-      title: "Title of the question 2",
-      problemStatement:
-        "Given an unsorted array of n elements, find if the element k is present in the array or not.",
-      constraints: [
-        "1 &le; arr &le; 100",
-        "1 &ge; n &le; 300",
-        "minNumberOfTurns &le; 6*10<sup>5</sup>",
-      ],
-      sampleTestCases: [
-        { input: "1\n2\n3", output: "6" },
-        { input: "1\n2\n3", output: "6" },
-        { input: "1\n2\n3", output: "6" },
-      ],
-      inputs: ["1", "2", "3"],
-      outputs: ["1", "2", "3"],
-    },
-    {
-      title: "Title of the question 3",
-      problemStatement:
-        "Given an unsorted array of n elements, find if the element k is present in the array or not.",
-      constraints: [
-        "1 &le; arr &le; 100",
-        "1 &ge; n &le; 300",
-        "minNumberOfTurns &le; 6*10<sup>5</sup>",
-      ],
-      sampleTestCases: [
-        { input: "1\n2\n3", output: "6" },
-        { input: "1\n2\n3", output: "6" },
-        { input: "1\n2\n3", output: "6" },
-      ],
-      inputs: ["1", "2", "3"],
-      outputs: ["1", "2", "3"],
-    },
-    {
-      title: "Title of the question 4",
-      problemStatement:
-        "Given an unsorted array of n elements, find if the element k is present in the array or not.",
-      constraints: [
-        "1 &le; arr &le; 100",
-        "1 &ge; n &le; 300",
-        "minNumberOfTurns &le; 6*10<sup>5</sup>",
-      ],
-      sampleTestCases: [
-        { input: "1\n2\n3", output: "6" },
-        { input: "1\n2\n3", output: "6" },
-        { input: "1\n2\n3", output: "6" },
-      ],
-      inputs: ["1", "2", "3"],
-      outputs: ["1", "2", "3"],
-    },
-  ];
+  useEffect(() => {
+    console.log(totalTimeForEachQuestion);
+  }, [totalTimeForEachQuestion]);
 
   const allInstructions = [
     {

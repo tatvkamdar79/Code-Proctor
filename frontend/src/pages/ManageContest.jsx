@@ -21,7 +21,7 @@ const ManageContest = () => {
   const NOTIFICATIONS = "NOTIFICATIONS";
   const ADD_PARTICIPANTS = "ADD_PARTICIPANTS";
 
-  const [contest, setContest] = useState({});
+  const [contest, setContest] = useState(null);
   const [selection, setSelection] = useState(DETAILS);
   const [contestName, setContestName] = useState(currentContestName);
   const [eventType, setEventType] = useState("FUN");
@@ -66,20 +66,20 @@ const ManageContest = () => {
     <div className="w-full lg:w-5/6 mx-auto">
       <ContestNavbar selection={selection} setSelection={setSelection} />
 
-      {Object.keys(contest).length > 0 && selection === DETAILS && (
+      {contest && selection === DETAILS && (
         <Details contest={contest} setContest={setContest} />
       )}
-      {Object.keys(contest).length > 0 && selection === QUESTIONS && (
+      {contest && selection === QUESTIONS && (
         <AddQuestions contest={contest} setContest={setContest} />
       )}
-      {Object.keys(contest).length > 0 && selection === CALCULATION_FORMULA && (
+      {contest && selection === CALCULATION_FORMULA && (
         <CalculationFormula contest={contest} setContest={setContest} />
       )}
       {selection === NOTIFICATIONS && notifications}
-      {Object.keys(contest).length > 0 && selection === LEADERBOARD && (
+      {contest && selection === LEADERBOARD && (
         <Leaderboard contest={contest} setContest={setContest} />
       )}
-      {Object.keys(contest).length > 0 && selection === ADD_PARTICIPANTS && (
+      {contest && selection === ADD_PARTICIPANTS && (
         <AddParticipants contest={contest} setContest={setContest} />
       )}
     </div>
