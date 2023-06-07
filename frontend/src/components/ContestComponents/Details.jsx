@@ -8,24 +8,35 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
   // TODO: The format in which dates are coming is weird.
   console.log(contest);
   const navigate = useNavigate();
-  const [contestName, setContestName] = useState(contest.contestName);
-  const [eventType, setEventType] = useState(contest.eventType);
-  const [companyName, setCompanyName] = useState(contest.companyName);
+  const [contestName, setContestName] = useState(contest?.contestName);
+  const [eventType, setEventType] = useState(contest?.eventType);
+  const [companyName, setCompanyName] = useState(contest?.companyName);
   const [contestStartDate, setContestStartDate] = useState(
-    contest.contestStartDate
+    contest?.contestStartDate
   );
-  const [startTime, setStartTime] = useState(contest.startTime);
-  const [contestEndDate, setContestEndDate] = useState(contest.contestEndDate);
-  const [endTime, setEndTime] = useState(contest.endTime);
+  const [startTime, setStartTime] = useState(contest?.startTime);
+  const [contestEndDate, setContestEndDate] = useState(contest?.contestEndDate);
+  const [endTime, setEndTime] = useState(contest?.endTime);
   const [showStartTime, setShowStartTime] = useState(false);
   const [showEndTime, setShowEndTime] = useState(false);
-  const [instructions, setInstructions] = useState(contest.instructions);
+  const [instructions, setInstructions] = useState(contest?.instructions);
   const [instructionsTitle, setInstructionsTitle] = useState(
-    contest.instructionsTitle
+    contest?.instructionsTitle
   );
 
-  console.log(typeof contest.contestStartDate);
-  // console.log(contest.contestStartDate.split("T"));
+  useEffect(() => {
+    setContestName(contest?.contestName);
+    setEventType(contest?.eventType);
+    setCompanyName(contest?.companyName);
+    setContestStartDate(contest?.contestStartDa);
+    setStartTime(contest?.startTime);
+    setContestEndDate(contest?.contestEndDate);
+    setEndTime(contest?.endTime);
+    setInstructionsTitle(contest?.instructionsTitle);
+  }, [contest]);
+
+  console.log(typeof contest?.contestStartDate);
+  // console.log(contest?.contestStartDate.split("T"));
 
   const possibleTimes = [
     "00:00",

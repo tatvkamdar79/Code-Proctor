@@ -26,6 +26,7 @@ const ManageContest = () => {
   const [contestName, setContestName] = useState(currentContestName);
   const [eventType, setEventType] = useState("FUN");
   const [companyName, setCompanyName] = useState("DARWINBOX");
+  const [loading, setLoading] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,6 +57,7 @@ const ManageContest = () => {
         setContest(response.data.data.contest);
         console.log(response.data);
         console.log(response.data.data.contest._id["$oid"]);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -66,8 +68,17 @@ const ManageContest = () => {
   return (
     <div className="w-full lg:w-5/6 mx-auto">
       <ContestNavbar selection={selection} setSelection={setSelection} />
+      {loading && (
+        <div className="flex justify-center place-items-center absolute h-[80vh] w-[83vw] bg-white bg-opacity-50">
+          <img
+            src="https://cdn.dribbble.com/users/2014028/screenshots/4455123/opentime_from_png_20fps.gif"
+            alt=""
+            // className="invert"
+          />
+        </div>
+      )}
 
-      {contest && selection === DETAILS && (
+      {selection === DETAILS && (
         <Details contest={contest} setContest={setContest} />
       )}
       {contest && selection === QUESTIONS && (

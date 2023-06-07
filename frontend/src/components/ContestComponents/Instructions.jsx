@@ -26,39 +26,40 @@ const Instructions = ({
         </div>
 
         <div className="mt-4">
-          {instructions.map((instruction, idx) => {
-            return (
-              <div className="mt-2">
-                <label className="flex place-items-center gap-x-7">
-                  <p className="w-60 font-medium text-gray-600 pl-3">
-                    Instruction {idx + 1}
-                  </p>
-                </label>
-                <div className="flex">
-                  <input
-                    type="text"
-                    value={instruction}
-                    onChange={(e) => {
-                      const newInstructions = [...instructions];
-                      newInstructions[idx] = e.target.value;
-                      setInstructions(newInstructions);
-                    }}
-                    placeholder="Enter Instruction"
-                    className="w-60 px-4 py-2 border rounded-md"
-                  />
-                  <AiFillDelete
-                    className="ml-5 mt-2 cursor-pointer text-red-500"
-                    size={25}
-                    onClick={() => {
-                      const newInstructions = [...instructions];
-                      newInstructions.splice(idx, 1);
-                      setInstructions(newInstructions);
-                    }}
-                  />
+          {instructions &&
+            instructions.map((instruction, idx) => {
+              return (
+                <div className="mt-2">
+                  <label className="flex place-items-center gap-x-7">
+                    <p className="w-60 font-medium text-gray-600 pl-3">
+                      Instruction {idx + 1}
+                    </p>
+                  </label>
+                  <div className="flex">
+                    <input
+                      type="text"
+                      value={instruction}
+                      onChange={(e) => {
+                        const newInstructions = [...instructions];
+                        newInstructions[idx] = e.target.value;
+                        setInstructions(newInstructions);
+                      }}
+                      placeholder="Enter Instruction"
+                      className="w-60 px-4 py-2 border rounded-md"
+                    />
+                    <AiFillDelete
+                      className="ml-5 mt-2 cursor-pointer text-red-500"
+                      size={25}
+                      onClick={() => {
+                        const newInstructions = [...instructions];
+                        newInstructions.splice(idx, 1);
+                        setInstructions(newInstructions);
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
 
         {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
