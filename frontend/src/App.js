@@ -60,8 +60,8 @@ const App = () => {
         <Route path="/room/:id" element={<Room />} />
 
         <Route path="/showStages" element={<ShowStages />} />
-        <Route path="/preTest" element={<PreTest />} />
-        <Route path="/test/:testName" element={<Test />} />
+        <Route path="/preTest/:currentContestName" element={<PreTest />} />
+        <Route path="/test/:currentContestName" element={<Test />} />
         <Route path="/createGroup" element={<CreateGroup />} />
 
         {/* <Route exact path="/createTest" element={<CreateTest />} /> */}

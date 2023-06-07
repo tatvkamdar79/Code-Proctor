@@ -4,14 +4,16 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import CodeExecutionPanel from "../components/CodeExecutionPanel";
 import screenfull from "screenfull";
 import axios from "axios";
+import { baseURL } from "../config/config";
 
 const Test = () => {
-  const { testName } = useParams();
+  const { currentContestName } = useParams();
 
   const navigate = useNavigate();
   const totalTime = 1800;
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState("ALL");
   const [questionsComponent, setQuestionsComponent] = useState([]);
+  const [contest, setContest] = useState(null);
 
   // The following details will be fetched from Api calls adn then stored in localStorgae until the durationof the exam
   const [questions, setQuestions] = useState([]);
@@ -155,6 +157,24 @@ const Test = () => {
   };
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // Tab is now inactive
+        alert("PLEASE DO NOT SWITCH TABS!");
+      } else {
+        // Tab is now active
+        console.log("Tab is now active");
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleExit = () => {
       if (!screenfull.isFullscreen) {
         handleFullscreenExit();
@@ -169,21 +189,24 @@ const Test = () => {
   }, []);
 
   useEffect(() => {
-    let newQuestionsComponent = [];
-    let idx = 0;
-    for (let question of questions) {
-      newQuestionsComponent.push(
-        <CodeExecutionPanel
-          question={question}
-          time={totalTimeForEachQuestion}
-          index={idx}
-          setTime={setHelperTimeVariable}
-          setIndex={setHelperQuestionIndex}
-        />
-      );
-      idx += 1;
+    console.log("From questions useEffect", questions);
+    if (questions !== []) {
+      let newQuestionsComponent = [];
+      let idx = 0;
+      for (let question of questions) {
+        newQuestionsComponent.push(
+          <CodeExecutionPanel
+            question={question}
+            time={totalTimeForEachQuestion}
+            index={idx}
+            setTime={setHelperTimeVariable}
+            setIndex={setHelperQuestionIndex}
+          />
+        );
+        idx += 1;
+      }
+      setQuestionsComponent(newQuestionsComponent);
     }
-    setQuestionsComponent(newQuestionsComponent);
   }, [questions]);
 
   useEffect(() => {
@@ -198,12 +221,30 @@ const Test = () => {
 
   useEffect(() => {
     let initialTimeState = [];
+
     // TODO: Fetch the questions from API call
-    const questionsForContest = staticQuestions;
-    for (let question of questionsForContest) {
-      initialTimeState.push(0);
-    }
-    setQuestions(questionsForContest);
+    const data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      route: "contests/getContestDetails",
+      contestName: currentContestName,
+    };
+    axios
+      .post(baseURL, data)
+      .then((response) => {
+        setContest(response.data.data.contest);
+        setQuestions(response.data.data.contest.questions);
+        console.log(response.data);
+        const questionsForContest = response.data.data.contest.questions;
+        for (let question of questionsForContest) {
+          initialTimeState.push(0);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // setQuestions(questionsForContest);
     setTotalTimeForEachQuestion(initialTimeState);
   }, []);
 
@@ -227,9 +268,9 @@ const Test = () => {
 
   return (
     <div className="flex h-screen" id="test">
-      <button onClick={enterFullscreen} id="fs">
+      {/* <button onClick={enterFullscreen} id="fs">
         Enter Full Screen
-      </button>
+      </button> */}
       {/* TEST NAVBAR */}
       {TestNavbar({ totalTime, selected, setSelected, questions })}
 
@@ -330,16 +371,16 @@ const ViewAllQuestionsList = (questions, setSelected) => {
         <p className="px-2 w-[22.5%]">TYPE</p>
         <p className="px-2 w-[22.5%]">ACTION</p>
       </div>
-      {questions.map(({ questionTitle, questionType }, index) => (
+      {questions.map(({ title }, index) => (
         <div
           key={index}
           className="w-[92%] flex flex-col justify-center mx-auto px-4 bg-white border border-gray-300 text-lg shadow-sm shadow-gray-300 hover:scale-105 transition-all duration-300"
         >
           <div className="flex place-items-center h-[90px]">
             <p className="w-[55%] font-semibold font-sans">
-              {index + 1}. {questionTitle}
+              {index + 1}. {title}
             </p>
-            <p className="w-[25%] font-light text-sm">{questionType}</p>
+            <p className="w-[25%] font-light text-sm">{"coding"}</p>
             <p className="w-[20%]">
               <button
                 onClick={() => setSelected(index)}
@@ -369,8 +410,8 @@ const TestInstructions = (allInstructions) => {
               {instructionType}
             </p>
             <ul className="w-[95%] mx-auto flex flex-col gap-y-2 font-semibold text-sky-900">
-              {instructions.map((instruction, index) => (
-                <li key={index} className="flex gap-x-1">
+              {instructions.map((instruction, innerIndex) => (
+                <li key={innerIndex} className="flex gap-x-1">
                   <span>{index + 1}.</span>
                   <span>{instruction}</span>
                 </li>

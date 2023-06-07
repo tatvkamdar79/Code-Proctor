@@ -442,7 +442,6 @@ const CodeExecutionPanel = ({
           bottomLeft: false,
           bottomRight: false,
         }}
-        className
       >
         <div className="flex overflow-y-scroll overflow-x-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
           <div
@@ -466,19 +465,20 @@ const CodeExecutionPanel = ({
                 Constraints :
               </p>
               <ul className="flex flex-col gap-y-1 italic pl-8 text-gray-600 list-disc">
-                {question.constraints.map((constraint, index) => {
+                {/* TODO Check error */}
+                {`question.constraints.map((constraint, index) => {
                   {
                     return React.createElement("li", {
                       dangerouslySetInnerHTML: { __html: constraint },
                       key: index,
                     });
                   }
-                })}
+                })`}
               </ul>
             </section>
 
             <section className="flex flex-col gap-y-8 text-gray-800">
-              {question.sampleTestCases.map(({ input, output }, index) => (
+              {`question.sampleTCs.map(({ input, output }, index) => (
                 <div
                   key={index}
                   className="flex flex-col gap-y-2 border-b border-gray-400 pb-4"
@@ -498,7 +498,7 @@ const CodeExecutionPanel = ({
                     <p>{output}</p>
                   </div>
                 </div>
-              ))}
+              ))`}
             </section>
           </div>
           <div className="flex flex-col h-screen w-3 place-items-center text-center justify-center bg-gray-200 hover:bg-gray-300">
@@ -527,14 +527,14 @@ const CodeExecutionPanel = ({
             <label>Language</label>
             <select
               className="bg-white border border-gray-300 w-32 py-1"
-              defaultValue={language}
+              value={language}
               onChange={(event) => {
                 setLanguage(event.target.value);
               }}
             >
               {languages.map((lang, index) => {
                 return (
-                  <option key={index} value={lang} selected={lang === language}>
+                  <option key={index} value={lang}>
                     {lang}
                   </option>
                 );
