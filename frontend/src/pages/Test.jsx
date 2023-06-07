@@ -18,6 +18,7 @@ const Test = () => {
   const [totalTimeForEachQuestion, setTotalTimeForEachQuestion] = useState([]);
   const [helperTimeVariable, setHelperTimeVariable] = useState(0);
   const [helperQuestionIndex, setHelperQuestionIndex] = useState(0);
+  const [contest, setContest] = useState({});
 
   // Remove this
   const staticQuestions = [
@@ -179,6 +180,7 @@ const Test = () => {
           index={idx}
           setTime={setHelperTimeVariable}
           setIndex={setHelperQuestionIndex}
+          // contestId={contest?._id["$oid"]}
         />
       );
       idx += 1;
