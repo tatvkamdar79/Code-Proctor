@@ -26,6 +26,7 @@ import "ace-builds/src-noconflict/theme-tomorrow_night_blue";
 import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/theme-ambiance";
 import "ace-builds/src-noconflict/theme-solarized_light";
+import { baseURL } from "../config/config";
 
 // interface EditorProps {
 //   language: string;
@@ -50,24 +51,14 @@ const Editor = ({
   fontSize,
   sampleInput,
   sampleOutput,
-  testCases,
   contestId,
   question,
+  contestantEmail,
 }) => {
-  testCases = [
-    { input: "1", output: "1" },
-    { input: "2", output: "2" },
-    { input: "3", output: "3" },
-    { input: "4", output: "4" },
-    { input: "5", output: "5" },
-    { input: "6", output: "6" },
-    { input: "1", output: "1" },
-    { input: "2", output: "2" },
-    { input: "3", output: "3" },
-    { input: "4", output: "4" },
-    { input: "5", output: "5" },
-    { input: "6", output: "6" },
-  ];
+  console.count("hello");
+  // TODO: Change the questionId and contestId
+  let questionId = question._id["$oid"];
+
   const TEST_RESULTS = "TEST_RESULTS";
   const CUSTOM_INPUT = "CUSTOM_INPUT";
   const RUNNING_CODE = "RUNNING_CODE";
@@ -90,6 +81,10 @@ const Editor = ({
   const [submissionStatusForTCs, setSubmissionStatusForTCs] = useState([]);
   const [resultForTCs, setResultForTCs] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [timeWhenQuestionOpened, setTimeWhenQuestionOpened] = useState(
+    Date.now()
+  );
 
   const handleSubmitAllTestCases = () => {
     // console.log(submissionStatusForTCs);
@@ -167,7 +162,9 @@ const Editor = ({
       let index = 0,
         score = 0;
       let results = [];
+      let time = 0;
       for (let res of responses) {
+        // console.log(res.data);
         const { stdout, stderr, build_stderr } = res.data;
         let output = "";
         if (stdout) output += stdout;
@@ -181,17 +178,44 @@ const Editor = ({
         if (question.hiddenTCs[index].output === output) {
           score += 1;
           results.push(1);
+          time = Math.max(time, Number(res.data.time));
         } else {
           results.push(0);
         }
         console.log(output, question.hiddenTCs[index].output);
         index += 1;
       }
+      console.log("Time: " + time);
       setSubmissionStatusForTCs([]);
       setExecutionStatus(COMPLETED);
       setShowConsole(COMPLETED);
       setResultForTCs(results);
       if (isSubmitting) {
+        console.log("In submitting...");
+        const resultForDB = results.map((result) =>
+          result ? "Correct" : "Wrong"
+        );
+        const data = {
+          route: "contests/addSubmission",
+          // TODO: Change email address
+          contestantEmail: contestantEmail,
+          contestId: contestId,
+          questionId: questionId,
+          submissionStatus: resultForDB,
+          testCasesPassed: score,
+          code: body,
+          executionTime: time,
+          submissionTime: new Date().getTime(),
+          isCorrect: score == resultForDB.length ? 1 : 0,
+          timeSpentOnQuestion: Date.now() - timeWhenQuestionOpened,
+        };
+        setTimeWhenQuestionOpened(Date.now());
+        try {
+          const result = await axios.post(baseURL, data);
+          //TODO: Display submitted and send to all questions page
+        } catch (err) {
+          console.log(err);
+        }
       }
       setIsSubmitting(false);
     };

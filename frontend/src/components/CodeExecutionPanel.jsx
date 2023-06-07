@@ -16,7 +16,9 @@ const CodeExecutionPanel = ({
   index,
   setIndex,
   contestId,
+  contestantEmail,
 }) => {
+  // console.log
   const [timeSpent, setTimeSpent] = useState(Date.now());
   const [id, setId] = useState("");
   const [title, setTitle] = useState("");
@@ -524,6 +526,7 @@ const CodeExecutionPanel = ({
         setOutput={setOutput}
         contestId={contestId}
         question={question}
+        contestantEmail={contestantEmail}
       >
         <div className="flex justify-start gap-x-10 py-2 px-5">
           <div className="flex justify-center place-items-center gap-x-2">

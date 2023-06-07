@@ -55,6 +55,7 @@ const ManageContest = () => {
       .then((response) => {
         setContest(response.data.data.contest);
         console.log(response.data);
+        console.log(response.data.data.contest._id["$oid"]);
       })
       .catch((err) => {
         console.log(err);

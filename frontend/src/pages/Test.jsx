@@ -11,11 +11,11 @@ const Test = () => {
   const navigate = useNavigate();
 
   const { state } = useLocation();
-  console.log(state);
-  if (!state || !state.validated) {
+  if (!state || !state.validated || !state.email) {
     navigate(`/pretest/${currentContestName}`);
   }
 
+  const contestantEmail = state.email;
   const totalTime = 1800;
   const [selected, setSelected] = useState("ALL");
   const [questionsComponent, setQuestionsComponent] = useState([]);
@@ -26,6 +26,7 @@ const Test = () => {
   const [totalTimeForEachQuestion, setTotalTimeForEachQuestion] = useState([]);
   const [helperTimeVariable, setHelperTimeVariable] = useState(0);
   const [helperQuestionIndex, setHelperQuestionIndex] = useState(0);
+  // const [contest, setContest] = useState({});
 
   useEffect(() => {
     console.log(totalTimeForEachQuestion);
@@ -140,6 +141,8 @@ const Test = () => {
             index={idx}
             setTime={setHelperTimeVariable}
             setIndex={setHelperQuestionIndex}
+            contestantEmail={contestantEmail}
+            contestId={contest?._id["$oid"]}
           />
         );
         idx += 1;
