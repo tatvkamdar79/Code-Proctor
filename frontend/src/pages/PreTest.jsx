@@ -1,22 +1,97 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import screenfull from "screenfull";
+import { baseURL } from "../config/config";
 
 export default function PreTest() {
+  const { currentContestName } = useParams();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [agreement1, setAgreement1] = useState(false);
   const [agreement2, setAgreement2] = useState(false);
   const [error, setError] = useState("");
+  const [errorCount, setErrorCount] = useState(0);
+  const [contest, setContest] = useState(null);
 
-  const handleSubmit = (e) => {
+  const enterFullscreen = () => {
+    if (screenfull.isEnabled) {
+      if (screenfull.isFullscreen) {
+        // screenfull.exit();
+      } else {
+        alert(
+          "You will now enter fullscreen mode. DO NOT EXIT IT UNTIL THE DURATION OF THE TEST!"
+        );
+        screenfull.request();
+      }
+    }
+  };
+
+  function formatTime(seconds) {
+    var hours = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds % 3600) / 60);
+
+    var formattedTime = "";
+
+    if (hours > 0) {
+      formattedTime += hours + "h";
+      formattedTime += " ";
+    }
+    if (minutes > 0) {
+      formattedTime += minutes + "m";
+    }
+
+    return formattedTime.trim();
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (contest === null) {
+      return;
+    }
 
     if (!email || !agreement1 || !agreement2) {
       setError("All fields are mandatory");
       return;
     }
 
+    if (!contest.contestants.includes(email)) {
+      if (errorCount === 0) {
+        setError("Please make sure that you are entering invited email only!");
+        setErrorCount(1);
+      } else {
+        setError("You are not authorized to take this test");
+      }
+      return;
+    }
+    console.log("Email in");
+    enterFullscreen();
+    navigate(`/test/${currentContestName}`, { state: { validated: true } });
     // TODO: Handle form submission
-    console.log("Form submitted successfully");
   };
+
+  useEffect(() => {
+    const data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      route: "contests/getContestDetails",
+      contestName: currentContestName,
+    };
+    axios
+      .post(baseURL, data)
+      .then((response) => {
+        setContest(response.data.data.contest);
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    contest !== null && console.log("Contest fetched");
+  }, [contest]);
 
   return (
     <div
@@ -31,17 +106,25 @@ export default function PreTest() {
         <div className="flex">
           <div className="mr-9">
             <h2 className="text text-[#957D89]">Test Duration</h2>
-            <p className="text-2xl text-[#51495F]">30 minutes</p>
+            <p className="text-2xl text-[#51495F] text-start font-semibold">
+              {/* {contest && contest.endDate["sec"] - contest.startDate["sec"]} */}
+              {contest !== null &&
+                formatTime(
+                  contest.contestEndDate.sec - contest.contestStartDate.sec
+                )}
+            </p>
           </div>
           <div>
             <h2 className="text text-[#957D89]">No. of Questions</h2>
-            <p className="text-2xl text-[#51495F]">20 questions</p>
+            <p className="text-2xl text-[#51495F] text-center font-semibold">
+              {contest !== null && contest.questions.length + " Questions"}
+            </p>
           </div>
         </div>
       </div>
+      <div className="pt-16"></div>
       <div className="w-3/5 bg-white overflow-y-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
         <div className="bg-[#F3F7F7] justify-center">
-          <div className="pt-16"></div>
           <section className="pl-16 h-screen justify-center flex flex-col">
             <h1 className="text-5xl mb-5 text-[#39424E]">Instructions</h1>
             <ol className="list-decimal">
@@ -54,7 +137,7 @@ export default function PreTest() {
             </ol>
           </section>
 
-          <section className="flex flex-col p-3 gap-y-3 pl-12 h-screen justify-center flex flex-col">
+          <section className="flex flex-col p-3 gap-y-3 pl-12 h-screen justify-center">
             <h1 className="text-[#39424E] w-5/6 ml-2 text-5xl">Questions</h1>
             <div className="flex flex-col ml-2 gap-y-2 w-2/3 text-[#39444E]">
               <p>
@@ -80,7 +163,7 @@ export default function PreTest() {
               </div>
             </div>
           </section>
-          <section className h-screen justify-center flex flex-col="">
+          <section className="h-screen justify-center flex flex-col">
             <div className="flex justify-center items-center h-screen">
               <form className="pl-16" onSubmit={handleSubmit}>
                 <h2 className="text-5xl mb-4 text-[#39424E]">
@@ -154,7 +237,11 @@ export default function PreTest() {
                 {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
                 <button
                   type="submit"
-                  className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+                  className={`bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 ${
+                    contest === null && "opacity-40"
+                  }`}
+                  disabled={contest === null}
+                  // onClick={enterFullscreen}
                 >
                   Start the Test!
                 </button>

@@ -407,7 +407,7 @@ const CodeExecutionPanel = ({
   const handleUpdateBody = (value) => {
     const patch = dmp.patch_make(body, value);
     setBody(value);
-    console.log(value);
+    // console.log(value);
     // debounce(() => socket.emit('updateBody', { value: patch, roomId: id }), 100)();
   };
 
@@ -442,7 +442,6 @@ const CodeExecutionPanel = ({
           bottomLeft: false,
           bottomRight: false,
         }}
-        className
       >
         <div className="flex overflow-y-scroll overflow-x-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
           <div
@@ -457,7 +456,7 @@ const CodeExecutionPanel = ({
 
             <section>
               <p className="font-normal text-gray-500">
-                {question.problemStatement}
+                {question.description}
               </p>
             </section>
 
@@ -466,19 +465,22 @@ const CodeExecutionPanel = ({
                 Constraints :
               </p>
               <ul className="flex flex-col gap-y-1 italic pl-8 text-gray-600 list-disc">
-                {question.constraints.map((constraint, index) => {
-                  {
-                    return React.createElement("li", {
-                      dangerouslySetInnerHTML: { __html: constraint },
-                      key: index,
-                    });
-                  }
-                })}
+                {/* TODO Check error */}
+                {question?.constraints
+                  ? question.constraints.map((constraint, index) => {
+                      {
+                        return React.createElement("li", {
+                          dangerouslySetInnerHTML: { __html: constraint },
+                          key: index,
+                        });
+                      }
+                    })
+                  : "No constraints"}
               </ul>
             </section>
 
             <section className="flex flex-col gap-y-8 text-gray-800">
-              {question.sampleTestCases.map(({ input, output }, index) => (
+              {question.sampleTCs.map(({ input, output }, index) => (
                 <div
                   key={index}
                   className="flex flex-col gap-y-2 border-b border-gray-400 pb-4"
@@ -492,7 +494,7 @@ const CodeExecutionPanel = ({
                     ))}
                   </div>
                   <p className="text-lg font-medium">
-                    Sample Output{index + 1} :
+                    Sample Output {index + 1} :
                   </p>
                   <div className="bg-white p-4 shadow-sm text-gray-800">
                     <p>{output}</p>
@@ -517,24 +519,25 @@ const CodeExecutionPanel = ({
         body={body}
         setBody={handleUpdateBody}
         fontSize={fontSize}
+        sampleInput={question.sampleTCs[0].input}
         output={output}
         setOutput={setOutput}
-        questionId={question}
         contestId={contestId}
+        question={question}
       >
         <div className="flex justify-start gap-x-10 py-2 px-5">
           <div className="flex justify-center place-items-center gap-x-2">
             <label>Language</label>
             <select
               className="bg-white border border-gray-300 w-32 py-1"
-              defaultValue={language}
+              value={language}
               onChange={(event) => {
                 setLanguage(event.target.value);
               }}
             >
               {languages.map((lang, index) => {
                 return (
-                  <option key={index} value={lang} selected={lang === language}>
+                  <option key={index} value={lang}>
                     {lang}
                   </option>
                 );
