@@ -51,11 +51,9 @@ const Editor = ({
   sampleInput,
   sampleOutput,
   testCases,
-  questionId,
   contestId,
+  question,
 }) => {
-  sampleInput = "This is sample input";
-  sampleOutput = "jhfkdsjh\njhfkdsjh\njhfkdsjh";
   testCases = [
     { input: "1", output: "1" },
     { input: "2", output: "2" },
@@ -78,7 +76,6 @@ const Editor = ({
   const SUBMITTING = "SUBMITTING";
   const IDLE = "IDLE";
   const ERROR = "ERROR";
-  const question = {};
 
   const [input, setInput] = useState(sampleInput);
   const [output, setOutput] = useState(sampleOutput);
@@ -111,7 +108,8 @@ const Editor = ({
       api_key: "guest",
     };
     let responses = [];
-    for (let testCase of testCases) {
+    console.log(question.hiddenTCs);
+    for (let testCase of question.hiddenTCs) {
       responses.push(
         axios.post(`https://api.paiza.io/runners/create`, {
           ...params,
@@ -177,15 +175,16 @@ const Editor = ({
         output = output.split("\n");
         output.splice(output.length - 1, 1);
         output = output.join("\n");
-        console.log("AFTER", output);
+        // console.log("AFTER", output);
+        console.log(`Final Output-----${output}-----END OUTPUT`);
 
-        if (testCases[index].output === output) {
+        if (question.hiddenTCs[index].output === output) {
           score += 1;
           results.push(1);
         } else {
           results.push(0);
         }
-        console.log(output, testCases[index].output);
+        console.log(output, question.hiddenTCs[index].output);
         index += 1;
       }
       setSubmissionStatusForTCs([]);
@@ -384,9 +383,11 @@ const Editor = ({
           <div className="w-[95%] mx-auto">
             <p className="text-gray-700 text-2xl font-semibold mb-2">Input :</p>
             <div className="bg-white p-4 rounded-md w-full overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] mb-4">
-              {input.split("\n").map((line) => (
-                <p>{line}</p>
-              ))}
+              {input ? (
+                input.split("\n").map((line) => <p>{line}</p>)
+              ) : (
+                <p> </p>
+              )}
             </div>
             {executionStatus === RUNNING_CODE && (
               <>
@@ -430,9 +431,11 @@ const Editor = ({
               Output :
             </p>
             <div className="bg-white p-4 rounded-md w-full overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-              {output.split("\n").map((line) => (
-                <p>{line}</p>
-              ))}
+              {output ? (
+                output.split("\n").map((line) => <p>{line}</p>)
+              ) : (
+                <p> </p>
+              )}
             </div>
           </div>
         </div>
@@ -459,7 +462,7 @@ const Editor = ({
             Running Test Cases :
           </p>
           <div className="w-5/6 mx-auto h-full grid grid-cols-5 justify-evenly place-items-center">
-            {testCases.map((testCase, idx) => {
+            {question.hiddenTCs.map((testCase, idx) => {
               return (
                 <p className="flex place-items-center gap-x-2">
                   <BsFillGearFill size={22} className="animate-spin" />
@@ -477,7 +480,7 @@ const Editor = ({
             Result of Test Cases :
           </p>
           <div className="w-5/6 mx-auto h-full grid grid-cols-5 justify-evenly place-items-center">
-            {testCases.map((testCase, idx) => {
+            {question.hiddenTCs.map((testCase, idx) => {
               return (
                 <p className="flex place-items-center gap-x-2">
                   TC {idx}

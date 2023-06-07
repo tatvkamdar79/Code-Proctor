@@ -407,7 +407,7 @@ const CodeExecutionPanel = ({
   const handleUpdateBody = (value) => {
     const patch = dmp.patch_make(body, value);
     setBody(value);
-    console.log(value);
+    // console.log(value);
     // debounce(() => socket.emit('updateBody', { value: patch, roomId: id }), 100)();
   };
 
@@ -456,7 +456,7 @@ const CodeExecutionPanel = ({
 
             <section>
               <p className="font-normal text-gray-500">
-                {question.problemStatement}
+                {question.description}
               </p>
             </section>
 
@@ -466,19 +466,21 @@ const CodeExecutionPanel = ({
               </p>
               <ul className="flex flex-col gap-y-1 italic pl-8 text-gray-600 list-disc">
                 {/* TODO Check error */}
-                {`question.constraints.map((constraint, index) => {
-                  {
-                    return React.createElement("li", {
-                      dangerouslySetInnerHTML: { __html: constraint },
-                      key: index,
-                    });
-                  }
-                })`}
+                {question?.constraints
+                  ? question.constraints.map((constraint, index) => {
+                      {
+                        return React.createElement("li", {
+                          dangerouslySetInnerHTML: { __html: constraint },
+                          key: index,
+                        });
+                      }
+                    })
+                  : "No constraints"}
               </ul>
             </section>
 
             <section className="flex flex-col gap-y-8 text-gray-800">
-              {`question.sampleTCs.map(({ input, output }, index) => (
+              {question.sampleTCs.map(({ input, output }, index) => (
                 <div
                   key={index}
                   className="flex flex-col gap-y-2 border-b border-gray-400 pb-4"
@@ -492,13 +494,13 @@ const CodeExecutionPanel = ({
                     ))}
                   </div>
                   <p className="text-lg font-medium">
-                    Sample Output{index + 1} :
+                    Sample Output {index + 1} :
                   </p>
                   <div className="bg-white p-4 shadow-sm text-gray-800">
                     <p>{output}</p>
                   </div>
                 </div>
-              ))`}
+              ))}
             </section>
           </div>
           <div className="flex flex-col h-screen w-3 place-items-center text-center justify-center bg-gray-200 hover:bg-gray-300">
@@ -517,10 +519,11 @@ const CodeExecutionPanel = ({
         body={body}
         setBody={handleUpdateBody}
         fontSize={fontSize}
+        sampleInput={question.sampleTCs[0].input}
         output={output}
         setOutput={setOutput}
-        questionId={question}
         contestId={contestId}
+        question={question}
       >
         <div className="flex justify-start gap-x-10 py-2 px-5">
           <div className="flex justify-center place-items-center gap-x-2">

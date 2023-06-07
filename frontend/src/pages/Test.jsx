@@ -158,13 +158,14 @@ const Test = () => {
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        // Tab is now inactive
-        alert("PLEASE DO NOT SWITCH TABS!");
-      } else {
-        // Tab is now active
-        console.log("Tab is now active");
-      }
+      // TODO UNCOMMENT THIS
+      // if (document.hidden) {
+      //   // Tab is now inactive
+      //   alert("PLEASE DO NOT SWITCH TABS!");
+      // } else {
+      //   // Tab is now active
+      //   console.log("Tab is now active");
+      // }
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -365,7 +366,7 @@ const TestNavbar = ({ totalTime, selected, setSelected, questions }) => {
 
 const ViewAllQuestionsList = (questions, setSelected) => {
   return (
-    <section className="w-11/12 h-full flex flex-col place-items-center border gap-y-4 bg-[#f3f7f7] overflow-y-scroll py-10">
+    <section className="w-full h-full flex flex-col place-items-center border gap-y-4 bg-[#f3f7f7] overflow-y-scroll py-10">
       <div className="w-[92%] flex place-items-center px-4 text-[13px] text-gray-500 font-semibold">
         <p className="px-2 w-[55%]">QUESTIONS</p>
         <p className="px-2 w-[22.5%]">TYPE</p>
@@ -398,7 +399,7 @@ const ViewAllQuestionsList = (questions, setSelected) => {
 
 const TestInstructions = (allInstructions) => {
   return (
-    <section className="w-11/12 h-full flex flex-col place-items-center border gap-y-4 bg-[#f3f7f7] overflow-y-scroll font-mono py-10">
+    <section className="w-full h-full flex flex-col place-items-center border gap-y-4 bg-[#f3f7f7] overflow-y-scroll font-mono py-10">
       <ul className="flex flex-col w-11/12 gap-y-10">
         {allInstructions.map(({ instructionType, instructions }, index) => (
           <li
