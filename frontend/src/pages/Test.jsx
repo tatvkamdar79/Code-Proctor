@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import CodeExecutionPanel from "../components/CodeExecutionPanel";
 import screenfull from "screenfull";
@@ -8,8 +8,14 @@ import { baseURL } from "../config/config";
 
 const Test = () => {
   const { currentContestName } = useParams();
-
   const navigate = useNavigate();
+
+  const { state } = useLocation();
+  console.log(state);
+  if (!state || !state.validated) {
+    navigate(`/pretest/${currentContestName}`);
+  }
+
   const totalTime = 1800;
   const [selected, setSelected] = useState("ALL");
   const [questionsComponent, setQuestionsComponent] = useState([]);
