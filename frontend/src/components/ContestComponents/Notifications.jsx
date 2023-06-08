@@ -90,9 +90,9 @@ Best regards,
     console.log(response);
   };
   return (
-    <section className="w-11/12 lg:w-5/6 flex mx-auto">
+    <section className="flex mx-auto">
       {/* Main component */}
-      <div className="flex-1 p-4">
+      <div className="flex-1 px-3">
         <h2 className="text-xl font-bold mb-4">Compose Email</h2>
         <div className="bg-white p-4 border shadow-md shadow-gray-400 rounded-xl">
           <div className="flex gap-x-1 place-items-center">
@@ -161,21 +161,17 @@ Best regards,
       </div>
       <div className="w-1/4 bg-gray-200 overflow-y-auto">
         <div className="p-4">
-          <h2 className="text-xl font-bold mb-4">Emails</h2>
-          <ul className="space-y-2">
+          <h2 className="text-xl font-bold mb-4">Contestant Emails</h2>
+          <ul className="space-y-2 overflow-y-scroll">
             {/* Replace with your email list */}
-            <li className="text-blue-600">example1@example.com</li>
-            <li className="text-blue-600">example2@example.com</li>
-            <li className="text-blue-600">example3@example.com</li>
-            <li className="text-blue-600">example4@example.com</li>
-            <li className="text-blue-600">example5@example.com</li>
-            <li className="text-blue-600">example6@example.com</li>
-            <li className="text-blue-600">example7@example.com</li>
-            <li className="text-blue-600">example8@example.com</li>
-            <li className="text-blue-600">example9@example.com</li>
-            <li className="text-blue-600">example10@example.com</li>
-            <li className="text-blue-600">example11@example.com</li>
-            <li className="text-blue-600">example12@example.com</li>
+            {contest?.contestants.map((contestant, index) => (
+              <li
+                className="text-orange-500 font-medium border-b border-gray-300"
+                key={index}
+              >
+                {contestant}
+              </li>
+            ))}
           </ul>
         </div>
       </div>

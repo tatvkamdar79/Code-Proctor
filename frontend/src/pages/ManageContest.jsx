@@ -22,7 +22,7 @@ const ManageContest = () => {
   const ADD_PARTICIPANTS = "ADD_PARTICIPANTS";
 
   const [contest, setContest] = useState(null);
-  const [selection, setSelection] = useState(DETAILS);
+  const [selection, setSelection] = useState(NOTIFICATIONS);
   const [contestName, setContestName] = useState(currentContestName);
   const [eventType, setEventType] = useState("FUN");
   const [companyName, setCompanyName] = useState("DARWINBOX");
@@ -61,13 +61,14 @@ const ManageContest = () => {
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   }, []);
 
   const notifications = Notifications({
-    data: "kjfhkdjxchgjvyzhftg",
     contest: contest,
   });
+
   return (
     <div className="w-full lg:w-5/6 mx-auto">
       <ContestNavbar selection={selection} setSelection={setSelection} />
@@ -90,7 +91,7 @@ const ManageContest = () => {
       {contest && selection === CALCULATION_FORMULA && (
         <CalculationFormula contest={contest} setContest={setContest} />
       )}
-      {selection === NOTIFICATIONS && notifications}
+      {selection === NOTIFICATIONS && <Notifications contest={contest} />}
       {contest && selection === LEADERBOARD && (
         <Leaderboard contest={contest} setContest={setContest} />
       )}

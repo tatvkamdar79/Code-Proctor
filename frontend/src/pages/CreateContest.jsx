@@ -206,6 +206,7 @@ const CreateContest = () => {
 
     const response = await axios.post(baseURL, contest);
     console.log(response);
+    navigate(`/contest/manage/${contestName}`);
   };
 
   useEffect(() => {

@@ -129,6 +129,9 @@ const Test = () => {
   }, []);
 
   useEffect(() => {
+    if (contest == null) {
+      return;
+    }
     console.log("From questions useEffect", questions);
     if (questions !== []) {
       let newQuestionsComponent = [];
@@ -142,14 +145,15 @@ const Test = () => {
             setTime={setHelperTimeVariable}
             setIndex={setHelperQuestionIndex}
             contestantEmail={contestantEmail}
-            contestId={contest?._id["$oid"]}
+            contestId={contest._id.$oid}
+            key={idx} // Add a unique key for each component
           />
         );
         idx += 1;
       }
       setQuestionsComponent(newQuestionsComponent);
     }
-  }, [questions]);
+  }, [contest]);
 
   useEffect(() => {
     let newTimeState = [...totalTimeForEachQuestion];

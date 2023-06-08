@@ -6,7 +6,7 @@ import Instructions from "./Instructions";
 
 const CreateChallangeDetails = ({ contest, setContest }) => {
   // TODO: The format in which dates are coming is weird.
-  console.log(contest);
+  console.log(new Date(contest?.contestStartDate.sec * 1000).toUTCString());
   const navigate = useNavigate();
   const [contestName, setContestName] = useState(contest?.contestName);
   const [eventType, setEventType] = useState(contest?.eventType);

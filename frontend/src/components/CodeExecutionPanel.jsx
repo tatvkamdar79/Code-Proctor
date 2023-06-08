@@ -297,6 +297,76 @@ const CodeExecutionPanel = ({
   };
   const [questionWidth, setQuestionWidth] = useState(window.outerWidth * 0.5);
   const [editorWidth, setEditorWidth] = useState("100%");
+  const editor = (
+    <Editor
+      theme={theme}
+      width={editorWidth}
+      height={"100vh"}
+      language={languageToEditorMode[language]}
+      body={body}
+      setBody={handleUpdateBody}
+      fontSize={fontSize}
+      sampleInput={question.sampleTCs[0].input}
+      output={output}
+      setOutput={setOutput}
+      contestId={contestId}
+      question={question}
+      contestantEmail={contestantEmail}
+    >
+      <div className="flex justify-start gap-x-10 py-2 px-5">
+        <div className="flex justify-center place-items-center gap-x-2">
+          <label>Language</label>
+          <select
+            className="bg-white border border-gray-300 w-32 py-1"
+            value={language}
+            onChange={(event) => {
+              setLanguage(event.target.value);
+            }}
+          >
+            {languages.map((lang, index) => {
+              return (
+                <option key={index} value={lang}>
+                  {lang}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="flex justify-center place-items-center gap-x-2">
+          <label>Theme</label>
+          <select
+            className="bg-white border border-gray-300 w-32 py-1"
+            defaultValue={theme}
+            onChange={(event) => setTheme(event.target.value)}
+          >
+            {themes.map((theme, index) => {
+              return (
+                <option key={index} value={theme}>
+                  {theme}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="flex justify-center place-items-center gap-x-2">
+          <label>Font Size</label>
+          <select
+            className="bg-white border border-gray-300 w-32 py-1"
+            defaultValue={fontSize}
+            onChange={(event) => setFontSize(event.target.value)}
+          >
+            {fontSizes.map((fontSize, index) => {
+              return (
+                <option key={index} value={fontSize}>
+                  {fontSize}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      </div>
+    </Editor>
+  );
   return (
     <div className="flex w-full h-screen overflow-y-scroll">
       <Resizable
@@ -390,74 +460,7 @@ const CodeExecutionPanel = ({
           </div>
         </div>
       </Resizable>
-      <Editor
-        theme={theme}
-        width={editorWidth}
-        height={"100vh"}
-        language={languageToEditorMode[language]}
-        body={body}
-        setBody={handleUpdateBody}
-        fontSize={fontSize}
-        sampleInput={question.sampleTCs[0].input}
-        output={output}
-        setOutput={setOutput}
-        contestId={contestId}
-        question={question}
-        contestantEmail={contestantEmail}
-      >
-        <div className="flex justify-start gap-x-10 py-2 px-5">
-          <div className="flex justify-center place-items-center gap-x-2">
-            <label>Language</label>
-            <select
-              className="bg-white border border-gray-300 w-32 py-1"
-              value={language}
-              onChange={(event) => {
-                setLanguage(event.target.value);
-              }}
-            >
-              {languages.map((lang, index) => {
-                return (
-                  <option key={index} value={lang}>
-                    {lang}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div className="flex justify-center place-items-center gap-x-2">
-            <label>Theme</label>
-            <select
-              className="bg-white border border-gray-300 w-32 py-1"
-              defaultValue={theme}
-              onChange={(event) => setTheme(event.target.value)}
-            >
-              {themes.map((theme, index) => {
-                return (
-                  <option key={index} value={theme}>
-                    {theme}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div className="flex justify-center place-items-center gap-x-2">
-            <label>Font Size</label>
-            <select
-              className="bg-white border border-gray-300 w-32 py-1"
-              defaultValue={fontSize}
-              onChange={(event) => setFontSize(event.target.value)}
-            >
-              {fontSizes.map((fontSize, index) => {
-                return (
-                  <option key={index} value={fontSize}>
-                    {fontSize}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        </div>
-      </Editor>
+      {editor}
     </div>
   );
 };
