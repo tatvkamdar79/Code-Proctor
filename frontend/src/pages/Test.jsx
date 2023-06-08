@@ -220,7 +220,6 @@ const Test = () => {
           setTimeout(() => {
             // We can store the ID returned from setInterval and clear the interval later if we want.
             // Click Image every 5 seconds
-
             // TODO Uncomment in real project
             // setInterval(() => {
             //   clickImageAndCheckIfUserIsCopying(canvas, video);
@@ -460,6 +459,14 @@ const ViewAllQuestionsList = (questions, setSelected) => {
           </div>
         </div>
       ))}
+      <div>
+        <button
+          onClick={() => console.log("Hello")}
+          className="w-56 h-16 bg-[#3c812e] text-white font-sans font-semibold shadow-lg shadow-green-200 text-sm"
+        >
+          Submit
+        </button>
+      </div>
     </section>
   );
 };

@@ -198,13 +198,15 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
     let isTimeCorrect = 1;
     if (isDateCorrect && greater == 0) {
       if (
-        Number(time1[0]) <= Number(time2[0]) &&
-        Number(time1[1]) <= Number(time2[1])
+        Number(time1[0]) < Number(time2[0]) ||
+        (Number(time1[0]) == Number(time2[0]) &&
+          Number(time1[1]) < Number(time2[1]))
       ) {
       } else {
         isTimeCorrect = 0;
       }
     }
+    console.log(isDateCorrect, isTimeCorrect);
     if (isDateCorrect == 0 || isTimeCorrect == 0) {
       alert("Fill the time and date fields properly");
       return;

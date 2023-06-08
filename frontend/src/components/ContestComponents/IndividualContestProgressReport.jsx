@@ -27,7 +27,7 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
     (question) => question.questionName
   );
   const timeTakenQuestionWise = candidateData.questions.map((question) => {
-    return Math.round(question.timeSpentOnQuestion / (1000 * 60));
+    return Math.round(question.timeSpentOnQuestion);
   });
 
   const chartOptions = {
@@ -55,7 +55,7 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
               color: "#ffffff",
               offsetY: 16,
               formatter: function (val) {
-                return val + " mins";
+                return val / (1000 * 60) + " mins";
               },
             },
             total: {
@@ -65,6 +65,10 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
               fontFamily: "Arial, sans-serif",
               color: "#ffffff",
               offsetY: 0,
+              formatter: function () {
+                // Custom formatter for the "Total" field
+                return candidateData.totalTime / (60 * 1000) + " mins";
+              },
             },
           },
         },
@@ -110,6 +114,7 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
   };
 
   const chartSeries = timeTakenQuestionWise;
+  console.log(typeof chartSeries, chartSeries);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -181,7 +186,7 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
                   Question
                 </th>
                 <th className="px-6 py-3 text-left text-lg font-semibold font-mono border-2 border-cyan-500">
-                  Time Spent
+                  Time per Question
                 </th>
                 <th className="px-6 py-3 text-left text-lg font-semibold font-mono border-2 border-cyan-500">
                   Correct Submissions
