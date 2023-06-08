@@ -220,6 +220,7 @@ const Test = () => {
           setTimeout(() => {
             // We can store the ID returned from setInterval and clear the interval later if we want.
             // Click Image every 5 seconds
+
             // TODO Uncomment in real project
             // setInterval(() => {
             //   clickImageAndCheckIfUserIsCopying(canvas, video);

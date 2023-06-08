@@ -22,7 +22,7 @@ const ManageContest = () => {
   const ADD_PARTICIPANTS = "ADD_PARTICIPANTS";
 
   const [contest, setContest] = useState(null);
-  const [selection, setSelection] = useState(NOTIFICATIONS);
+  const [selection, setSelection] = useState(LEADERBOARD);
   const [contestName, setContestName] = useState(currentContestName);
   const [eventType, setEventType] = useState("FUN");
   const [companyName, setCompanyName] = useState("DARWINBOX");
@@ -91,7 +91,7 @@ const ManageContest = () => {
       {contest && selection === CALCULATION_FORMULA && (
         <CalculationFormula contest={contest} setContest={setContest} />
       )}
-      {selection === NOTIFICATIONS && <Notifications contest={contest} />}
+      {selection === NOTIFICATIONS && notifications}
       {contest && selection === LEADERBOARD && (
         <Leaderboard contest={contest} setContest={setContest} />
       )}
