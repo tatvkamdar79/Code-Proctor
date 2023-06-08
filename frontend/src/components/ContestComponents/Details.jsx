@@ -5,8 +5,6 @@ import { baseURL } from "../../config/config";
 import Instructions from "./Instructions";
 
 const CreateChallangeDetails = ({ contest, setContest }) => {
-  // TODO: The format in which dates are coming is weird.
-  console.log(new Date(contest?.contestStartDate.sec * 1000).toUTCString());
   const navigate = useNavigate();
   const [contestName, setContestName] = useState(contest?.contestName);
   const [eventType, setEventType] = useState(contest?.eventType);
@@ -24,7 +22,6 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
     contest?.instructionsTitle
   );
 
-  // TODO: Start Time and End Time are coming incorrectly. For "aman" it is 01:00 and 01:15
   useEffect(() => {
     setContestName(contest?.contestName);
     setEventType(contest?.eventType);
@@ -33,6 +30,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
     setContestEndDate(contest?.contestEndDate);
     setEndTime(contest?.endTime);
     setInstructionsTitle(contest?.instructionsTitle);
+    setInstructions(contest?.instructions);
     const startingDate = new Date(
       contest?.contestStartDate.sec * 1000
     ).toLocaleString();
@@ -42,14 +40,16 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
     if (contest) {
       setContestStartDate(convertDateFormat(startingDate.slice(0, 10)));
       setContestEndDate(convertDateFormat(endingDate.slice(0, 10)));
-      setStartTime(startingDate.slice(12, 17));
-      setEndTime(endingDate.slice(12, 17));
+      setStartTime(
+        new Date(contest?.contestStartDate.sec * 1000)
+          .toUTCString()
+          .slice(17, 22)
+      );
+      setEndTime(
+        new Date(contest?.contestEndDate.sec * 1000).toUTCString().slice(17, 22)
+      );
     }
-    console.log("Starting date", startingDate);
   }, [contest]);
-
-  console.log(typeof contest?.contestStartDate);
-  // console.log(contest?.contestStartDate.split("T"));
 
   const possibleTimes = [
     "00:00",
@@ -166,11 +166,11 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
 
   const convertDateFormat = (dateString) => {
     const parts = dateString.split("/"); // Split the date string into parts
-    console.log("Parts is", parts);
+    // console.log("Parts is", parts);
     // Rearrange the parts in the desired order (yyyy-mm-dd)
     const year = parts[2].split(",")[0];
     const formattedDate = `${year}-${parts[1]}-${parts[0]}`;
-    console.log(formattedDate);
+    // console.log(formattedDate);
     return formattedDate;
   };
 
@@ -210,7 +210,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
       return;
     }
 
-    const contest = {
+    const updatedContest = {
       contestId: contest._id["$oid"],
       contestName,
       eventType,
@@ -223,12 +223,12 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
       instructions,
       route: "contests/modifyContest",
       authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE2ODYxMjY0MTd9.wZb6sS3D9rHBneR6lbCOY7LpLJtNsOIhZfc0iXfRptQ",
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI2MDc3NzB9.nxH-peUegSz_z8svOa2JTUc9WYHRehFLOtuFZO4ykXM",
     };
 
-    console.log(contest);
+    console.log(updatedContest);
 
-    const response = await axios.post(baseURL, contest);
+    const response = await axios.post(baseURL, updatedContest);
     console.log(response);
   };
 
