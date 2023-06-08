@@ -198,7 +198,6 @@ const Test = () => {
     // console.log("Time changed", totalTimeForEachQuestion);
   }, [totalTimeForEachQuestion]);
 
-  // TODO: Send Image to server.
   useEffect(() => {
     // Check if the browser supports getUserMedia (camera access)
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -221,9 +220,10 @@ const Test = () => {
           setTimeout(() => {
             // We can store the ID returned from setInterval and clear the interval later if we want.
             // Click Image every 5 seconds
-            setInterval(() => {
-              clickImageAndCheckIfUserIsCopying(canvas, video);
-            }, 10000);
+            // TODO Uncomment in real project
+            // setInterval(() => {
+            //   clickImageAndCheckIfUserIsCopying(canvas, video);
+            // }, 10000);
           }, 1000);
         })
         .catch(function (error) {
