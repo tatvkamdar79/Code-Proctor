@@ -56,7 +56,9 @@ const Leaderboard = ({ contest, setContest }) => {
     const minutes = totalMinutes % 60;
     const hours = Math.floor(totalMinutes / 60);
 
-    return `${hours} : ${minutes} : ${seconds}`;
+    return `${hours < 10 ? "0" + hours : hours} : ${
+      minutes < 10 ? "0" + minutes : minutes
+    } : ${seconds < 10 ? "0" + seconds : seconds}`;
   };
 
   const correctSubmissions = (submissionDetails) => {
@@ -170,12 +172,15 @@ const Leaderboard = ({ contest, setContest }) => {
   };
 
   return (
-    <section className="w-11/12 mx-auto relative">
+    <section className="w-11/12 mx-auto">
       {submissions === null && (
-        <div className="w-full flex justify-between place-items-center absolute opacity-50 top-16">
-          <img src={leaderboardLoading} alt="Loading..." />
-          <img src={leaderboardLoading} alt="Loading..." />
-          <img src={leaderboardLoading} alt="Loading..." />
+        <div className="w-full absolute left-0">
+          <div className="flex w-5/6 mx-auto justify-evenly mt-16">
+            <img src={leaderboardLoading} alt="Loading..." />
+            <img src={leaderboardLoading} alt="Loading..." />
+            <img src={leaderboardLoading} alt="Loading..." />
+            <img src={leaderboardLoading} alt="Loading..." />
+          </div>
         </div>
       )}
       <table className="table-auto w-full">
