@@ -211,7 +211,7 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
             <div className="w-full rounded-full h-1 mx-auto bg-gray-400"></div>
           </div>
           <hr />
-          <div className="h-[85%] bg-gray-100 rounded-b-lg pt-3">
+          <div className="h-[85%] bg-gray-100 rounded-b-lg pt-3 overflow-y-scroll">
             {selectedQuestions.length === 0 && (
               <div className="flex text-center justify-center place-items-center h-full">
                 <p className="text-3xl font-semibold font-serif text-gray-600 justify-self-center place-self-center w-full">

@@ -17,7 +17,7 @@ const Home = ({ previousRooms }) => {
   ];
 
   return (
-    <div className="w-screen h-[93.5vh] mx-auto bg-back">
+    <div className="w-full h-[93.5vh] mx-auto bg-back">
       <div className="w-5/6 h-[60vh] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center justify-center lg:gap-x-10">
         {/* CARDS */}
         <div className="w-80 lg:w-full h-60 border-2 border-gray-400 rounded-3xl text-white bg-orange-500 hover:bg-orange-600 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
