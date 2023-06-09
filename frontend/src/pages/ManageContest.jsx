@@ -32,6 +32,9 @@ const ManageContest = () => {
   const [companyName, setCompanyName] = useState("DARWINBOX");
   const [loading, setLoading] = useState(true);
   const [contestDoesNotExist, setContestDoesNotExist] = useState(false);
+  const [emailLogs, setEmailLogs] = useState(null);
+  const [body, setBody] = useState("");
+  const [subject, setSubject] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -70,6 +73,21 @@ const ManageContest = () => {
         setLoading(false);
       });
   }, []);
+  useEffect(() => {
+    if (contest !== null) {
+      const data = {
+        authToken:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+        route: "contests/fetchEmailLogs",
+        contestId: contest._id.$oid,
+      };
+      axios.post(baseURL, data).then((response) => {
+        console.log("THis is response of emails");
+        console.log(response.data.data);
+        setEmailLogs(response.data.data);
+      });
+    }
+  }, [contest]);
 
   const notifications = Notifications({
     contest: contest,
@@ -134,7 +152,16 @@ const ManageContest = () => {
       {contest && selection === CALCULATION_FORMULA && (
         <CalculationFormula contest={contest} setContest={setContest} />
       )}
-      {selection === NOTIFICATIONS && notifications}
+      {selection === NOTIFICATIONS && (
+        <Notifications
+          contest={contest}
+          emailLogs={emailLogs}
+          body={body}
+          setBody={setBody}
+          subject={subject}
+          setSubject={setSubject}
+        />
+      )}
       {contest && selection === LEADERBOARD && (
         <Leaderboard contest={contest} setContest={setContest} />
       )}
