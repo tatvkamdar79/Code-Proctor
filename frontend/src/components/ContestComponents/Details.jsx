@@ -234,6 +234,24 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
 
     const response = await axios.post(baseURL, updatedContest);
     console.log(response);
+    if (response.data.status == 200) {
+      const data = {
+        authToken:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+        route: "contests/getContestDetails",
+        contestName: contestName,
+      };
+      axios
+        .post(baseURL, data)
+        .then((response) => {
+          setContest(response.data.data.contest);
+          console.log(response.data);
+          console.log(response.data.data.contest._id["$oid"]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (

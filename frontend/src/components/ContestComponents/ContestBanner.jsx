@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ContestBanner = ({ startDate, endDate }) => {
   const [remainingTime, setRemainingTime] = useState(getRemainingTime());
+  const { currentContestName } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -15,11 +18,12 @@ const ContestBanner = ({ startDate, endDate }) => {
 
   function getRemainingTime() {
     const now = new Date().getTime();
-    const targetDate = new Date(startDate).getTime();
+    const targetDate = new Date(startDate - 19800000).getTime();
     const distance = targetDate - now;
 
     if (distance < 0) {
       // Test start date has passed
+      navigate(`/pretest/${currentContestName}`);
       return {
         days: 0,
         hours: 0,
