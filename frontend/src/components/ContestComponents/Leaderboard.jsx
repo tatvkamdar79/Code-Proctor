@@ -85,9 +85,8 @@ const Leaderboard = ({ contest, setContest }) => {
     { label: "Score", key: "score" },
   ];
 
-  const csvData = [];
-
-  // const csvData = data.map((row) => ({
+  const csvData = submissions;
+  // .map((row) => ({
   //   name: row.name,
   //   email: row.email,
   //   questionsSolved: row.questionsSolved,

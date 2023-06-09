@@ -6,20 +6,22 @@ import Instructions from "./Instructions";
 
 const CreateChallangeDetails = ({ contest, setContest }) => {
   const navigate = useNavigate();
-  const [contestName, setContestName] = useState(contest?.contestName);
-  const [eventType, setEventType] = useState(contest?.eventType);
-  const [companyName, setCompanyName] = useState(contest?.companyName);
+  const [contestName, setContestName] = useState(contest?.contestName || "");
+  const [eventType, setEventType] = useState(contest?.eventType || "");
+  const [companyName, setCompanyName] = useState(contest?.companyName || "");
   const [contestStartDate, setContestStartDate] = useState(
-    contest?.contestStartDate
+    contest?.contestStartDate || ""
   );
-  const [startTime, setStartTime] = useState(contest?.startTime);
-  const [contestEndDate, setContestEndDate] = useState(contest?.contestEndDate);
-  const [endTime, setEndTime] = useState(contest?.endTime);
+  const [startTime, setStartTime] = useState(contest?.startTime || "");
+  const [contestEndDate, setContestEndDate] = useState(
+    contest?.contestEndDate || ""
+  );
+  const [endTime, setEndTime] = useState(contest?.endTime || "");
   const [showStartTime, setShowStartTime] = useState(false);
   const [showEndTime, setShowEndTime] = useState(false);
-  const [instructions, setInstructions] = useState(contest?.instructions);
+  const [instructions, setInstructions] = useState(contest?.instructions || "");
   const [instructionsTitle, setInstructionsTitle] = useState(
-    contest?.instructionsTitle
+    contest?.instructionsTitle || ""
   );
 
   useEffect(() => {
@@ -245,7 +247,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
               </p>
               <input
                 type="text"
-                value={contestName}
+                value={contestName ? contestName : ""}
                 onChange={(e) => setContestName(e.target.value)}
                 required
                 className="w-60 px-4 py-2 border rounded-md"
@@ -259,7 +261,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
                 Event Type: <span className="text-red-500">*</span>
               </p>
               <select
-                value={eventType}
+                value={eventType ? eventType : ""}
                 onChange={(e) => setEventType(e.target.value)}
                 className="w-60 px-4 py-2 border rounded-md"
               >
@@ -276,7 +278,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
               </p>
               <input
                 type="text"
-                value={companyName}
+                value={companyName ? companyName : ""}
                 onChange={(e) => setCompanyName(e.target.value)}
                 className="w-60 px-4 py-2 border rounded-md"
               />
@@ -293,7 +295,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
                 name=""
                 id=""
                 className="border border-gray-300 pl-3"
-                value={contestStartDate}
+                value={contestStartDate ? contestStartDate : ""}
                 onChange={(e) => setContestStartDate(e.target.value)}
               />
             </label>
@@ -308,7 +310,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
               <div>
                 <input
                   type="text"
-                  value={startTime}
+                  value={startTime ? startTime : ""}
                   onChange={(e) => setStartTime(e.target.value)}
                   className="w-60 px-4 py-2 border rounded-md"
                   onClick={() => setShowStartTime(true)}
@@ -319,8 +321,11 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
                     !showStartTime && "hidden"
                   } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
                 >
-                  {possibleTimes.map((time) => (
-                    <li onClick={(e) => setStartTime(e.target.innerText)}>
+                  {possibleTimes.map((time, index) => (
+                    <li
+                      key={index}
+                      onClick={(e) => setStartTime(e.target.innerText)}
+                    >
                       {time}
                     </li>
                   ))}
@@ -337,7 +342,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
                 type="date"
                 name=""
                 id=""
-                value={contestEndDate}
+                value={contestEndDate ? contestEndDate : ""}
                 className="border border-gray-300 pl-3"
                 onChange={(e) => {
                   setContestEndDate(e.target.value);
@@ -355,7 +360,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
               <div>
                 <input
                   type="text"
-                  value={endTime}
+                  value={endTime ? endTime : ""}
                   onChange={(e) => setEndTime(e.target.value)}
                   className="w-60 px-4 py-2 border rounded-md"
                   onClick={() => setShowEndTime(true)}
@@ -366,8 +371,11 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
                     !showEndTime && "hidden"
                   } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
                 >
-                  {possibleTimes.map((time) => (
-                    <li onClick={(e) => setEndTime(e.target.innerText)}>
+                  {possibleTimes.map((time, index) => (
+                    <li
+                      key={index}
+                      onClick={(e) => setEndTime(e.target.innerText)}
+                    >
                       {time}
                     </li>
                   ))}

@@ -11,6 +11,7 @@ import axios from "axios";
 import { baseURL } from "../config/config";
 import Instructions from "../components/ContestComponents/Instructions";
 import Notifications from "../components/ContestComponents/Notifications";
+import ContestInfo from "../components/ContestComponents/ContestInfo";
 
 const ManageContest = () => {
   const { currentContestName } = useParams("currentContestName");
@@ -22,7 +23,7 @@ const ManageContest = () => {
   const ADD_PARTICIPANTS = "ADD_PARTICIPANTS";
 
   const [contest, setContest] = useState(null);
-  const [selection, setSelection] = useState(LEADERBOARD);
+  const [selection, setSelection] = useState(DETAILS);
   const [contestName, setContestName] = useState(currentContestName);
   const [eventType, setEventType] = useState("FUN");
   const [companyName, setCompanyName] = useState("DARWINBOX");
@@ -82,6 +83,9 @@ const ManageContest = () => {
         </div>
       )}
 
+      {selection !== DETAILS && (
+        <ContestInfo contest={contest} setContest={setContest} />
+      )}
       {selection === DETAILS && (
         <Details contest={contest} setContest={setContest} />
       )}

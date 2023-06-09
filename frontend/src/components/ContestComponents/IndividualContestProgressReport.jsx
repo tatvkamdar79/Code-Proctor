@@ -114,7 +114,6 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
   };
 
   const chartSeries = timeTakenQuestionWise;
-  console.log(typeof chartSeries, chartSeries);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
