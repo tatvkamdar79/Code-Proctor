@@ -6,6 +6,7 @@ import { SiMinutemailer } from "react-icons/si";
 const Notifications = ({
   contest,
   emailLogs,
+  setEmailLogs,
   body,
   setBody,
   subject,
@@ -94,6 +95,19 @@ Best regards,
     };
     console.log(email);
     const response = await axios.post(baseURL, email);
+
+    const data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      route: "contests/fetchEmailLogs",
+      contestId: contest._id.$oid,
+    };
+    axios.post(baseURL, data).then((response) => {
+      console.log("THis is response of emails");
+      console.log(response.data.data);
+      setEmailLogs(response.data.data);
+    });
+
     console.log(response);
   };
   return (
@@ -186,13 +200,21 @@ Best regards,
       </div>
       <div className="w-full pl-3 mt-4">
         <button
-          onClick={() => setViewEmailLogs((emailLogs) => !emailLogs)}
+          onClick={() => {
+            setViewEmailLogs((emailLogs) => !emailLogs);
+            setTimeout(() => {
+              window.scrollBy({ top: 1000, behavior: "smooth" });
+            }, 200);
+          }}
           className="bg-green-600 text-lg text-white px-6 py-2 rounded hover:bg-green-700 transition-colors duration-300 flex place-items-center gap-x-1 mb-5"
         >
           {viewEmailLogs ? "Hide Email History" : "View Email History"}
         </button>
         {viewEmailLogs && (
-          <div className="flex flex-col gap-y-6">
+          <div
+            className="flex flex-col gap-y-6 h-[80vh] overflow-y-scroll my-10"
+            id="logs"
+          >
             {emailLogs === null && (
               <p className="text-xl font-semibold font-mono">
                 Loading Email History...

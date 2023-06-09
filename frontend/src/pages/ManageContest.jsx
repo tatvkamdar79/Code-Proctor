@@ -156,6 +156,7 @@ const ManageContest = () => {
         <Notifications
           contest={contest}
           emailLogs={emailLogs}
+          setEmailLogs={setEmailLogs}
           body={body}
           setBody={setBody}
           subject={subject}
