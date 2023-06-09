@@ -35,7 +35,6 @@ const AddParticipants = ({ contest, setContest }) => {
     if (usersToBeAdded.length == 0) {
       alert("Please fill the form correctly and make sure users are added");
     }
-    // TODO: Save users to database for this particular test
     const properUsers = usersToBeAdded.filter((user) => user.length > 0);
     const data = {
       route: "contests/modifyContestants",
@@ -47,6 +46,22 @@ const AddParticipants = ({ contest, setContest }) => {
     try {
       const response = await axios.post(baseURL, data);
       console.log(response.data);
+      if (response.data.status === 200) {
+        const data = {
+          authToken:
+            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+          route: "contests/getContestDetails",
+          contestName: contest.contestName,
+        };
+        axios
+          .post(baseURL, data)
+          .then((response) => {
+            setContest(response.data.data.contest);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     } catch (err) {
       console.log(err);
     }
