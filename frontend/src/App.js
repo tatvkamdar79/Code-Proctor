@@ -17,6 +17,8 @@ import CreateContest from "./pages/CreateContest";
 import ShowStages from "./pages/ShowStages";
 import IndividualContestProgressReport from "./components/ContestComponents/IndividualContestProgressReport";
 import RecruitmentTimeline from "./pages/RecruitmentTimeline";
+import AllQuestions from "./pages/AllQuestions";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const [previousRooms, setPreviousRooms] = useState([]);
@@ -42,7 +44,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      {/* <Header /> */}
+      <Navbar />
       <Routes>
         {/* Adding this manually because this structure of routes sucks */}
         <Route path="/" element={<Home />} />
@@ -79,6 +81,7 @@ const App = () => {
           path="/recruitment-timeline/create"
           element={<RecruitmentTimeline />}
         />
+        <Route path="/problems/all" element={<AllQuestions />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
