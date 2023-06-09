@@ -19,6 +19,7 @@ import IndividualContestProgressReport from "./components/ContestComponents/Indi
 import RecruitmentTimeline from "./pages/RecruitmentTimeline";
 import AllQuestions from "./pages/AllQuestions";
 import Navbar from "./components/Navbar";
+import OngoingContestsComponent from "./components/ContestComponents/OngoingContests";
 
 const App = () => {
   const [previousRooms, setPreviousRooms] = useState([]);
@@ -109,6 +110,11 @@ const App = () => {
           <Route
             path="/recruitment-timeline/create"
             element={<RecruitmentTimeline />}
+          />
+
+          <Route
+            path="/contests/ongoing"
+            element={<OngoingContestsComponent />}
           />
 
           <Route path="*" element={<NotFound />} />
