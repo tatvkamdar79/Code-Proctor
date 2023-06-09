@@ -243,166 +243,174 @@ const CreateContest = () => {
   }, [contestEndDate]);
 
   return (
-    <>
+    <div className="flex justify-center place-items-center h-[90vh] w-screen p-5">
       <div
-        className={`w-5/6 lg:w-2/3 ml-10 lg:mx-auto ${submitting && "blur-sm"}`}
+        className={`w-11/12 lg:w-2/3 flex flex-col ml-10 lg:mx-auto ${
+          submitting && "blur-sm"
+        }`}
       >
-        <div className={`w-2/3 flex flex-col gap-y-3`}>
-          <p className="text-2xl font-medium text-gray-700">Create Contest</p>
-          <p className="font-normal text-gray-400 italic">
-            Host your own coding contest on HackerRank. You can practice and
-            compete with friends from your organization or school. Select from
-            our library of over 1,500 coding challenges or create your own.
-          </p>
-          <p className="italic text-gray-400">
-            Get started by providing the initial details for your contest.
-          </p>
+        <div className={`w-2/3`}>
+          <div className="w-full h-full flex flex-col gap-y-3 justify-center">
+            <p className="text-2xl font-medium text-gray-700">Create Contest</p>
+            <p className="font-normal text-gray-400 italic">
+              Host your own coding contest on HackerRank. You can practice and
+              compete with friends from your organization or school. Select from
+              our library of over 1,500 coding challenges or create your own.
+            </p>
+            <p className="italic text-gray-400">
+              Get started by providing the initial details for your contest.
+            </p>
+          </div>
         </div>
-        <form onSubmit={handleSubmit} className="p-4">
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Contest Name: <span className="text-red-500">*</span>
-              </p>
-              <input
-                type="text"
-                value={contestName}
-                onChange={(e) => setContestName(e.target.value)}
-                required
-                className="w-60 px-4 py-2 border rounded-md"
-              />
-            </label>
-          </div>
-          {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Event Type: <span className="text-red-500">*</span>
-              </p>
-              <select
-                value={eventType}
-                onChange={(e) => setEventType(e.target.value)}
-                className="w-60 px-4 py-2 border rounded-md"
-              >
-                <option value="FUN">FUN</option>
-                <option value="RECRUITMENT">RECRUITMENT</option>
-              </select>
-            </label>
-          </div>
-          {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Company Name: <span className="text-red-500">*</span>
-              </p>
-              <input
-                type="text"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                className="w-60 px-4 py-2 border rounded-md"
-              />
-            </label>
-          </div>
-          {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Contest Start Date<span className="text-red-500">*</span>
-              </p>
-              <input
-                type="date"
-                name=""
-                id=""
-                className="border border-gray-300 pl-3"
-                onChange={(e) => setContestStartDate(e.target.value)}
-                required
-              />
-            </label>
-          </div>
-          {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-          <div className="py-2 w-fit">
-            <label className="flex gap-x-7">
-              <p className="w-60 mt-3 font-medium text-gray-600">
-                Start Time (IST, 24 hour time):{" "}
-                <span className="text-red-500">*</span>
-              </p>
-              <div>
+        <div className="flex h-[60.5vh]">
+          <form onSubmit={handleSubmit} className="w-full p-4">
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center gap-x-7">
+                <p className="w-60 font-medium text-gray-600">
+                  Contest Name: <span className="text-red-500">*</span>
+                </p>
                 <input
                   type="text"
-                  value={startTime}
-                  readOnly
-                  onChange={(e) => setStartTime(e.target.value)}
+                  value={contestName}
+                  onChange={(e) => setContestName(e.target.value)}
+                  required
                   className="w-60 px-4 py-2 border rounded-md"
-                  onFocus={() => setShowStartTime(true)}
-                  onBlur={() => setTimeout(() => setShowStartTime(false), 200)}
                 />
-                <ul
-                  className={`${
-                    !showStartTime && "hidden"
-                  } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+              </label>
+            </div>
+            {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center gap-x-7">
+                <p className="w-60 font-medium text-gray-600">
+                  Event Type: <span className="text-red-500">*</span>
+                </p>
+                <select
+                  value={eventType}
+                  onChange={(e) => setEventType(e.target.value)}
+                  className="w-60 px-4 py-2 border rounded-md"
                 >
-                  {possibleTimes.map((time) => (
-                    <li onClick={(e) => setStartTime(e.target.innerText)}>
-                      {time}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </label>
-          </div>
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Contest End Date<span className="text-red-500">*</span>
-              </p>
-              <input
-                type="date"
-                name=""
-                id=""
-                className="border border-gray-300 pl-3"
-                onChange={(e) => setContestEndDate(e.target.value)}
-              />
-            </label>
-          </div>
-          <div className="py-2 w-fit">
-            <label className="flex gap-x-7">
-              <p className="w-60 mt-3 font-medium text-gray-600">
-                End Time (IST, 24 hour time):{" "}
-                <span className="text-red-500">*</span>
-              </p>
-              <div>
+                  <option value="FUN">FUN</option>
+                  <option value="RECRUITMENT">RECRUITMENT</option>
+                </select>
+              </label>
+            </div>
+            {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center gap-x-7">
+                <p className="w-60 font-medium text-gray-600">
+                  Company Name: <span className="text-red-500">*</span>
+                </p>
                 <input
                   type="text"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
                   className="w-60 px-4 py-2 border rounded-md"
-                  onFocus={() => setShowEndTime(true)}
-                  onBlur={() => setTimeout(() => setShowEndTime(false), 200)}
                 />
-                <ul
-                  className={`${
-                    !showEndTime && "hidden"
-                  } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
-                  autoFocus
-                >
-                  {possibleTimes.map((time) => (
-                    <li onClick={(e) => setEndTime(e.target.innerText)}>
-                      {time}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </label>
-          </div>
-          <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" />
-          <button
-            type="submit"
-            className="px-6 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-300 font-mono my-4"
-            // onClick={handleGetStarted}
-          >
-            Get Started
-          </button>
-        </form>
+              </label>
+            </div>
+            {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center gap-x-7">
+                <p className="w-60 font-medium text-gray-600">
+                  Contest Start Date<span className="text-red-500">*</span>
+                </p>
+                <input
+                  type="date"
+                  name=""
+                  id=""
+                  className="border border-gray-300 pl-3"
+                  onChange={(e) => setContestStartDate(e.target.value)}
+                  required
+                />
+              </label>
+            </div>
+            {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+            <div className="py-2 w-fit">
+              <label className="flex gap-x-7">
+                <p className="w-60 mt-3 font-medium text-gray-600">
+                  Start Time (IST, 24 hour time):{" "}
+                  <span className="text-red-500">*</span>
+                </p>
+                <div>
+                  <input
+                    type="text"
+                    value={startTime}
+                    readOnly
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="w-60 px-4 py-2 border rounded-md"
+                    onFocus={() => setShowStartTime(true)}
+                    onBlur={() =>
+                      setTimeout(() => setShowStartTime(false), 200)
+                    }
+                  />
+                  <ul
+                    className={`${
+                      !showStartTime && "hidden"
+                    } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+                  >
+                    {possibleTimes.map((time) => (
+                      <li onClick={(e) => setStartTime(e.target.innerText)}>
+                        {time}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </label>
+            </div>
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center gap-x-7">
+                <p className="w-60 font-medium text-gray-600">
+                  Contest End Date<span className="text-red-500">*</span>
+                </p>
+                <input
+                  type="date"
+                  name=""
+                  id=""
+                  className="border border-gray-300 pl-3"
+                  onChange={(e) => setContestEndDate(e.target.value)}
+                />
+              </label>
+            </div>
+            <div className="py-2 w-fit">
+              <label className="flex gap-x-7">
+                <p className="w-60 mt-3 font-medium text-gray-600">
+                  End Time (IST, 24 hour time):{" "}
+                  <span className="text-red-500">*</span>
+                </p>
+                <div>
+                  <input
+                    type="text"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="w-60 px-4 py-2 border rounded-md"
+                    onFocus={() => setShowEndTime(true)}
+                    onBlur={() => setTimeout(() => setShowEndTime(false), 200)}
+                  />
+                  <ul
+                    className={`${
+                      !showEndTime && "hidden"
+                    } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+                    autoFocus
+                  >
+                    {possibleTimes.map((time) => (
+                      <li onClick={(e) => setEndTime(e.target.innerText)}>
+                        {time}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </label>
+            </div>
+            <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" />
+            <button
+              type="submit"
+              className="px-6 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-300 font-mono my-4"
+              // onClick={handleGetStarted}
+            >
+              Get Started
+            </button>
+          </form>
+        </div>
       </div>
       {submitting && (
         <div className="absolute top-0 left-0">
@@ -418,7 +426,7 @@ const CreateContest = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
