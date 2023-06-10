@@ -19,15 +19,15 @@ const Home = ({ previousRooms }) => {
 
   return (
     <div className="w-full h-[92.5vh] mx-auto bg-blac flex">
-      <div className="w-1/2 bg-gray-200 border-r border-gray-400">
+      <div className={`w-1/2 bg-white border-r border-gray-400`}>
         <OngoingContestsComponent />
       </div>
       <div className="w-1/2 h-[92.5vh] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 place-items-center justify-center lg:gap-x-10 overflow-y-scroll bg-gray-200 border-l border-gray-400">
         {/* CARDS */}
-        <div className="w-96 h-52 rounded-3xl text-white bg-gray-400 hover:bg-gray-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
+        <div className="w-96 h-52 rounded-3xl text-white bg-gradient-to-r from-gray-500 to-gray-300 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
           Welcome user,
         </div>
-        <div className="w-96 h-52 rounded-3xl text-white bg-orange-500 hover:bg-orange-600 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
+        <div className="w-96 h-52 rounded-3xl text-white bg-gradient-to-t from-orange-700 to-orange-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
             <p className="text-2xl font-mono font-semibold">View Contests</p>
             <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
@@ -54,7 +54,7 @@ const Home = ({ previousRooms }) => {
         </div>
         <Link
           to={"/challenge/all"}
-          className="w-96 h-52 rounded-3xl text-white bg-sky-600 hover:bg-sky-700 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+          className="w-96 h-52 rounded-3xl text-white bg-gradient-to-b from-sky-700 to-sky-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
         >
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
             <p className="text-2xl font-mono font-semibold">View Challanges</p>

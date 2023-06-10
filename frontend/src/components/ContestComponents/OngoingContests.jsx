@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { baseURL } from "../../config/config";
 import ongoingContestLoading from "../../assets/ongoingContestsLoading.gif";
+import { BiSearchAlt } from "react-icons/bi";
 
 const OngoingContestsComponent = () => {
   const [contests, setContests] = useState([]);
@@ -55,22 +56,51 @@ const OngoingContestsComponent = () => {
   };
 
   return (
-    <div className="w-full mx-auto p-4">
-      <div className="mb-4 flex items-center">
+    <div
+      className={`w-full h-[92.5vh] mx-auto p-4 transition-all duration-1000 ${
+        filteredContests ? "bg-stone-100" : "bg-white"
+      }`}
+    >
+      <div className="w-full mb-4 flex justify-center place-items-center">
+        <BiSearchAlt size={40} className="w-1/12" />
         <input
           type="text"
           placeholder="Search contest name"
           value={searchQuery}
           onChange={handleSearchChange}
-          className="w-1/3 p-4 border border-gray-300 rounded-lg mx-auto"
+          className="w-11/12 p-4 border-2 border-gray-300 rounded-lg mx-auto outline-none transition-all duration-300 focus:border-green-500 hover:border-green-600"
         />
       </div>
       {!filteredContests && (
         <div className="absolute flex top-[28%] w-[97%]">
-          <img src={ongoingContestLoading} alt="" className="w-[12.5%]" />
-          <img src={ongoingContestLoading} alt="" className="w-[12.5%]" />
-          <img src={ongoingContestLoading} alt="" className="w-[12.5%]" />
-          <img src={ongoingContestLoading} alt="" className="w-[12.5%]" />
+          <img
+            src={
+              "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
+            }
+            alt=""
+            className="w-[12.5%]"
+          />
+          <img
+            src={
+              "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
+            }
+            alt=""
+            className="w-[12.5%]"
+          />
+          <img
+            src={
+              "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
+            }
+            alt=""
+            className="w-[12.5%]"
+          />
+          <img
+            src={
+              "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
+            }
+            alt=""
+            className="w-[12.5%]"
+          />
         </div>
       )}
       <table className="w-full">
@@ -116,10 +146,10 @@ const OngoingContestsComponent = () => {
             ))}
         </tbody>
       </table>
-      <p className="text-lg font-semibold font-mono mx-auto">
+      <p className="mt-5 text-lg font-semibold font-mono mx-auto text-center">
         {filteredContests
           ? "Tip: Click on a contest for details"
-          : "Hold on! We're getting the contest Details!"}
+          : "Hold on! We're contacting our servers!"}
       </p>
     </div>
   );

@@ -63,6 +63,7 @@ const App = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []); // Empty dependency array ensures the effect runs only once
+  console.log();
 
   return (
     <BrowserRouter>
@@ -72,7 +73,8 @@ const App = () => {
         </div>
       )}
       <div className={`${!block && ""}`}>
-        <Navbar />
+        {!window.location.pathname.includes("/pretest/") &&
+          !window.location.pathname.includes("/test/") && <Navbar />}
         <Routes>
           {/* Adding this manually because this structure of routes sucks */}
           <Route path="/" element={<Home />} />
