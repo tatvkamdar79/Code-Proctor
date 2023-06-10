@@ -68,12 +68,14 @@ const ContestBanner = ({ startDate, endDate }) => {
         <div className="flex justify-evenly w-full font-mono">
           <div className="flex flex-col place-items-center justify-center text-4xl font-semibold tracking-widest gap-y-4">
             <p className="border-b">Start Date</p>
-            <p>{new Date(startDate).toLocaleString().slice(0, 10)}</p>
+            <p>
+              {new Date(startDate - 19800000).toLocaleString().slice(0, 10)}
+            </p>
             <p>{new Date(startDate).toUTCString().slice(17, 22)}</p>
           </div>
           <div className="flex flex-col place-items-center justify-center text-4xl font-semibold tracking-widest gap-y-4">
             <p className="border-b">End Date</p>
-            <p>{new Date(endDate).toLocaleString().slice(0, 10)}</p>
+            <p>{new Date(endDate - 19800000).toLocaleString().slice(0, 10)}</p>
             <p>{new Date(endDate).toUTCString().slice(17, 22)}</p>
           </div>
         </div>
