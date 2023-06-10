@@ -3,13 +3,15 @@ import Editor from "../components/Editor";
 import { languageToEditorMode } from "../config/mappings";
 import API from "../utils/API";
 import { debounce } from "../utils/utils";
-// import SplitPane from "react-split-pane";
+import SplitPane from "react-split-pane";
 
 import socket from "../utils/socket";
 import { baseURL } from "../config/config";
 import Peer from "peerjs";
 import { diff_match_patch } from "diff-match-patch";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import CodePairEditor from "../components/CodePairEditor";
+import axios from "axios";
 
 // interface RoomProps {
 //     updatePreviousRooms: (room: string) => any;
@@ -24,9 +26,10 @@ var myAudio;
 // to trying to destroy an already destoyed thing, or when we were in process of it.
 // So yeah, something to work on #TODO
 
-const Room = (props) => {
+const Room = () => {
   const navigate = useNavigate();
-  const [id, setId] = useState("");
+  const { id } = useParams();
+  // const [id, setId] = useState("");
   const [title, setTitle] = useState("");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -35,6 +38,15 @@ const Room = (props) => {
   const [widthLeft, setWidthLeft] = useState("");
   const [widthRight, setWidthRight] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const languages = Object.keys(languageToEditorMode);
   const fontSizes = [
@@ -118,26 +130,35 @@ const Room = (props) => {
     });
   }, [input]);
 
-  // useEffect(() => {
-  //   const id = "";
-  //   // props.match.params.id;
-  //   setId(id);
-  //   socket.emit("joinroom", id);
-
-  //   API.get(`/api/room/${id}`)
-  //     .then((res) => {})
-  //     .catch((err) => {
-  //       navigate("/404");
-  //     });
-  //   return () => {
-  //     if (myPeer) {
-  //       socket.emit("leaveAudioRoom", myPeer.id);
-  //       destroyConnection();
-  //     }
-  //     myAudio = null;
-  //     socket.emit("leaveroom", id);
-  //   };
-  // }, []);
+  useEffect(() => {
+    // const id = roomId;
+    // props.match.params.id;
+    socket.emit("joinroom", id);
+    const data = {
+      route: "room/getRoom",
+      id: id,
+    };
+    console.log(data);
+    axios
+      .post(baseURL, data)
+      .then((response) => {
+        console.log(response.data);
+        setBody(response.data.data.body);
+        setInput(response.data.data.input);
+        setLanguage(response.data.data.language);
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
+    return () => {
+      if (myPeer) {
+        socket.emit("leaveAudioRoom", myPeer.id);
+        destroyConnection();
+      }
+      myAudio = null;
+      socket.emit("leaveroom", id);
+    };
+  }, []);
   // [props.match.params.id]);
 
   useEffect(() => {
@@ -194,10 +215,18 @@ const Room = (props) => {
   const handleSubmit = () => {
     if (submissionStatus === runningStatus) return;
     setSubmissionStatus(runningStatus);
-
-    API.patch(`/api/room/${id}`, { title, body, input, language })
-      .then((data) => {
-        console.log(data);
+    const data = {
+      route: "room/saveChanges",
+      id,
+      title,
+      body,
+      input,
+      language,
+    };
+    axios
+      .post(baseURL, data)
+      .then((response) => {
+        console.log(response.data.data);
       })
       .catch((err) => {
         setSubmissionStatus(errorStatus);
@@ -243,21 +272,17 @@ const Room = (props) => {
   };
 
   const handleUpdateBody = (value) => {
-    const patch = dmp.patch_make(body, value);
+    // const patch = dmp.patch_make(body, value);
     setBody(value);
-    debounce(
-      () => socket.emit("updateBody", { value: patch, roomId: id }),
-      100
-    )();
+    // debounce(
+    //   () => socket.emit("updateBody", { value: patch, roomId: id }),
+    //   100
+    // )();
   };
 
   const handleUpdateInput = (value) => {
     const patch = dmp.patch_make(input, value);
     setInput(value);
-    debounce(
-      () => socket.emit("updateInput", { value: patch, roomId: id }),
-      100
-    )();
   };
 
   const handleWidthChange = (x) => {
@@ -402,13 +427,15 @@ const Room = (props) => {
   }, [isMuted]);
 
   return (
-    <div>
-      <div className="row container-fluid text-center justify-content-center">
-        <div className="form-group col-lg-2 col-md-3">
-          <label>Choose Language</label>
+    <div className="">
+      {/* <Modal /> */}
+      <div className="flex justify-center gap-x-14">
+        <div className="flex flex-col items-center justify-center">
+          <label className="text-center">Choose Language</label>
+          {/* <br /> */}
           <select
-            className="form-select"
-            defaultValue={language}
+            className=""
+            value={language}
             onChange={(event) => {
               setLanguage(event.target.value);
               socket.emit("setLanguage", {
@@ -417,104 +444,113 @@ const Room = (props) => {
               });
             }}
           >
-            {languages.map((lang, index) => {
-              return (
-                <option key={index} value={lang} selected={lang == language}>
-                  {lang}
-                </option>
-              );
-            })}
+            {languages.map((lang, index) => (
+              <option key={index} value={lang}>
+                {lang}
+              </option>
+            ))}
           </select>
         </div>
-        <div className="form-group col-lg-2 col-md-3">
-          <label>Choose Theme</label>
+        <div className="flex flex-col items-center justify-center col-span-2 md:col-span-3">
+          <label className="text-center">Choose Theme</label>
           <select
             className="form-select"
-            defaultValue={theme}
+            value={theme}
             onChange={(event) => setTheme(event.target.value)}
           >
-            {themes.map((theme, index) => {
-              return (
-                <option key={index} value={theme}>
-                  {theme}
-                </option>
-              );
-            })}
+            {themes.map((theme, index) => (
+              <option key={index} value={theme}>
+                {theme}
+              </option>
+            ))}
           </select>
         </div>
-        <div className="form-group col-lg-2 col-md-3">
-          <label>Font Size</label>
+        <div className="flex flex-col items-center justify-center col-span-2 md:col-span-3">
+          <label className="text-center">Font Size</label>
           <select
             className="form-select"
-            defaultValue={fontSize}
+            value={fontSize}
             onChange={(event) => setFontSize(event.target.value)}
           >
-            {fontSizes.map((fontSize, index) => {
-              return (
-                <option key={index} value={fontSize}>
-                  {fontSize}
-                </option>
-              );
-            })}
+            {fontSizes.map((fontSize, index) => (
+              <option key={index} value={fontSize}>
+                {fontSize}
+              </option>
+            ))}
           </select>
         </div>
-        <div className="form-group col-lg-2 col-md-3">
-          <br />
-          <button
-            className="btn btn-secondary"
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-            }}
-          >
-            Copy room link
-          </button>
+        <div className="flex items-center justify-center col-span-2 md:col-span-2">
+          <div className="text-center mt-3" id="userFieldsContainer">
+            <button
+              className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+              style={{ alignItems: "end" }}
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+              }}
+            >
+              Copy room link
+            </button>
+          </div>
         </div>
-        <div className="form-group col-lg-2 col-md-2">
-          <br />
+        <div className="flex items-center justify-center col-span-2 md:col-span-2">
           <button
-            className={`btn btn-${inAudio ? "primary" : "secondary"}`}
+            className="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+            style={{ alignItems: "end" }}
             onClick={() => setInAudio(!inAudio)}
           >
             {inAudio ? "Leave Audio" : "Join Audio"} Room
           </button>
         </div>
         {inAudio ? (
-          <div className="form-group col-lg-1 col-md-2">
-            <br />
+          <div className="flex flex-col items-center justify-center col-span-2 md:col-span-2">
             <button
-              className={`btn btn-${!isMuted ? "primary" : "secondary"}`}
+              className={`${
+                !isMuted ? "bg-blue-600" : "bg-red-600"
+              } text-white font-semibold py-2 px-4 rounded-md shadow mr-5`}
+              style={{ alignItems: "end" }}
               onClick={() => setIsMuted(!isMuted)}
             >
               {isMuted ? "Muted" : "Speaking"}
             </button>
           </div>
         ) : (
-          <div className="form-group col-lg-1 col-md-2" />
+          <div className="form-group col-span-2 md:col-span-2" />
         )}
-
-        <div className="form-group col-lg-1 col-md-2">
-          <br />
-          <label>Status: {submissionStatus}</label>
+        <div className="flex flex-col items-center justify-center col-span-2 md:col-span-2">
+          <label className="text-center">Status: {submissionStatus}</label>
         </div>
       </div>
 
       <hr />
-      {/* <SplitPane
+
+      <div className="flex items-center justify-center col my-5">
+        <button
+          className={`bg-green-700  text-white font-semibold py-2 px-2 rounded-md shadow mr-5`}
+          style={{ alignItems: "end" }}
+          onClick={() => {
+            openModal();
+          }}
+        >
+          Invite people to the room?
+        </button>
+      </div>
+
+      <SplitPane
         split="vertical"
         minSize={150}
         maxSize={windowWidth - 150}
         defaultSize={windowWidth / 2}
-        className="row text-center "
+        className="flex-row text-center"
         style={{ height: "78vh", width: "100vw", marginRight: "0" }}
         onChange={handleWidthChange}
       >
         <div>
-          <div className="row mb-1">
-            <h5 className="col">Code Here</h5>
-
-            <div className="form-group col">
+          <div className="flex pl-24 gap-x-24">
+            <h5 className="col py-2">Code Here</h5>
+            <div className="flex items-center justify-center col">
               <button
-                className="btn btn-secondary"
+                className={`bg-gray-500  text-white font-semibold py-2 px-2 rounded-md shadow mr-5`}
+                style={{ alignItems: "end" }}
                 onClick={() => {
                   navigator.clipboard.writeText(body);
                 }}
@@ -522,9 +558,10 @@ const Room = (props) => {
                 Copy Code
               </button>
             </div>
-            <div className="form-group col">
+            <div className="flex items-center justify-center col">
               <button
-                className="btn btn-primary"
+                className={`bg-blue-600  text-white font-semibold py-2 px-2 rounded-md shadow mr-5`}
+                style={{ alignItems: "end" }}
                 onClick={handleSubmit}
                 disabled={submissionStatus === runningStatus}
               >
@@ -532,10 +569,9 @@ const Room = (props) => {
               </button>
             </div>
           </div>
-          <Editor
+          <CodePairEditor
             theme={theme}
             width={widthLeft}
-            // @ts-ignore
             language={languageToEditorMode[language]}
             body={body}
             setBody={handleUpdateBody}
@@ -544,7 +580,7 @@ const Room = (props) => {
         </div>
         <div className="text-center">
           <h5>Input</h5>
-          <Editor
+          <CodePairEditor
             theme={theme}
             language={""}
             body={input}
@@ -554,7 +590,7 @@ const Room = (props) => {
             fontSize={fontSize}
           />
           <h5>Output</h5>
-          <Editor
+          <CodePairEditor
             theme={theme}
             language={""}
             body={output}
@@ -565,7 +601,131 @@ const Room = (props) => {
             fontSize={fontSize}
           />
         </div>
-      </SplitPane> */}
+      </SplitPane>
+      <div className="h-96">
+        <Modal isOpen={isModalOpen} onClose={closeModal} />
+      </div>
+    </div>
+  );
+};
+
+const Modal = ({ isOpen, onClose }) => {
+  const [emailList, setEmailList] = useState([]);
+  const [emailInput, setEmailInput] = useState("");
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  const addEmail = () => {
+    if (emailInput.trim() !== "") {
+      if (!validateEmail(emailInput)) {
+        setMessage("Please enter a valid email");
+        setIsError(true);
+      } else {
+        setEmailList([...emailList, emailInput]);
+        setEmailInput("");
+        setMessage("");
+        setIsError(false);
+      }
+    }
+  };
+
+  const deleteEmail = (index) => {
+    setEmailList(emailList.filter((_, i) => i !== index));
+  };
+
+  const handleSendInvites = async () => {
+    const url = window.location.href;
+    const data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI3ODgwNzd9.Pdw-8UvyEXYtA0JKGK3S6JD29dkQzaRwkE8Grg-AJdQ",
+      route: "room/sendInvites",
+      url,
+      emails: emailList,
+    };
+
+    try {
+      setMessage("Sent invites successfully!");
+      setIsError(false);
+      const response = await axios.post(baseURL, data);
+    } catch (err) {
+      setMessage("Some error occurred while sending, please try again");
+      setIsError(true);
+    }
+  };
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
+  if (!isOpen) {
+    return null;
+  }
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-10 h-full">
+      <div className="fixed inset-0 bg-black opacity-50"></div>
+      <div>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded">
+            {/* Modal content */}
+            <h2 className="text-xl font-bold mb-4">Invite People</h2>
+            <p
+              className={`text-sm ${
+                !isError ? "text-green-700" : "text-red-700"
+              } items-center mb-3`}
+            >
+              {message}
+            </p>
+            <input
+              type="email"
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              className="border border-gray-300 rounded px-4 py-2 mb-4"
+              placeholder="Enter email address"
+            />
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-3 py-2 px-4 rounded"
+              onClick={addEmail}
+            >
+              Add Email
+            </button>
+
+            <ul className="mt-4">
+              {emailList.map((email, index) => (
+                <li
+                  key={index}
+                  className="flex items-center justify-between border border-gray-300 rounded px-4 py-2 mb-2"
+                >
+                  <span>{email}</span>
+                  <button
+                    className="text-red-500 hover:text-red-700"
+                    onClick={() => deleteEmail(index)}
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-col">
+              <button
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
+                onClick={handleSendInvites}
+              >
+                Send invites
+              </button>
+              <button
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-4"
+                onClick={onClose}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
