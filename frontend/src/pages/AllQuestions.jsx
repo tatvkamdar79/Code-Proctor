@@ -33,7 +33,7 @@ const AllQuestions = () => {
     setSearchResults(results);
   };
   return (
-    <div className="w-screen h-[93.5vh]">
+    <div className="w-full h-[92.5vh]">
       <div className="flex w-11/12 h-full mx-auto border">
         <div
           className={`pt-5 w-1/2 h-full flex flex-col justify-center place-items-center border-r-2 border-gray-400 bg-gray-50 px-5`}

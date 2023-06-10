@@ -4,6 +4,7 @@ import { ImSigma } from "react-icons/im";
 import { BsFillGearFill } from "react-icons/bs";
 import { GiBackwardTime } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import OngoingContestsComponent from "../components/ContestComponents/OngoingContests";
 
 const Home = ({ previousRooms }) => {
   const [contestName, setContestName] = useState("ContestName");
@@ -17,10 +18,16 @@ const Home = ({ previousRooms }) => {
   ];
 
   return (
-    <div className="w-screen h-[93.5vh] mx-auto bg-back">
-      <div className="w-5/6 h-[60vh] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center justify-center lg:gap-x-10">
+    <div className="w-full h-[92.5vh] mx-auto bg-blac flex">
+      <div className="w-1/2 bg-gray-200 border-r border-gray-400">
+        <OngoingContestsComponent />
+      </div>
+      <div className="w-1/2 h-[92.5vh] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 place-items-center justify-center lg:gap-x-10 overflow-y-scroll bg-gray-200 border-l border-gray-400">
         {/* CARDS */}
-        <div className="w-80 lg:w-full h-60 border-2 border-gray-400 rounded-3xl text-white bg-orange-500 hover:bg-orange-600 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
+        <div className="w-96 h-52 rounded-3xl text-white bg-gray-400 hover:bg-gray-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
+          Welcome user,
+        </div>
+        <div className="w-96 h-52 rounded-3xl text-white bg-orange-500 hover:bg-orange-600 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
             <p className="text-2xl font-mono font-semibold">View Contests</p>
             <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
@@ -45,7 +52,10 @@ const Home = ({ previousRooms }) => {
             </div>
           </div>
         </div>
-        <div className="w-80 lg:w-full h-60 border-2 border-gray-400 rounded-3xl text-white bg-sky-600 hover:bg-sky-700 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
+        <Link
+          to={"/challenge/all"}
+          className="w-96 h-52 rounded-3xl text-white bg-sky-600 hover:bg-sky-700 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+        >
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
             <p className="text-2xl font-mono font-semibold">View Challanges</p>
             <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
@@ -56,10 +66,10 @@ const Home = ({ previousRooms }) => {
               Total
             </p>
           </div>
-        </div>
+        </Link>
         <Link
           to={"/contest/create"}
-          className="w-80 lg:w-full h-60 border-2 border-gray-400 rounded-3xl text-white bg-pink-600 hover:bg-pink-700 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+          className="w-96 h-52 rounded-3xl text-white bg-pink-600 hover:bg-pink-700 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
         >
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
             <p className="text-2xl font-mono font-semibold">Create Contest</p>
@@ -70,7 +80,7 @@ const Home = ({ previousRooms }) => {
         </Link>
         <Link
           to={"/createChallenge"}
-          className="w-80 lg:w-full h-60 border-2 border-gray-400 rounded-3xl text-white bg-teal-400 hover:bg-teal-500 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+          className="w-96 h-52 rounded-3xl text-white bg-emerald-600 hover:bg-emerald-700 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
         >
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
             <p className="text-2xl font-mono font-semibold">Create Challenge</p>
@@ -79,10 +89,9 @@ const Home = ({ previousRooms }) => {
             </p>
           </div>
         </Link>
-
         <div
           to={`/contest/manage/${contestName}`}
-          className="w-80 lg:w-full h-60 border-2 border-gray-400 rounded-3xl text-white bg-purple-500 hover:bg-purple-600 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+          className="w-96 h-52 rounded-3xl text-white bg-purple-500 hover:bg-purple-600 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
           // onClick={() => alert("clicked")}
         >
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
