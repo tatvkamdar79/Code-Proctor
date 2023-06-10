@@ -5,7 +5,7 @@ import Header from "./components/header";
 import Home from "./pages/Home";
 import JoinRoom from "./pages/joinroom";
 import NewRoom from "./pages/newroom";
-import NotFound from "./pages/notfound";
+import NotFound from "./pages/NotFound";
 import Room from "./pages/room";
 import Test from "./pages/Test";
 import PreTest from "./pages/PreTest";
@@ -66,12 +66,12 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      {block && (
+      {!block && block && (
         <div className="w-full text-center text-2xl h-10 bg-yellow-200 flex justify-center place-items-center border-2 border-gray-400 bg-opacity-70">
           <p className="text-orange-400">Please view the page on a PC</p>
         </div>
       )}
-      <div className={`${block && "hidden"}`}>
+      <div className={`${!block && ""}`}>
         <Navbar />
         <Routes>
           {/* Adding this manually because this structure of routes sucks */}

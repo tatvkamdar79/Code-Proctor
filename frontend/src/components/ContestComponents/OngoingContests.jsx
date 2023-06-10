@@ -2,10 +2,11 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { baseURL } from "../../config/config";
+import ongoingContestLoading from "../../assets/ongoingContestsLoading.gif";
 
 const OngoingContestsComponent = () => {
   const [contests, setContests] = useState([]);
-  const [filteredContests, setFilteredContests] = useState([]);
+  const [filteredContests, setFilteredContests] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
@@ -54,7 +55,7 @@ const OngoingContestsComponent = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="w-full mx-auto p-4">
       <div className="mb-4 flex items-center">
         <input
           type="text"
@@ -64,9 +65,17 @@ const OngoingContestsComponent = () => {
           className="w-1/3 p-4 border border-gray-300 rounded-lg mx-auto"
         />
       </div>
+      {!filteredContests && (
+        <div className="absolute flex top-[28%] w-[97%]">
+          <img src={ongoingContestLoading} alt="" className="w-[12.5%]" />
+          <img src={ongoingContestLoading} alt="" className="w-[12.5%]" />
+          <img src={ongoingContestLoading} alt="" className="w-[12.5%]" />
+          <img src={ongoingContestLoading} alt="" className="w-[12.5%]" />
+        </div>
+      )}
       <table className="w-full">
         <thead>
-          <tr className="bg-blue-500 text-white">
+          <tr className="bg-sky-500 text-white">
             <th className="p-4">Contest Number</th>
             <th className="p-4">Contest Name</th>
             <th className="p-4">No. of Contestants</th>
@@ -76,34 +85,42 @@ const OngoingContestsComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredContests.map((contest, idx) => (
-            <tr
-              key={contest.id}
-              className="border-b cursor-pointer"
-              onClick={() => navigate(`/contest/manage/${contest.contestName}`)}
-            >
-              <td className="p-4 text-center font-semibold font-mono">
-                {idx + 1}
-              </td>
-              <td className="p-4 text-center font-semibold font-mono">
-                {contest.contestName}
-              </td>
-              <td className="p-4 text-center font-semibold font-mono">
-                {contest.contestants.length}
-              </td>
-              <td className="p-4 text-center font-semibold font-mono">
-                {contest.questions.length}
-              </td>
-              <td className="p-4 text-center font-semibold font-mono">
-                {formatDate(contest.contestStartDate.sec * 1000)}
-              </td>
-              <td className="p-4 text-center font-semibold font-mono">
-                {formatDate(contest.contestEndDate.sec * 1000)}
-              </td>
-            </tr>
-          ))}
+          {filteredContests &&
+            filteredContests.map((contest, idx) => (
+              <tr
+                key={contest.id}
+                className="border-b cursor-pointer"
+                onClick={() =>
+                  navigate(`/contest/manage/${contest.contestName}`)
+                }
+              >
+                <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                  {idx + 1}
+                </td>
+                <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                  {contest.contestName}
+                </td>
+                <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                  {contest.contestants.length}
+                </td>
+                <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                  {contest.questions.length}
+                </td>
+                <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                  {formatDate(contest.contestStartDate.sec * 1000)}
+                </td>
+                <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                  {formatDate(contest.contestEndDate.sec * 1000)}
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
+      <p className="text-lg font-semibold font-mono mx-auto">
+        {filteredContests
+          ? "Tip: Click on a contest for details"
+          : "Hold on! We're getting the contest Details!"}
+      </p>
     </div>
   );
 };
