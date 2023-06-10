@@ -274,10 +274,7 @@ export default function PreTest() {
           </>
         )}
       {contest &&
-        !(
-          contest.contestStartDate.sec * 1000 - 19800000 <= currentEpochTime &&
-          currentEpochTime <= contest.contestEndDate.sec * 1000 - 19800000
-        ) && (
+        contest.contestStartDate.sec * 1000 - 19800000 > currentEpochTime && (
           <ContestBanner
             startDate={contest.contestStartDate.sec * 1000}
             endDate={contest.contestEndDate.sec * 1000}
