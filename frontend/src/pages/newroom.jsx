@@ -1,6 +1,8 @@
+import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { baseURL } from "../config/config";
 import API from "../utils/API";
 
 const NewRoom = (props) => {
@@ -8,41 +10,44 @@ const NewRoom = (props) => {
   const [roomName, setRoomName] = useState("");
 
   const handleSubmit = () => {
-    API.post("/api/room", { title: roomName })
+    const data = {
+      route: "room/createRoom",
+      title: roomName,
+    };
+    axios
+      .post(baseURL, data)
       .then((res) => {
-        navigate(`/room/${res.data.data}`);
+        console.log(res.data);
+        navigate(`/room/${res.data.data.id.$oid}`);
       })
       .catch((err) => {
+        console.log(err);
         alert("Looks like some error occured");
       });
   };
 
   return (
-    <div className="container-fluid">
-      <div>
-        <div className="form-group text-center pt-5 mt-5 row justify-content-center">
-          <div className="col-5">
-            <h1>Create New Room</h1>
-            <input
-              type="text"
-              value={roomName}
-              onChange={(e) => setRoomName(e.target.value)}
-              className="form-control"
-              placeholder="Enter room name"
-            />
-            <small id="emailHelp" className="form-text text-muted">
-              Create your room or <Link to="/joinroom"> Join another </Link>
-            </small>
-          </div>
+    <div className="container mx-auto">
+      <div className="flex flex-col items-center pt-5 mt-5">
+        <div className="w-64">
+          <h1 className="text-3xl font-bold mb-4">Create New Room</h1>
+          <input
+            type="text"
+            value={roomName}
+            onChange={(e) => setRoomName(e.target.value)}
+            className="w-full border border-gray-300 rounded px-4 py-2 mb-2"
+            placeholder="Enter room name"
+          />
+          <small className="text-gray-500">
+            Create your room or <a href="/joinroom">Join another</a>
+          </small>
         </div>
-        <div className="form-group text-center pt-3 row justify-content-center">
-          <button
-            onClick={handleSubmit}
-            className="btn btn-primary col-2 text-lg"
-          >
-            <h3>Join Room</h3>
-          </button>
-        </div>
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3"
+        >
+          <h3 className="text-lg">Join Room</h3>
+        </button>
       </div>
     </div>
   );

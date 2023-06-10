@@ -20,6 +20,7 @@ import RecruitmentTimeline from "./pages/RecruitmentTimeline";
 import AllQuestions from "./pages/AllQuestions";
 import Navbar from "./components/Navbar";
 import OngoingContestsComponent from "./components/ContestComponents/OngoingContests";
+import CodePairHome from "./pages/CodePairHome";
 
 const App = () => {
   const [previousRooms, setPreviousRooms] = useState([]);
@@ -54,6 +55,12 @@ const App = () => {
           exact
           path="/"
           element={() => <Home previousRooms={previousRooms} />}
+        />
+
+        <Route
+          exact
+          path="/codepair"
+          element={() => <CodePairHome previousRooms={previousRooms} />}
         />
         <Route path="/newroom" element={<NewRoom />} />
         <Route path="/joinroom" element={<JoinRoom />} />
