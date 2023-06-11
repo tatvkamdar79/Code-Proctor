@@ -208,6 +208,7 @@ const Editor = ({
           submissionTime: new Date().getTime(),
           isCorrect: score == resultForDB.length ? 1 : 0,
           timeSpentOnQuestion: Date.now() - timeWhenQuestionOpened,
+          language,
         };
         setTimeWhenQuestionOpened(Date.now());
         try {

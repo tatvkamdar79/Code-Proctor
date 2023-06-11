@@ -20,6 +20,8 @@ const Test = () => {
   const [selected, setSelected] = useState("ALL");
   const [questionsComponent, setQuestionsComponent] = useState([]);
   const [contest, setContest] = useState(null);
+  const [showTest, setShowTest] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // The following details will be fetched from Api calls adn then stored in localStorgae until the durationof the exam
   const [questions, setQuestions] = useState([]);
@@ -27,6 +29,51 @@ const Test = () => {
   const [helperTimeVariable, setHelperTimeVariable] = useState(0);
   const [helperQuestionIndex, setHelperQuestionIndex] = useState(0);
   // const [contest, setContest] = useState({});
+
+  useEffect(() => {
+    if (!contest) return;
+
+    axios
+      .get("https://api.ipify.org/?format=json")
+      .then((response) => {
+        const ipAddress = response.data.ip;
+        const data = {
+          route: "contests/markPresence",
+          contestantEmail: state.email,
+          contestId: contest._id.$oid,
+          ipAddress: ipAddress,
+        };
+        return axios.post(baseURL, data);
+      })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.status == 400) {
+          alert(response.data.message);
+        } else {
+          setShowTest(true);
+        }
+      })
+      .catch((err) => {
+        console.log("Error in marking user", err);
+      });
+
+    return () => {
+      const data = {
+        route: "contests/unmarkPresence",
+        contestantEmail: state.email,
+        contestId: contest._id.$oid,
+      };
+      axios.post(baseURL, data).then((response) => {
+        console.log(response.data);
+      });
+    };
+  }, [contest]);
+
+  useEffect(() => {
+    if (isSubmitted) {
+      navigate("/home");
+    }
+  }, [isSubmitted]);
 
   useEffect(() => {
     console.log(totalTimeForEachQuestion);
@@ -308,8 +355,7 @@ const Test = () => {
         // Mark user as copying
         if (!isAlone || isMobilePresent) {
           // Send server request and mark as copy
-        } else {
-          // Everything is fine
+          alert("You are seem to be copying");
         }
         console.log(keywords);
       })
@@ -341,7 +387,15 @@ const Test = () => {
       {/* TEST NAVBAR */}
       {TestNavbar({ totalTime, selected, setSelected, questions })}
 
-      {selected === "ALL" && ViewAllQuestionsList(questions, setSelected)}
+      {contest &&
+        selected === "ALL" &&
+        ViewAllQuestionsList(
+          questions,
+          setSelected,
+          contest._id.$oid,
+          state.email,
+          setIsSubmitted
+        )}
 
       {selected === "INSTRUCTIONS" && TestInstructions(allInstructions)}
 
@@ -430,7 +484,30 @@ const TestNavbar = ({ totalTime, selected, setSelected, questions }) => {
   );
 };
 
-const ViewAllQuestionsList = (questions, setSelected) => {
+const ViewAllQuestionsList = (
+  questions,
+  setSelected,
+  contestId,
+  contestantEmail,
+  setIsSubmitted
+) => {
+  const handleSubmit = async () => {
+    const data = {
+      route: "contests/submitTest",
+      contestId,
+      contestantEmail,
+    };
+    try {
+      const response = await axios.post(baseURL, data);
+      console.log(response.data);
+      if (response.data.status === 200) {
+        alert("Test submitted");
+        setIsSubmitted(true);
+      }
+    } catch (err) {
+      console.log("Error while submitting", err);
+    }
+  };
   return (
     <section className="w-full h-full flex flex-col place-items-center border gap-y-4 bg-[#f3f7f7] overflow-y-scroll py-10">
       <div className="w-[92%] flex place-items-center px-4 text-[13px] text-gray-500 font-semibold">
@@ -461,7 +538,7 @@ const ViewAllQuestionsList = (questions, setSelected) => {
       ))}
       <div>
         <button
-          onClick={() => console.log("Hello")}
+          onClick={handleSubmit}
           className="w-56 h-16 bg-[#3c812e] text-white font-sans font-semibold shadow-lg shadow-green-200 text-sm"
         >
           Submit

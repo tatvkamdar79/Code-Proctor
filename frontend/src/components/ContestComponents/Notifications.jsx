@@ -12,6 +12,11 @@ const Notifications = ({
   subject,
   setSubject,
 }) => {
+  useEffect(() => {
+    console.log("Contest changed and reflected in Notificaions");
+    console.log(contest?.contestants);
+  }, [contest]);
+
   const [viewEmailLogs, setViewEmailLogs] = useState(false);
 
   //   TODO Update timeline details and other content in sample emails dynamically

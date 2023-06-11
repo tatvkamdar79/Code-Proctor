@@ -5,7 +5,6 @@ import { baseURL } from "../config/config";
 import axios from "axios";
 
 const AddParticipants = ({ contest, setContest }) => {
-  console.log(contest);
   const [previousGroups, setPreviousGroups] = useState([]);
   const [usersToBeAdded, setUsersToBeAdded] = useState(contest.contestants);
   const [newGroupName, setNewGroupName] = useState("");
@@ -56,6 +55,7 @@ const AddParticipants = ({ contest, setContest }) => {
         axios
           .post(baseURL, data)
           .then((response) => {
+            console.log("Contest changed", response.data.data.contest);
             setContest(response.data.data.contest);
           })
           .catch((err) => {
