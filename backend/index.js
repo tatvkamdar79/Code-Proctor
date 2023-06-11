@@ -21,51 +21,41 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
-
-  socket.on("join_room", (data) => {
-    console.log(data);
-    socket.join(data.room);
+  socket.on("joinroom", (roomId) => {
+    socket.join(roomId);
+    socket.broadcast.to(roomId).emit("userjoined");
+  });
+  socket.on("leaveroom", (roomId) => {
+    socket.leave(roomId);
   });
 
-  socket.on("writing", (data) => {
-    console.log(socket.id, data);
-    socket.to(data.room).emit("written", data.code);
+  socket.on("updateBody", ({ value, roomId }) => {
+    socket.broadcast.to(roomId).emit("updateBody", value);
+    console.log("Updating");
+  });
+  socket.on("updateInput", ({ value, roomId }) => {
+    socket.broadcast.to(roomId).emit("updateInput", value);
   });
 
-  socket.on("change_language", (data) => {
-    console.log(socket.id, "changed language to ", data.language);
-    socket.to(data.room).emit("changed_language", { language: data.language });
+  socket.on("setBody", ({ value, roomId }) => {
+    socket.broadcast.to(roomId).emit("setBody", value);
+  });
+  socket.on("setInput", ({ value, roomId }) => {
+    socket.broadcast.to(roomId).emit("setInput", value);
+  });
+  socket.on("setLanguage", ({ value, roomId }) => {
+    socket.broadcast.to(roomId).emit("setLanguage", value);
+  });
+  socket.on("setOutput", ({ value, roomId }) => {
+    socket.broadcast.to(roomId).emit("setOutput", value);
   });
 
-  socket.on("test", (data) => {
-    console.log(data);
-    socket.emit("a", data);
-  });
+  socket.on("joinAudioRoom", (roomId, userId) => {
+    socket.broadcast.to(roomId).emit("userJoinedAudio", userId);
 
-  socket.on("leave_room", (data) => {
-    console.log("user ", socket.id, " is Leaving room ", data);
-    socket.leave(data.room);
-  });
-
-  socket.on("send_message", (data) => {
-    socket.to(data.room).emit("receive_message", data);
-  });
-
-  socket.on("typing", (data) => {
-    socket.to(data.room).emit("typed", data.text);
-  });
-
-  socket.on("resize", (data) => {
-    if (data.room === "") {
-      return;
-    }
-    console.log(data);
-    socket.to(data.room).emit("resized", data);
-  });
-
-  socket.on("leave_room", (data) => {
-    socket.leave(data.room);
+    socket.on("leaveAudioRoom", () => {
+      socket.broadcast.to(roomId).emit("userLeftAudio", userId);
+    });
   });
 });
 

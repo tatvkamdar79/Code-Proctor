@@ -15,7 +15,8 @@ const OngoingContestsComponent = () => {
   // Replace this with your actual API call
   useEffect(() => {
     let time = new Date(Date.now()).toLocaleDateString().split("/");
-    const formattedTime = `${time[2]}-${time[1]}-${time[0]}`;
+    const formattedTime =
+      `${time[2]}-${time[1]}-${time[0]}` + "T" + "00" + ":" + "00";
     const data = {
       route: "contests/getActiveContests",
       authToken:
