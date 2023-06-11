@@ -8,7 +8,7 @@ const Navbar = () => {
         <div className="flex gap-x-32">
           <p className="font-semibold text-3xl font-mono py-3">D B C</p>
           <div className="flex place-items-center">
-            <ul className="flex gap-x-5 font-semibold font-mono text-md">
+            <ul className="flex gap-x-1 font-semibold font-mono text-md">
               <Link to={"/home"}>
                 <li className="px-10 text-center py-3 cursor-pointer transition-all duration-200 text-gray-200 hover:text-white hover:bg-gray-600">
                   Home
@@ -32,6 +32,11 @@ const Navbar = () => {
               <Link to={"/challenge/create"}>
                 <li className="px-10 text-center py-3 cursor-pointer transition-all duration-200 text-gray-200 hover:text-white hover:bg-gray-600">
                   Create Challenge
+                </li>
+              </Link>
+              <Link to={"/codepair"}>
+                <li className="px-10 text-center py-3 cursor-pointer transition-all duration-200 text-gray-200 hover:text-white hover:bg-gray-600">
+                  Code Pair
                 </li>
               </Link>
             </ul>

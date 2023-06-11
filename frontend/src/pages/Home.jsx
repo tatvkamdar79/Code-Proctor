@@ -24,7 +24,7 @@ const Home = ({ previousRooms }) => {
       </div>
       <div className="w-1/2 h-[92.5vh] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 place-items-center justify-center lg:gap-x-10 overflow-y-scroll bg-gray-200 border-l border-gray-400">
         {/* CARDS */}
-        <div className="w-96 h-52 rounded-3xl text-white bg-gradient-to-r from-gray-500 to-gray-300 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
+        <div className="w-96 h-52 rounded-3xl text-green-600 border border-black hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
           Welcome user,
         </div>
         <div className="w-96 h-52 rounded-3xl text-white bg-gradient-to-t from-orange-700 to-orange-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
@@ -52,46 +52,9 @@ const Home = ({ previousRooms }) => {
             </div>
           </div>
         </div>
-        <Link
-          to={"/challenge/all"}
-          className="w-96 h-52 rounded-3xl text-white bg-gradient-to-b from-sky-700 to-sky-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
-        >
-          <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
-            <p className="text-2xl font-mono font-semibold">View Challanges</p>
-            <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
-              /challenges/all
-            </p>
-            <p className="flex place-items-center gap-x-2 font-medium">
-              <ImSigma size={18} className="animate-bounce" />
-              Total
-            </p>
-          </div>
-        </Link>
-        <Link
-          to={"/contest/create"}
-          className="w-96 h-52 rounded-3xl text-white bg-pink-600 hover:bg-pink-700 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
-        >
-          <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
-            <p className="text-2xl font-mono font-semibold">Create Contest</p>
-            <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
-              /contest/create
-            </p>
-          </div>
-        </Link>
-        <Link
-          to={"/createChallenge"}
-          className="w-96 h-52 rounded-3xl text-white bg-emerald-600 hover:bg-emerald-700 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
-        >
-          <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
-            <p className="text-2xl font-mono font-semibold">Create Challenge</p>
-            <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
-              /createChallenge
-            </p>
-          </div>
-        </Link>
         <div
           to={`/contest/manage/${contestName}`}
-          className="w-96 h-52 rounded-3xl text-white bg-purple-500 hover:bg-purple-600 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+          className="w-96 h-52 rounded-3xl text-white bg-gradient-to-b from-cyan-600 to-cyan-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
           // onClick={() => alert("clicked")}
         >
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
@@ -111,12 +74,49 @@ const Home = ({ previousRooms }) => {
             </p>
             <Link
               to={`/contest/manage/${contestName}`}
-              className="flex text-center border rounded-lg px-2 py-1 bg-gray-100 text-black font-mono hover:scale-105 transition-all duration-300"
+              className="flex text-center border rounded-lg px-5 py-1 text-black font-mono hover:scale-105 transition-all duration-300 font-semibold bg-gray-200 shadow-lg shadow-gray-400"
             >
               Manage Contest
             </Link>
           </div>
         </div>
+        <Link
+          to={"/contest/create"}
+          className="w-96 h-52 rounded-3xl text-white bg-gradient-to-b from-sky-700 to-sky-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+        >
+          <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
+            <p className="text-2xl font-mono font-semibold">
+              Create A New Contest
+            </p>
+            <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
+              /contest/create
+            </p>
+          </div>
+        </Link>
+        <Link
+          to={"/challenge/all"}
+          className="w-96 h-52 rounded-3xl text-white bg-gradient-to-b from-gray-700 to-gray-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+        >
+          <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
+            <p className="text-2xl font-mono font-semibold">View Challanges</p>
+            <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
+              /challenges/all
+            </p>
+            <p className="flex place-items-center gap-x-2 font-medium">Total</p>
+            <ImSigma size={18} className="animate-bounce" />
+          </div>
+        </Link>
+        <Link
+          to={"/createChallenge"}
+          className="w-96 h-52 rounded-3xl text-white bg-gradient-to-t from-emerald-700 to-emerald-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+        >
+          <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
+            <p className="text-2xl font-mono font-semibold">Create Challenge</p>
+            <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
+              /createChallenge
+            </p>
+          </div>
+        </Link>
         {/* CARDS */}
       </div>
     </div>

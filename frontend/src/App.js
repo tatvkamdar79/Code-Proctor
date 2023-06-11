@@ -25,6 +25,7 @@ import CodePairHome from "./pages/CodePairHome";
 const App = () => {
   const [previousRooms, setPreviousRooms] = useState([]);
   const [block, setBlock] = useState(false);
+  const [page, setPage] = useState(null);
 
   roomProps.updatePreviousRooms = (room) => {
     if (previousRooms[0] === room) return;
@@ -66,63 +67,63 @@ const App = () => {
   }, []); // Empty dependency array ensures the effect runs only once
   console.log();
 
+  useEffect(() => {
+    setPage(window.location.pathname);
+  }, [window.location.pathname]);
+
   return (
     <BrowserRouter>
-      {!block && block && (
+      {block && !block && (
         <div className="w-full text-center text-2xl h-10 bg-yellow-200 flex justify-center place-items-center border-2 border-gray-400 bg-opacity-70">
           <p className="text-orange-400">Please view the page on a PC</p>
         </div>
       )}
-      <div className={`${!block && ""}`}>
-        {!window.location.pathname.includes("/pretest/") &&
-          !window.location.pathname.includes("/test/") && <Navbar />}
+      <div className={`${block && ""}`}>
+        {page && !page.includes("/pretest/") && !page.includes("/test/") && (
+          <Navbar />
+        )}
         <Routes>
-          {/* Adding this manually because this structure of routes sucks */}
+          {/* NETRY AND HOME ROUTES */}
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route
-            exact
-            path="/"
-            element={() => <Home previousRooms={previousRooms} />}
-          />
+
+          {/* CODE PAIR */}
           <Route
             exact
             path="/codepair"
-            element={() => <CodePairHome previousRooms={previousRooms} />}
+            element={<CodePairHome previousRooms={previousRooms} />}
           />
           <Route path="/newroom" element={<NewRoom />} />
           <Route path="/joinroom" element={<JoinRoom />} />
           <Route path="/room/:id" element={<Room />} />
 
-          <Route path="/showStages" element={<ShowStages />} />
+          {/* CONTEST, CHALLENGE AND GROUP ROUTES */}
+          <Route exact path="/contest/create" element={<CreateContest />} />
+          <Route exact path="/challenge/create" element={<CreateChallange />} />
+          <Route path="/createGroup" element={<CreateGroup />} />
+          <Route
+            path="/contests/ongoing"
+            element={<OngoingContestsComponent />}
+          />
+          <Route path="/challenge/all" element={<AllQuestions />} />
+
+          {/* TEST ROUTES */}
           <Route path="/preTest/:currentContestName" element={<PreTest />} />
           <Route path="/test/:currentContestName" element={<Test />} />
-          <Route path="/createGroup" element={<CreateGroup />} />
-
-          {/* <Route exact path="/createTest" element={<CreateTest />} /> */}
-
-          {/* <Route exact path="/contest/create" element={<CreateContest />} /> */}
-          <Route exact path="/contest/create" element={<CreateContest />} />
           <Route
             path="/contest/manage/:currentContestName"
             element={<ManageContest />}
           />
-          <Route exact path="/challenge/create" element={<CreateChallange />} />
-          <Route
+
+          {/* <Route
             path="/contest/manage/:contestName/:email"
             element={<IndividualContestProgressReport />}
-          />
+          /> */}
 
-          <Route path="/challenge/all" element={<AllQuestions />} />
-
+          {/* TRYING */}
           <Route
             path="/recruitment-timeline/create"
             element={<RecruitmentTimeline />}
-          />
-
-          <Route
-            path="/contests/ongoing"
-            element={<OngoingContestsComponent />}
           />
 
           <Route path="*" element={<NotFound />} />

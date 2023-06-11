@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../../config/config";
 import { SiMinutemailer } from "react-icons/si";
+import { BiPlusMedical } from "react-icons/bi";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 const Notifications = ({
   contest,
@@ -122,7 +124,114 @@ Best regards,
       <div className="flex mx-auto">
         {/* Main component */}
         <div className="flex-1 px-3">
-          <h2 className="text-xl font-bold mb-4">Compose Email</h2>
+          <div className="w-full flex place-items-center mb-4">
+            <p className="w-1/12 text-xl font-bold">Compose Email</p>
+            <div className="w-11/12 flex flex-col gap-y-1">
+              <div className="grid grid-cols-4 place-items-center">
+                <p
+                  onClick={() =>
+                    setBody((body) => body + "[Contestant's Email]")
+                  }
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">Recipient Email</span>
+                </p>
+                <p
+                  onClick={() => setBody((body) => body + "[Contest Name]")}
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">Contest Name</span>
+                </p>
+                <p
+                  onClick={() => setBody((body) => body + "[Event Type]")}
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">Event Type</span>
+                </p>
+                <p
+                  onClick={() => setBody((body) => body + "[Company Name]")}
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">Company Name</span>
+                </p>
+              </div>
+              <div className="grid grid-cols-5 place-items-center">
+                <p
+                  onClick={() =>
+                    setBody((body) => body + "[Contest Start Date]")
+                  }
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">Start Date</span>
+                </p>
+                <p
+                  onClick={() => setBody((body) => body + "[Contest End Date]")}
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">End Date</span>
+                </p>
+                <p
+                  onClick={() => setBody((body) => body + "[Your Name]")}
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">Your Name</span>
+                </p>
+                <p
+                  onClick={() =>
+                    setBody((body) => body + "[Your Position/Organization]")
+                  }
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">Designation</span>
+                </p>
+                <p
+                  onClick={() =>
+                    setBody((body) => body + "[Contact Information]")
+                  }
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">Contact Info</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-white p-4 border shadow-md shadow-gray-400 rounded-xl">
             <div className="flex gap-x-1 place-items-center">
               <p className="w-14 mb-2 text-sm font-semibold text-gray-700 justify-self-center place-self-center mt-2">
