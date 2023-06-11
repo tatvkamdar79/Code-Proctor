@@ -88,7 +88,7 @@ const App = () => {
           <Route
             exact
             path="/codepair"
-            element={() => <CodePairHome previousRooms={previousRooms} />}
+            element={<CodePairHome previousRooms={previousRooms} />}
           />
           <Route path="/newroom" element={<NewRoom />} />
           <Route path="/joinroom" element={<JoinRoom />} />
