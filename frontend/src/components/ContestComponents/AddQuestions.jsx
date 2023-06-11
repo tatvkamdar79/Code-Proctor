@@ -51,7 +51,7 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
     setChanged(false);
   }, [selectedQuestions]);
 
-  const saveChanges = () => {
+  const saveChanges = async () => {
     if (!changed) {
       return;
     }
@@ -63,7 +63,7 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
     console.log("alreadySelectedQuestionsIds", alreadySelectedQuestionsIds);
     console.log(newSelectedQuestionsIds);
 
-    axios
+    await axios
       .post(baseURL, {
         authToken:
           "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1NDEzMzZ9.AB0kpYjkD0zIMBDi_-Q980FRY3XG_X4K4P9asTxll2c",
@@ -75,27 +75,28 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
         if (res.status === 200) {
           setSavingChanges(false);
         }
-        const data = {
-          authToken:
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
-          route: "contests/getContestDetails",
-          contestName: currentContestName,
-        };
-        axios
-          .post(baseURL, data)
-          .then((response) => {
-            setContest(response.data.data.contest);
-            console.log(response.data);
-            console.log(response.data.data.contest._id["$oid"]);
-            setChanged(false);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
       })
       .catch((err) => {
         console.error(err);
         setSavingChanges(false);
+      });
+    const data = {
+      authToken:
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      route: "contests/getContestDetails",
+      contestName: currentContestName,
+    };
+
+    await axios
+      .post(baseURL, data)
+      .then((response) => {
+        setContest(response.data.data.contest);
+        console.log(response.data);
+        console.log(response.data.data.contest._id["$oid"]);
+        setChanged(false);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 

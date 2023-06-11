@@ -89,10 +89,6 @@ const ManageContest = () => {
     }
   }, [contest]);
 
-  const notifications = Notifications({
-    contest: contest,
-  });
-
   const [correctedContestName, setCorrectedContestName] =
     useState(currentContestName);
   return (
@@ -143,15 +139,19 @@ const ManageContest = () => {
       )}
 
       {selection !== DETAILS && <ContestInfo contest={contest} />}
+
       {selection === DETAILS && (
         <Details contest={contest} setContest={setContest} />
       )}
+
       {contest && selection === QUESTIONS && (
         <AddQuestions contest={contest} setContest={setContest} />
       )}
+
       {contest && selection === CALCULATION_FORMULA && (
         <CalculationFormula contest={contest} setContest={setContest} />
       )}
+
       {selection === NOTIFICATIONS && (
         <Notifications
           contest={contest}
