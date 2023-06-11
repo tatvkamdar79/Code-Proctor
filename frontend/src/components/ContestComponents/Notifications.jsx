@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../../config/config";
 import { SiMinutemailer } from "react-icons/si";
-import { BiPlusMedical } from "react-icons/bi";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import loading from "../../assets/addQuestionsLoading.gif";
 
 const Notifications = ({
   contest,
@@ -14,6 +14,8 @@ const Notifications = ({
   subject,
   setSubject,
 }) => {
+  const [sendingEmail, setSendingEmail] = useState(false);
+
   useEffect(() => {
     console.log("Contest changed and reflected in Notificaions");
     console.log(contest?.contestants);
@@ -101,7 +103,9 @@ Best regards,
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
     };
     console.log(email);
+    setSendingEmail(true);
     const response = await axios.post(baseURL, email);
+    setSendingEmail(false);
 
     console.log(response);
 
@@ -387,6 +391,20 @@ Best regards,
           </div>
         )}
       </div>
+      {sendingEmail && (
+        <div className="absolute top-0 left-0 h-screen w-full flex justify-center place-items-center">
+          <div className="flex flex-col">
+            <img
+              src="https://i.pinimg.com/originals/2c/f9/0b/2cf90be1a5b8a7816e3107f58e0077b4.gif"
+              alt=""
+              className="opacity-60"
+            />
+            <p className="w-full text-3xl text-center font-semibold font-mono animate-bounce">
+              <span className="animate-pulse">Sending E-Mails...</span>
+            </p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

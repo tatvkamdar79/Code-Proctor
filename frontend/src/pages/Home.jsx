@@ -94,16 +94,14 @@ const Home = ({ previousRooms }) => {
           </div>
         </Link>
         <Link
-          to={"/challenge/all"}
-          className="w-96 h-52 rounded-3xl text-white bg-gradient-to-b from-gray-700 to-gray-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
+          to={"/create-group"}
+          className="w-96 h-52 rounded-3xl text-white bg-gradient-to-t from-gray-700 to-gray-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
         >
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
-            <p className="text-2xl font-mono font-semibold">View Challanges</p>
+            <p className="text-2xl font-mono font-semibold">Create A Group</p>
             <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
-              /challenges/all
+              /create-group
             </p>
-            <p className="flex place-items-center gap-x-2 font-medium">Total</p>
-            <ImSigma size={18} className="animate-bounce" />
           </div>
         </Link>
         <Link

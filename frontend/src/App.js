@@ -100,7 +100,7 @@ const App = () => {
           {/* CONTEST, CHALLENGE AND GROUP ROUTES */}
           <Route exact path="/contest/create" element={<CreateContest />} />
           <Route exact path="/challenge/create" element={<CreateChallange />} />
-          <Route path="/createGroup" element={<CreateGroup />} />
+          <Route path="/create-group" element={<CreateGroup />} />
           <Route
             path="/contests/ongoing"
             element={<OngoingContestsComponent />}

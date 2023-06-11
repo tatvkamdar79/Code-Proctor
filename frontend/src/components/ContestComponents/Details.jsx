@@ -312,7 +312,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
                 type="date"
                 name=""
                 id=""
-                className="border border-gray-300 pl-3"
+                className="border border-gray-300 w-60 py-2 px-3 rounded-md"
                 value={contestStartDate ? contestStartDate : ""}
                 onChange={(e) => setContestStartDate(e.target.value)}
               />
@@ -361,7 +361,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
                 name=""
                 id=""
                 value={contestEndDate ? contestEndDate : ""}
-                className="border border-gray-300 pl-3"
+                className="border border-gray-300 w-60 py-2 px-3 rounded-md"
                 onChange={(e) => {
                   setContestEndDate(e.target.value);
                   console.log("Contest end date", e.target.value);

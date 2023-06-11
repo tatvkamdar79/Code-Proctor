@@ -254,13 +254,10 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
           </table>
           {selected !== null && (
             <>
-              <p
-                ref={viewCodeRef}
-                className="mt-4 mb-1 text-3xl font-semibold underline"
-              >
-                Code:{" "}
-                <label className="text-2xl">{`(${candidateData.questions[selected].language})`}</label>
+              <p ref={viewCodeRef} className="text-3xl font-semibold mt-5">
+                Code
               </p>
+              <p className="text-lg capitalize font-semibold font-mono">{`${candidateData.questions[selected].language}`}</p>
               <AceEditor
                 mode={candidateData.questions[selected].language}
                 theme="monokai"

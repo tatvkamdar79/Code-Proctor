@@ -145,7 +145,7 @@ const AddParticipants = ({ contest, setContest }) => {
           Save Users
         </button>
         <Link
-          to="/createGroup"
+          to="/create-group"
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-[11px] px-4 rounded-md shadow mr-5"
         >
           Create Group

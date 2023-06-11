@@ -119,7 +119,7 @@ const OngoingContestsComponent = () => {
             filteredContests.map((contest, idx) => (
               <tr
                 key={contest.id}
-                className="border-b cursor-pointer"
+                className="border-b cursor-pointer hover:scale-105 transition-all duration-300 bg-green-50"
                 onClick={() =>
                   navigate(`/contest/manage/${contest.contestName}`)
                 }
@@ -149,7 +149,7 @@ const OngoingContestsComponent = () => {
       <p className="mt-5 text-lg font-semibold font-mono mx-auto text-center">
         {filteredContests
           ? "Tip: Click on a contest for details"
-          : "Hold on! We're contacting our servers!"}
+          : "Hold on! We're fetching data from our servers..."}
       </p>
     </div>
   );

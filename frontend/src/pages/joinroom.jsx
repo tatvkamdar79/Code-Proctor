@@ -1,13 +1,14 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const JoinRoom = (props) => {
   const [roomId, setRoomId] = useState("");
+  const navigate = useNavigate();
 
   const handleJoinRoom = () => {
     if (roomId) {
-      props.history.push(`/room/${roomId}`);
+      navigate(`/room/${roomId}`);
     }
   };
 

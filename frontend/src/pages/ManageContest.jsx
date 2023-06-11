@@ -6,7 +6,7 @@ import ContestNavbar from "../components/ContestComponents/ContestNavbar";
 import Leaderboard from "../components/ContestComponents/Leaderboard";
 import CreateGroup from "./CreateGroup";
 import AddParticipants from "./AddParticipants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL } from "../config/config";
 import Instructions from "../components/ContestComponents/Instructions";
@@ -14,9 +14,12 @@ import Notifications from "../components/ContestComponents/Notifications";
 import ContestInfo from "../components/ContestComponents/ContestInfo";
 import contestDetailsLoading from "../assets/contestDetailsLoading.gif";
 import contestDoesNotExistGif from "../assets/contestDoesNotExist.gif";
+import Popup from "../components/ContestComponents/Popup";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const ManageContest = () => {
   const { currentContestName } = useParams("currentContestName");
+
   const navigate = useNavigate();
   const DETAILS = "DETAILS";
   const QUESTIONS = "QUESTIONS";
@@ -35,6 +38,11 @@ const ManageContest = () => {
   const [emailLogs, setEmailLogs] = useState(null);
   const [body, setBody] = useState("");
   const [subject, setSubject] = useState("");
+  const [showFirstTimePopup, setShowFirstTimePopup] = useState(false);
+  const [closeShowFirstTimePopup, setCloseShowFirstTimePopup] = useState(false);
+
+  const { state } = useLocation();
+  console.log("state", state);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -72,6 +80,13 @@ const ManageContest = () => {
         setContestDoesNotExist(true);
         setLoading(false);
       });
+
+    console.log(state);
+    if (state && state?.newContest && state.newContest) {
+      setTimeout(() => {
+        setShowFirstTimePopup(true);
+      }, 1500);
+    }
   }, []);
   useEffect(() => {
     if (contest !== null) {
@@ -92,7 +107,7 @@ const ManageContest = () => {
   const [correctedContestName, setCorrectedContestName] =
     useState(currentContestName);
   return (
-    <div className="w-full lg:w-5/6 mx-auto">
+    <div className="w-full lg:w-5/6 mx-auto overflow-hidden">
       {contestDoesNotExist && (
         <div className="absolute top-0 left-0 w-full h-screen bg-white flex flex-col justify-center place-items-center gap-y-2">
           <p className="font-semibold font-mono text-3xl text-gray-800">
@@ -169,6 +184,47 @@ const ManageContest = () => {
       {contest && selection === ADD_PARTICIPANTS && (
         <AddParticipants contest={contest} setContest={setContest} />
       )}
+      {state &&
+        state?.newContest &&
+        state.newContest &&
+        !closeShowFirstTimePopup && (
+          <div
+            className={`absolute min-w-80 h- right-[8.4%] top-[17vh] bg-gray-200 bg-opacity-30 border border-gray-400 rounded-md p-2 opacity-80 ${
+              showFirstTimePopup
+                ? "translate-x-0 scale-105"
+                : "translate-x-[570px] scale-0"
+            } transition-all duration-[1000ms] ease-in-out`}
+          >
+            <AiOutlineCloseCircle
+              size={20}
+              className="absolute left-0.5 top-0.5 cursor-pointer text-red-600"
+              onClick={() => {
+                setShowFirstTimePopup(false);
+                setTimeout(() => {
+                  setCloseShowFirstTimePopup(true);
+                }, 1000);
+              }}
+            />
+            <p className="text-lg font-mono font-semibold pr-7 pl-7 text-green-600">
+              Welcome to managing a new contest
+            </p>
+            <p className="text-sm font-mono font-semibold pr-7 pl-7 text-green-600">
+              Would you like to add participants?
+            </p>
+            <button
+              onClick={() => {
+                setSelection(ADD_PARTICIPANTS);
+                setShowFirstTimePopup(false);
+                setTimeout(() => {
+                  setCloseShowFirstTimePopup(true);
+                }, 1000);
+              }}
+              className="bg-cyan-600 text-white shadow-md shadow-gray-300 ml-7 my-1 px-3 py-1 rounded-md"
+            >
+              Add Participants
+            </button>
+          </div>
+        )}
     </div>
   );
 };

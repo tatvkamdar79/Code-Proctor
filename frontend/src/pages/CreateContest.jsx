@@ -218,7 +218,9 @@ const CreateContest = () => {
       if (response.data.status === 200) {
         setSubmitting(false);
         console.log("SUCCESS", response);
-        navigate(`/contest/manage/${contestName}`);
+        navigate(`/contest/manage/${contestName}`, {
+          state: { newContest: true },
+        });
       } else if (response.data.status === 400) {
         console.log("PROBLEM!", response);
         setSubmitting(false);
