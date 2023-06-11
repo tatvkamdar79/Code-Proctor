@@ -115,6 +115,7 @@ const Room = () => {
   useEffect(() => {
     socket.off("updateBody");
     socket.on("updateBody", (patch) => {
+      console.log("In update body");
       const [newBody, res] = dmp.patch_apply(patch, body);
       if (res[0]) setBody(newBody);
       else console.log("Failed", body, patch);
@@ -272,8 +273,9 @@ const Room = () => {
   };
 
   const handleUpdateBody = (value) => {
-    // const patch = dmp.patch_make(body, value);
+    const patch = dmp.patch_make(body, value);
     setBody(value);
+    socket.emit("updateBody", { value: patch, roomId: id });
     // debounce(
     //   () => socket.emit("updateBody", { value: patch, roomId: id }),
     //   100
