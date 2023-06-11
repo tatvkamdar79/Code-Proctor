@@ -18,7 +18,7 @@ const ContestInfo = ({ contest, setContest }) => {
     console.log(contest);
     console.log("Contest Changed");
     setContestName(contest?.contestName);
-    setQuestions(contest?.questions?.length);
+    setQuestions(contest?.questions.length);
     setStartDate(
       new Date(contest?.contestStartDate?.sec * 1000).toLocaleString()
     );

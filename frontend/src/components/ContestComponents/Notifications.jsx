@@ -101,19 +101,21 @@ Best regards,
     console.log(email);
     const response = await axios.post(baseURL, email);
 
-    const data = {
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
-      route: "contests/fetchEmailLogs",
-      contestId: contest._id.$oid,
-    };
-    axios.post(baseURL, data).then((response) => {
-      console.log("THis is response of emails");
-      console.log(response.data.data);
-      setEmailLogs(response.data.data);
-    });
-
     console.log(response);
+
+    setTimeout(async () => {
+      const data = {
+        authToken:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+        route: "contests/fetchEmailLogs",
+        contestId: contest._id.$oid,
+      };
+      await axios.post(baseURL, data).then((response) => {
+        console.log("THis is response of emails");
+        console.log(response.data.data);
+        setEmailLogs(response.data.data);
+      });
+    }, 5000);
   };
   return (
     <section>
