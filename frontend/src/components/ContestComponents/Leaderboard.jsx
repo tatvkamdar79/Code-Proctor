@@ -162,7 +162,7 @@ const Leaderboard = ({ contest, setContest }) => {
                         correctSubmissions: details.correctSubmissions,
                         incorrectSubmissions: details.incorrectSubmissions,
                         totalTestCases: questionTestCases[questionId],
-                        language: "teri marzi bhai",
+                        language: details.language,
                         testCasesPassed: details.submissionStatus.reduce(
                           (total, x) => (x == "Correct" ? total + 1 : total),
                           0

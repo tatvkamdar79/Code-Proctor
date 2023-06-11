@@ -22,6 +22,7 @@ const Test = () => {
   const [contest, setContest] = useState(null);
   const [showTest, setShowTest] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [cameraStream, setCameraStream] = useState(null);
 
   // The following details will be fetched from Api calls adn then stored in localStorgae until the durationof the exam
   const [questions, setQuestions] = useState([]);
@@ -264,6 +265,8 @@ const Test = () => {
           canvas.style.display = "none";
           document.body.appendChild(canvas);
 
+          setCameraStream(stream);
+
           setTimeout(() => {
             // We can store the ID returned from setInterval and clear the interval later if we want.
             // Click Image every 5 seconds
@@ -279,6 +282,11 @@ const Test = () => {
     } else {
       console.error("Camera access not supported by the browser");
     }
+    return () => {
+      if (cameraStream && cameraStream.stop) {
+        cameraStream.stop();
+      }
+    };
   }, []);
 
   const clickImageAndCheckIfUserIsCopying = async (canvas, video) => {
@@ -356,6 +364,17 @@ const Test = () => {
         if (!isAlone || isMobilePresent) {
           // Send server request and mark as copy
           alert("You are seem to be copying");
+          const data = {
+            contestId: contest?._id.$oid,
+            contestantEmail,
+            route: "contests/markUserCopying",
+          };
+          axios
+            .post(baseURL, data)
+            .then((response) => {
+              navigate("/home");
+            })
+            .catch((err) => console.log(err));
         }
         console.log(keywords);
       })

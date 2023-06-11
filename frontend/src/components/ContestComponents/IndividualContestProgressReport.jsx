@@ -258,7 +258,8 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
                 ref={viewCodeRef}
                 className="mt-4 mb-1 text-3xl font-semibold underline"
               >
-                Code
+                Code:{" "}
+                <label className="text-2xl">{`(${candidateData.questions[selected].language})`}</label>
               </p>
               <AceEditor
                 mode={candidateData.questions[selected].language}

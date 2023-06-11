@@ -67,11 +67,22 @@ export default function PreTest() {
       }
       return;
     }
-    console.log("Email in");
-    enterFullscreen();
-    navigate(`/test/${currentContestName}`, {
-      state: { validated: true, email },
-    });
+
+    const data = {
+      route: "contests/markPresence",
+      contestantEmail: email,
+      contestId: contest._id.$oid,
+    };
+    const response = await axios.post(baseURL, data);
+    if (response.data.status === 200) {
+      console.log("Email in");
+      enterFullscreen();
+      navigate(`/test/${currentContestName}`, {
+        state: { validated: true, email },
+      });
+    } else {
+      alert(response.data.message);
+    }
     // TODO: Handle form submission
   };
 
