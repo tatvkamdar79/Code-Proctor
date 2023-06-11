@@ -14,7 +14,6 @@ import Notifications from "../components/ContestComponents/Notifications";
 import ContestInfo from "../components/ContestComponents/ContestInfo";
 import contestDetailsLoading from "../assets/contestDetailsLoading.gif";
 import contestDoesNotExistGif from "../assets/contestDoesNotExist.gif";
-import Popup from "../components/ContestComponents/Popup";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const ManageContest = () => {
@@ -184,6 +183,8 @@ const ManageContest = () => {
       {contest && selection === ADD_PARTICIPANTS && (
         <AddParticipants contest={contest} setContest={setContest} />
       )}
+
+      
       {state &&
         state?.newContest &&
         state.newContest &&

@@ -136,7 +136,7 @@ Best regards,
                   onClick={() =>
                     setBody((body) => body + "[Contestant's Email]")
                   }
-                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
                 >
                   <AiOutlinePlusCircle
                     size={30}
@@ -146,7 +146,7 @@ Best regards,
                 </p>
                 <p
                   onClick={() => setBody((body) => body + "[Contest Name]")}
-                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
                 >
                   <AiOutlinePlusCircle
                     size={30}
@@ -156,7 +156,7 @@ Best regards,
                 </p>
                 <p
                   onClick={() => setBody((body) => body + "[Event Type]")}
-                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
                 >
                   <AiOutlinePlusCircle
                     size={30}
@@ -166,7 +166,7 @@ Best regards,
                 </p>
                 <p
                   onClick={() => setBody((body) => body + "[Company Name]")}
-                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
                 >
                   <AiOutlinePlusCircle
                     size={30}
@@ -180,7 +180,7 @@ Best regards,
                   onClick={() =>
                     setBody((body) => body + "[Contest Start Date]")
                   }
-                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
                 >
                   <AiOutlinePlusCircle
                     size={30}
@@ -190,7 +190,7 @@ Best regards,
                 </p>
                 <p
                   onClick={() => setBody((body) => body + "[Contest End Date]")}
-                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
                 >
                   <AiOutlinePlusCircle
                     size={30}
@@ -200,7 +200,7 @@ Best regards,
                 </p>
                 <p
                   onClick={() => setBody((body) => body + "[Your Name]")}
-                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
                 >
                   <AiOutlinePlusCircle
                     size={30}
@@ -212,7 +212,7 @@ Best regards,
                   onClick={() =>
                     setBody((body) => body + "[Your Position/Organization]")
                   }
-                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
                 >
                   <AiOutlinePlusCircle
                     size={30}
@@ -224,7 +224,7 @@ Best regards,
                   onClick={() =>
                     setBody((body) => body + "[Contact Information]")
                   }
-                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-gray-600 text-white hover:scale-105 hover:bg-gray-500 transition-all duration-300 cursor-pointer"
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
                 >
                   <AiOutlinePlusCircle
                     size={30}
