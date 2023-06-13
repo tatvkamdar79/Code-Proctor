@@ -37,7 +37,13 @@ const AddParticipants = ({ contest, setContest }) => {
       alert("Please fill the form correctly and make sure users are added");
       return;
     }
-    const properUsers = usersToBeAdded.filter((user) => user.length > 0);
+    const properUsers = usersToBeAdded.filter(
+      (user) =>
+        user.length > 0 &&
+        user.match(
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        )
+    );
     const data = {
       route: "contests/modifyContestants",
       authToken:
@@ -49,6 +55,7 @@ const AddParticipants = ({ contest, setContest }) => {
       setLoading(true);
       const response = await axios.post(baseURL, data);
       setLoading(false);
+      setUsersToBeAdded(properUsers);
       console.log(response.data);
       if (response.data.status === 200) {
         const data = {

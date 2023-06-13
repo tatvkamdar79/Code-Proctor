@@ -11,21 +11,25 @@ const OngoingContestsComponent = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
-  // Simulating API call to set the contests state variable
-  // Replace this with your actual API call
   useEffect(() => {
+    let time = new Date(Date.now()).toLocaleDateString().split("/");
+    const formattedTime =
+      `${time[2]}-${time[1]}-${time[0]}` +
+      "T" +
+      new Date().toLocaleTimeString() +
+      ".000Z";
+    console.log(formattedTime);
     const data = {
       route: "contests/getActiveContests",
       authToken:
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI3MjY5NDd9.TUuWc-2EbVViBKjJMXK4OAK_GQarhn2qzHWG4JR4jmE",
-      time: new Date().toISOString(),
+      time: formattedTime,
     };
 
     axios
       .post(baseURL, data)
       .then((response) => {
         setContests(response.data.data);
-        // console.log(response.data.data);
         setFilteredContests(response.data.data);
       })
       .catch((err) => console.log(err));
