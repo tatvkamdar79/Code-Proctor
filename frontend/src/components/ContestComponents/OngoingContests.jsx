@@ -14,14 +14,11 @@ const OngoingContestsComponent = () => {
   // Simulating API call to set the contests state variable
   // Replace this with your actual API call
   useEffect(() => {
-    let time = new Date(Date.now()).toLocaleDateString().split("/");
-    const formattedTime =
-      `${time[2]}-${time[1]}-${time[0]}` + "T" + "00" + ":" + "00";
     const data = {
       route: "contests/getActiveContests",
       authToken:
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI3MjY5NDd9.TUuWc-2EbVViBKjJMXK4OAK_GQarhn2qzHWG4JR4jmE",
-      time: formattedTime,
+      time: new Date().toISOString(),
     };
 
     axios
