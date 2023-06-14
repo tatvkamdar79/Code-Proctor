@@ -24,7 +24,7 @@ const Notifications = ({
   const [viewEmailLogs, setViewEmailLogs] = useState(false);
 
   //   TODO Update timeline details and other content in sample emails dynamically
-  const sampleInvitationEmail = `Dear [Contestant's Name],
+  const sampleInvitationEmail = `Dear [Contestant\'s Email],
         We are pleased to invite you to participate in our upcoming contest. Your exceptional skills and talent have caught our attention, and we believe you would be a valuable addition to the competition.
 
 Contest Details:
