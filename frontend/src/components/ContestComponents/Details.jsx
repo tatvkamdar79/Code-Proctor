@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../../config/config";
 import Instructions from "./Instructions";
+import AddingUsersToGroupLoadingGif from "../../assets/addingUsersLoading.gif";
 
 const CreateChallangeDetails = ({ contest, setContest }) => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
   const [instructionsTitle, setInstructionsTitle] = useState(
     contest?.instructionsTitle || ""
   );
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setContestName(contest?.contestName);
@@ -178,6 +180,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     console.log("SUBMIT");
     // console.log(contestStartDate, date);
     const d1 = contestStartDate.split("-");
@@ -211,6 +214,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
     console.log(isDateCorrect, isTimeCorrect);
     if (isDateCorrect == 0 || isTimeCorrect == 0) {
       alert("Fill the time and date fields properly");
+      setLoading(false);
       return;
     }
 
@@ -245,6 +249,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
         .post(baseURL, data)
         .then((response) => {
           setContest(response.data.data.contest);
+          setLoading(false);
           console.log(response.data);
           console.log(response.data.data.contest._id["$oid"]);
         })
@@ -417,6 +422,16 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
           />
         </div>
       </form>
+      {loading && (
+        <div className="absolute h-screen w-full top-0 left-0 flex justify-center place-items-center">
+          <div>
+            <p className="w-full text-center text-3xl font-semibold font-mono animate-bounce text-gray-800">
+              <span className="animate-pulse">Saving Changes</span>
+            </p>
+            <img src={AddingUsersToGroupLoadingGif} alt="" className="" />
+          </div>
+        </div>
+      )}
     </section>
   );
 };

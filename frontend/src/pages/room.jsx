@@ -115,7 +115,6 @@ const Room = () => {
   useEffect(() => {
     socket.off("updateBody");
     socket.on("updateBody", (patch) => {
-      console.log("In update body");
       const [newBody, res] = dmp.patch_apply(patch, body);
       if (res[0]) setBody(newBody);
       else console.log("Failed", body, patch);
