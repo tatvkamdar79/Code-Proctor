@@ -155,8 +155,8 @@ const App = () => {
             <Route path="/challenge/all" element={<AllQuestions />} />
 
             {/* TEST ROUTES */}
-            <Route path="/preTest/:currentContestName" element={<PreTest />} />
-            <Route path="/test/:currentContestName" element={<Test />} />
+            <Route path="/preTest/:currentContestName/:userHash" element={<PreTest />} />
+            <Route path="/test/:currentContestName/:userHash" element={<Test />} />
             <Route
               path="/contest/manage/:currentContestName"
               element={<ManageContest />}

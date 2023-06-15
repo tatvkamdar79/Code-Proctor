@@ -218,6 +218,12 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
       return;
     }
 
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     const updatedContest = {
       contestId: contest._id["$oid"],
       contestName,
@@ -230,8 +236,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
       instructionsTitle,
       instructions,
       route: "contests/modifyContest",
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI2MDc3NzB9.nxH-peUegSz_z8svOa2JTUc9WYHRehFLOtuFZO4ykXM",
+      authToken: jwt,
     };
 
     console.log(updatedContest);
@@ -240,8 +245,7 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
     console.log(response);
     if (response.data.status == 200) {
       const data = {
-        authToken:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+        authToken: jwt,
         route: "contests/getContestDetails",
         contestName: contestName,
       };

@@ -86,6 +86,13 @@ Best regards,
 
   const handleSendEmail = async (e) => {
     e.preventDefault();
+
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     let format = "";
     if (body === sampleInvitationEmail) {
       format = "sampleInvitationEmail";
@@ -99,8 +106,7 @@ Best regards,
       format,
       timeSentAt: new Date().toISOString(),
       route: "contests/sendNotification",
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      authToken: jwt,
     };
     console.log(email);
     setSendingEmail(true);
@@ -111,8 +117,7 @@ Best regards,
 
     setTimeout(async () => {
       const data = {
-        authToken:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+        authToken: jwt,
         route: "contests/fetchEmailLogs",
         contestId: contest._id.$oid,
       };

@@ -44,10 +44,16 @@ const AddParticipants = ({ contest, setContest }) => {
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
         )
     );
+
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     const data = {
       route: "contests/modifyContestants",
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1NDIxMjV9.2TH7h3PNsP-vYO049GsEx4xm2Yj7AmyGVStf7xoxzFE",
+      authToken: jwt,
       contestId: contest._id["$oid"],
       emails: properUsers,
     };
@@ -59,8 +65,7 @@ const AddParticipants = ({ contest, setContest }) => {
       console.log(response.data);
       if (response.data.status === 200) {
         const data = {
-          authToken:
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+          authToken: jwt,
           route: "contests/getContestDetails",
           contestName: contest.contestName,
         };
@@ -86,9 +91,14 @@ const AddParticipants = ({ contest, setContest }) => {
   };
 
   useEffect(() => {
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     const data = {
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      authToken: jwt,
       route: "groups/getGroups",
     };
     axios

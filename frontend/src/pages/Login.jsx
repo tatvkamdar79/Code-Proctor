@@ -45,6 +45,7 @@ const Login = () => {
 
   async function getUserDetails() {
     let jwt = getCookie("JWT_AUTH");
+    
     if (jwt.length === 0) {
       return;
     }

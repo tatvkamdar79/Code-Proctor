@@ -25,8 +25,10 @@ const Home = ({ previousRooms }) => {
 
       <div className="w-1/2 h-[92.5vh] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 place-items-center justify-center lg:gap-x-10 overflow-y-scroll bg-gray-200 border-l border-gray-400">
         {/* CARDS */}
-        <div className="w-96 h-52 rounded-3xl text-green-600 border border-black hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
-          Welcome user,
+        <div className="w-96 h-52 rounded-3xl text-green-600 border border-black hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300 bg-gradient-to-r ">
+          <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
+            Code Pair
+          </div>
         </div>
         <div className="w-96 h-52 rounded-3xl text-white bg-gradient-to-t from-orange-700 to-orange-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">

@@ -154,6 +154,13 @@ const CreateContest = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let jwt = getCookie("JWT_AUTH");
+
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     setSubmitting(true);
 
     console.log("SUBMIT");
@@ -207,8 +214,7 @@ const CreateContest = () => {
       questions: [],
       contestants: [],
       route: "contests/create",
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1NjE5NzN9.0iyte-Pnsml69EMA9YkXnZAz0oLavureJu6Rd4wm3xg",
+      authToken: jwt,
     };
 
     console.log(contest);

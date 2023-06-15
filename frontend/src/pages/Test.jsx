@@ -7,7 +7,7 @@ import axios from "axios";
 import { baseURL } from "../config/config";
 
 const Test = () => {
-  const { currentContestName } = useParams();
+  const { currentContestName, userHash } = useParams();
   const navigate = useNavigate();
 
   const { state } = useLocation();
@@ -218,8 +218,7 @@ const Test = () => {
 
     // TODO: Fetch the questions from API call
     const data = {
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      authToken: userHash,
       route: "contests/getContestDetails",
       contestName: currentContestName,
     };
@@ -318,8 +317,7 @@ const Test = () => {
       {
         base64Image: base64Image,
         route: `tests/storeImage`,
-        authToken:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1Mzk5NzB9.kdW4g-CH7WYUeQJdnqgBkzhHfNoXcCm9qEpag0r0SwY",
+        authToken: userHash,
       },
       { "Content-Type": "application/json" }
     );

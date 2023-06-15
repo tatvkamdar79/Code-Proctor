@@ -6,7 +6,7 @@ import ContestBanner from "../components/ContestComponents/ContestBanner";
 import { baseURL } from "../config/config";
 
 export default function PreTest() {
-  const { currentContestName } = useParams();
+  const { currentContestName, userHash } = useParams();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [agreement1, setAgreement1] = useState(false);
@@ -88,8 +88,7 @@ export default function PreTest() {
 
   useEffect(() => {
     const data = {
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      authToken: userHash,
       route: "contests/getContestDetails",
       contestName: currentContestName,
     };

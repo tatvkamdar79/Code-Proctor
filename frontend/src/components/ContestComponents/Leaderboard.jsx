@@ -24,6 +24,12 @@ const Leaderboard = ({ contest, setContest }) => {
   ] = useState([]);
 
   useEffect(() => {
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     console.log("Contest is", contest);
     let tempQuestions = {},
       tempTCs = {};
@@ -36,8 +42,7 @@ const Leaderboard = ({ contest, setContest }) => {
     setQuestionTestCases(tempTCs);
     const data = {
       contestId: contest._id.$oid,
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      authToken: jwt,
       route: "contests/getSubmissions",
     };
     axios.post(baseURL, data).then((response) => {

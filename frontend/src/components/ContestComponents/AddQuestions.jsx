@@ -2,12 +2,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiSearchAlt, BiSearchAlt2 } from "react-icons/bi";
 import { SiSketchfab } from "react-icons/si";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../../config/config";
 import loading from "../../assets/addQuestionsLoading.gif";
 import { MdOutlineAddCircle } from "react-icons/md";
 
 const CreateContestAddQuestions = ({ contest, setContest }) => {
+  const navigate = useNavigate();
   const { currentContestName } = useParams();
   const [selectedQuestions, setSelectedQuestions] = useState(contest.questions);
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,10 +18,15 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
   const [savingChanges, setSavingChanges] = useState(false);
 
   useEffect(() => {
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     axios
       .post(baseURL, {
-        authToken:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1Mzk1OTl9.wyOmQgp8FpwzjxU7Ih0e29d8RotSxtPgDTQkRy5tr3Q",
+        authToken: jwt,
         route: "problems/getAllProblems",
       })
       .then((response) => {
@@ -63,10 +69,15 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
     console.log("alreadySelectedQuestionsIds", alreadySelectedQuestionsIds);
     console.log(newSelectedQuestionsIds);
 
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     await axios
       .post(baseURL, {
-        authToken:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1NDEzMzZ9.AB0kpYjkD0zIMBDi_-Q980FRY3XG_X4K4P9asTxll2c",
+        authToken: jwt,
         route: "contests/modifyQuestions",
         contestId: contest._id.$oid,
         updatedQuestions: newSelectedQuestionsIds,
@@ -81,8 +92,7 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
         setSavingChanges(false);
       });
     const data = {
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      authToken: jwt,
       route: "contests/getContestDetails",
       contestName: currentContestName,
     };

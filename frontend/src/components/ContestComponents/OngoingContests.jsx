@@ -12,6 +12,12 @@ const OngoingContestsComponent = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     let time = new Date(Date.now()).toLocaleDateString().split("/");
     const formattedTime =
       `${time[2]}-${time[1]}-${time[0]}` +
@@ -21,8 +27,7 @@ const OngoingContestsComponent = () => {
     console.log(formattedTime);
     const data = {
       route: "contests/getActiveContests",
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI3MjY5NDd9.TUuWc-2EbVViBKjJMXK4OAK_GQarhn2qzHWG4JR4jmE",
+      authToken: jwt,
       time: formattedTime,
     };
 
