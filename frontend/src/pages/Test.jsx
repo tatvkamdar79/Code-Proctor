@@ -5,6 +5,7 @@ import CodeExecutionPanel from "../components/CodeExecutionPanel";
 import screenfull from "screenfull";
 import axios from "axios";
 import { baseURL } from "../config/config";
+import submittingLoading from "../assets/submitTestLoading.gif";
 
 const Test = () => {
   const { currentContestName, userHash } = useParams();
@@ -20,6 +21,7 @@ const Test = () => {
   const [showTest, setShowTest] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [cameraStream, setCameraStream] = useState(null);
+  const [submittingTest, setSubmittingTest] = useState(false);
 
   // The following details will be fetched from Api calls adn then stored in localStorgae until the durationof the exam
   const [questions, setQuestions] = useState([]);
@@ -34,7 +36,9 @@ const Test = () => {
 
   useEffect(() => {
     if (isSubmitted) {
-      navigate("/home");
+      navigate("/thank-you-for-taking-the-test", {
+        state: { email: state.email },
+      });
     }
   }, [isSubmitted]);
 
@@ -375,7 +379,9 @@ const Test = () => {
           setSelected,
           contest._id.$oid,
           state.email,
-          setIsSubmitted
+          setIsSubmitted,
+          submittingTest,
+          setSubmittingTest
         )}
 
       {selected === "INSTRUCTIONS" && TestInstructions(allInstructions)}
@@ -470,9 +476,12 @@ const ViewAllQuestionsList = (
   setSelected,
   contestId,
   contestantEmail,
-  setIsSubmitted
+  setIsSubmitted,
+  submittingTest,
+  setSubmittingTest
 ) => {
   const handleSubmit = async () => {
+    setSubmittingTest(true);
     const data = {
       route: "contests/submitTest",
       contestId,
@@ -482,16 +491,22 @@ const ViewAllQuestionsList = (
       const response = await axios.post(baseURL, data);
       console.log(response.data);
       if (response.data.status === 200) {
+        setSubmittingTest(false);
         alert("Test submitted");
         setIsSubmitted(true);
       }
     } catch (err) {
+      setSubmittingTest(false);
       console.log("Error while submitting", err);
     }
   };
   return (
-    <section className="w-full h-full flex flex-col place-items-center border gap-y-4 bg-[#f3f7f7] overflow-y-scroll py-10">
-      <div className="w-[92%] flex place-items-center px-4 text-[13px] text-gray-500 font-semibold">
+    <section className="w-full h-full flex flex-col place-items-center border gap-y-4 bg-[#f3f7f7] overflow-y-scroll py-10 ">
+      <div
+        className={`w-[92%] flex place-items-center px-4 text-[13px] text-gray-500 font-semibold ${
+          submittingTest && "blur-[2px]"
+        }`}
+      >
         <p className="px-2 w-[55%]">QUESTIONS</p>
         <p className="px-2 w-[22.5%]">TYPE</p>
         <p className="px-2 w-[22.5%]">ACTION</p>
@@ -499,7 +514,9 @@ const ViewAllQuestionsList = (
       {questions.map(({ title }, index) => (
         <div
           key={index}
-          className="w-[92%] flex flex-col justify-center mx-auto px-4 bg-white border border-gray-300 text-lg shadow-sm shadow-gray-300 hover:scale-105 transition-all duration-300"
+          className={`w-[92%] flex flex-col justify-center mx-auto px-4 bg-white border border-gray-300 text-lg shadow-sm shadow-gray-300 hover:scale-105 transition-all duration-300 ${
+            submittingTest && "blur-[4px]"
+          }`}
         >
           <div className="flex place-items-center h-[90px]">
             <p className="w-[55%] font-semibold font-sans">
@@ -517,14 +534,24 @@ const ViewAllQuestionsList = (
           </div>
         </div>
       ))}
-      <div>
+      <div className="w-5/6 flex justify-end py-10">
         <button
           onClick={handleSubmit}
-          className="w-56 h-16 bg-[#3c812e] text-white font-sans font-semibold shadow-lg shadow-green-200 text-sm"
+          className="w-56 h-16 bg-green-600 text-xl text-white font-sans font-semibold shadow-md shadow-green-400 hover:scale-110 rounded-md transition-all duration-300"
         >
           Submit
         </button>
       </div>
+      {submittingTest && (
+        <div className="absolute top-0 left-0 w-full h-screen flex flex-col justify-center place-items-center">
+          <img src={submittingLoading} alt="" />
+          <p className="text-xl font-mono font-semibold text-green-800 animate-bounce">
+            <span className="animate-pulse">
+              Hold on! We are submitting your test...
+            </span>
+          </p>
+        </div>
+      )}
     </section>
   );
 };

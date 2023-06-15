@@ -5,6 +5,7 @@ import { SiMinutemailer } from "react-icons/si";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import loading from "../../assets/addQuestionsLoading.gif";
 import { getCookie } from "../../Hooks/useCookies";
+import { useNavigate } from "react-router-dom";
 
 const Notifications = ({
   contest,
@@ -15,6 +16,7 @@ const Notifications = ({
   subject,
   setSubject,
 }) => {
+  const navigate = useNavigate();
   const [sendingEmail, setSendingEmail] = useState(false);
 
   useEffect(() => {
@@ -25,29 +27,51 @@ const Notifications = ({
   const [viewEmailLogs, setViewEmailLogs] = useState(false);
 
   //   TODO Update timeline details and other content in sample emails dynamically
-  const sampleInvitationEmail = `Dear [Contestant\'s Email],
+  const sampleInvitationEmail = `
+  <html>
+  <body>
+  Dear [Contestant\'s Email],
+        <p>
         We are pleased to invite you to participate in our upcoming contest. Your exceptional skills and talent have caught our attention, and we believe you would be a valuable addition to the competition.
+        </p>
 
-Contest Details:
+<h3>Contest Details:</h3>
+<br/>
+<b>Contest Name:</b> <b>[Contest Name]</b><br/>
+<b>Event Type:</b> <b>[Event Type]</b><br/>
+<b>Company Name:</b> <b>[Company Name]</b><br/>
+<b>Contest Start Date:</b> <b>[Contest Start Date]</b><br/>
+<b>Contest End Date:</b> <b>[Contest End Date]</b><br/>
 
-Contest Name: [Contest Name]
-Event Type: [Event Type]
-Company Name: [Company Name]
-Contest Start Date: [Contest Start Date]
-Contest End Date: [Contest End Date]
+<br/>
+<br/>
+
+<h4><b>Please Join the test from the specified URL only</b></h4>
+<h4>Test URL:</h4> <h4><b>[Contest URL]</b></h4>
+
+<br/>
+<br/>
 
 Instructions:
 [Provide any specific instructions or guidelines for the contest]
 
-We are excited to see your performance and witness your talent in action. If you accept our invitation, please confirm your participation by replying to this email with your acceptance and any additional information required.
+<br/>
+<h5>We are excited to see your performance and witness your talent in action. If you accept our invitation, please confirm your participation by replying to this email with your acceptance and any additional information required.</h5>
+<br/>
+<h5>If you have any questions or need further clarification, please don't hesitate to reach out to us. We look forward to your positive response and the opportunity to have you as a contestant in our contest.</h5>
+<br/>
+<h5>Best regards,</h5>
 
-If you have any questions or need further clarification, please don't hesitate to reach out to us. We look forward to your positive response and the opportunity to have you as a contestant in our contest.
-
-Best regards,
-
+<br/>
+<br/>
+<br/>
 [Your Name]
+<br/>
 [Your Position/Organization]
-[Contact Information]`;
+<br/>
+[Contact Information]
+</body>
+</html>`;
   const sampleUpdateContestTimingsEmail = `Dear [Candidate's Name],
 
         We hope this email finds you well. We are writing to inform you about an important update regarding the timeline for the contest in which you are participating. Please take note of the revised dates and make the necessary adjustments to your schedule:
@@ -93,22 +117,40 @@ Best regards,
       navigate("/login");
       return;
     }
-
+    let noHtmlEmailBody = "";
     let format = "";
     if (body === sampleInvitationEmail) {
       format = "sampleInvitationEmail";
     } else if (body === sampleUpdateContestTimingsEmail) {
       format = "sampleUpdateContestTimingsEmail";
+    } else {
+      format = "custom";
+      noHtmlEmailBody =
+        "<html><body>" + body.split("\n").join("<br/>") + "</body></html>";
     }
-    const email = {
-      contestId: contest._id["$oid"],
-      subject,
-      body,
-      format,
-      timeSentAt: new Date().toISOString(),
-      route: "contests/sendNotification",
-      authToken: jwt,
-    };
+    let email = {};
+
+    if (format === "custom") {
+      email = {
+        contestId: contest._id["$oid"],
+        subject,
+        body: noHtmlEmailBody,
+        format,
+        timeSentAt: new Date().toISOString(),
+        route: "contests/sendNotification",
+        authToken: jwt,
+      };
+    } else {
+      email = {
+        contestId: contest._id["$oid"],
+        subject,
+        body,
+        format,
+        timeSentAt: new Date().toISOString(),
+        route: "contests/sendNotification",
+        authToken: jwt,
+      };
+    }
     console.log(email);
     setSendingEmail(true);
     const response = await axios.post(baseURL, email);
@@ -125,7 +167,10 @@ Best regards,
       await axios.post(baseURL, data).then((response) => {
         console.log("THis is response of emails");
         console.log(response.data.data);
-        setEmailLogs(response.data.data);
+        let fetchedEmailLogs = [...response.data.data];
+        fetchedEmailLogs.reverse();
+        console.log("fel", fetchedEmailLogs);
+        setEmailLogs(fetchedEmailLogs);
       });
     }, 5000);
   };
@@ -137,7 +182,7 @@ Best regards,
           <div className="w-full flex place-items-center mb-4">
             <p className="w-1/12 text-xl font-bold">Compose Email</p>
             <div className="w-11/12 flex flex-col gap-y-1">
-              <div className="grid grid-cols-4 place-items-center">
+              <div className="grid grid-cols-5 place-items-center">
                 <p
                   onClick={() =>
                     setBody((body) => body + "[Contestant's Email]")
@@ -159,6 +204,16 @@ Best regards,
                     className="text-green-500 w-1/4"
                   />
                   <span className="w-3/4 text-start">Contest Name</span>
+                </p>
+                <p
+                  onClick={() => setBody((body) => body + "[Contest URL]")}
+                  className="w-52 h-12 rounded-full flex place-items-center border font-mono font-semibold bg-neutral-500 text-white hover:scale-105 hover:bg-neutral-700 transition-all duration-300 cursor-pointer"
+                >
+                  <AiOutlinePlusCircle
+                    size={30}
+                    className="text-green-500 w-1/4"
+                  />
+                  <span className="w-3/4 text-start">Contest URL</span>
                 </p>
                 <p
                   onClick={() => setBody((body) => body + "[Event Type]")}

@@ -22,6 +22,7 @@ import Login from "./pages/Login";
 import { baseURL } from "./config/config";
 import { getCookie } from "./Hooks/useCookies";
 import axios from "axios";
+import ThankYou from "./pages/ThankYou";
 
 const userContext = createContext("User Context");
 
@@ -114,9 +115,10 @@ const App = () => {
           </div>
         )}
         <div className={`${block && ""}`}>
-          {page && !page.includes("/pretest/") && !page.includes("/test/") && (
-            <Navbar />
-          )}
+          {page &&
+            !page.includes("/pretest/") &&
+            !page.includes("/test/") &&
+            !page.includes("/thank-you-for-taking-the-test") && <Navbar />}
           <Routes>
             {/* NETRY AND HOME ROUTES */}
             <Route path="/" element={<Home />} />
@@ -164,12 +166,17 @@ const App = () => {
               element={<ManageContest />}
             />
 
+            <Route
+              path="/thank-you-for-taking-the-test"
+              element={<ThankYou />}
+            />
+
             {/* <Route
             path="/contest/manage/:contestName/:email"
             element={<IndividualContestProgressReport />}
           /> */}
 
-          {/* TRYING */}
+            {/* TRYING */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
