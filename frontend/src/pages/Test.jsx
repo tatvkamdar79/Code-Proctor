@@ -7,13 +7,10 @@ import axios from "axios";
 import { baseURL } from "../config/config";
 
 const Test = () => {
-  const { currentContestName } = useParams();
+  const { currentContestName, userHash } = useParams();
   const navigate = useNavigate();
 
   const { state } = useLocation();
-  if (!state || !state.validated || !state.email) {
-    navigate(`/pretest/${currentContestName}`);
-  }
 
   const contestantEmail = state?.email;
   const totalTime = 1800;
@@ -31,44 +28,9 @@ const Test = () => {
   const [helperQuestionIndex, setHelperQuestionIndex] = useState(0);
   // const [contest, setContest] = useState({});
 
-  useEffect(() => {
-    if (!contest) return;
-
-    axios
-      .get("https://api.ipify.org/?format=json")
-      .then((response) => {
-        const ipAddress = response.data.ip;
-        const data = {
-          route: "contests/markPresence",
-          contestantEmail: state.email,
-          contestId: contest._id.$oid,
-          ipAddress: ipAddress,
-        };
-        return axios.post(baseURL, data);
-      })
-      .then((response) => {
-        console.log(response.data);
-        if (response.data.status == 400) {
-          alert(response.data.message);
-        } else {
-          setShowTest(true);
-        }
-      })
-      .catch((err) => {
-        console.log("Error in marking user", err);
-      });
-
-    return () => {
-      const data = {
-        route: "contests/unmarkPresence",
-        contestantEmail: state.email,
-        contestId: contest._id.$oid,
-      };
-      axios.post(baseURL, data).then((response) => {
-        console.log(response.data);
-      });
-    };
-  }, [contest]);
+  if (!state || !state.validated || !state.email) {
+    navigate(`/pretest/${currentContestName}/${userHash}`);
+  }
 
   useEffect(() => {
     if (isSubmitted) {
@@ -218,17 +180,18 @@ const Test = () => {
 
     // TODO: Fetch the questions from API call
     const data = {
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
       route: "contests/getContestDetails",
       contestName: currentContestName,
     };
     axios
       .post(baseURL, data)
       .then((response) => {
+        console.log("RESPONSE", response);
         setContest(response.data.data.contest);
         setQuestions(response.data.data.contest.questions);
+        console.log("ljhfkjdshf");
         console.log(response.data);
+        console.log("ljhfkjdshf");
         const questionsForContest = response.data.data.contest.questions;
         for (let question of questionsForContest) {
           initialTimeState.push(0);
@@ -318,8 +281,7 @@ const Test = () => {
       {
         base64Image: base64Image,
         route: `tests/storeImage`,
-        authToken:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1Mzk5NzB9.kdW4g-CH7WYUeQJdnqgBkzhHfNoXcCm9qEpag0r0SwY",
+        email: contestantEmail,
       },
       { "Content-Type": "application/json" }
     );

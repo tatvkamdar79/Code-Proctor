@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import loading from "../assets/addQuestionsLoading.gif";
 import { baseURL } from "../config/config";
+import { getCookie } from "../Hooks/useCookies";
 
 const AllQuestions = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,10 +12,15 @@ const AllQuestions = () => {
   const [viewProblem, setViewProblem] = useState(null);
 
   useEffect(() => {
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     axios
       .post(baseURL, {
-        authToken:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1Mzk1OTl9.wyOmQgp8FpwzjxU7Ih0e29d8RotSxtPgDTQkRy5tr3Q",
+        authToken: jwt,
         route: "problems/getAllProblems",
       })
       .then((response) => {

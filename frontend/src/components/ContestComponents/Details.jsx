@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../../config/config";
 import Instructions from "./Instructions";
 import AddingUsersToGroupLoadingGif from "../../assets/addingUsersLoading.gif";
+import { getCookie } from "../../Hooks/useCookies";
 
 const CreateChallangeDetails = ({ contest, setContest }) => {
   const navigate = useNavigate();
@@ -218,6 +219,12 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
       return;
     }
 
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     const updatedContest = {
       contestId: contest._id["$oid"],
       contestName,
@@ -230,33 +237,37 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
       instructionsTitle,
       instructions,
       route: "contests/modifyContest",
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI2MDc3NzB9.nxH-peUegSz_z8svOa2JTUc9WYHRehFLOtuFZO4ykXM",
+      authToken: jwt,
     };
 
     console.log(updatedContest);
 
     const response = await axios.post(baseURL, updatedContest);
+
     console.log(response);
-    if (response.data.status == 200) {
-      const data = {
-        authToken:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
-        route: "contests/getContestDetails",
-        contestName: contestName,
-      };
-      axios
-        .post(baseURL, data)
-        .then((response) => {
-          setContest(response.data.data.contest);
-          setLoading(false);
-          console.log(response.data);
-          console.log(response.data.data.contest._id["$oid"]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+
+    if (response.data.status !== 200) {
+      // console.log("jdsfhfvds", response.data.message);
+      alert(response.data.message);
     }
+
+    const data = {
+      authToken: jwt,
+      route: "contests/getContestDetails",
+      contestName: contest?.contestName,
+    };
+    axios
+      .post(baseURL, data)
+      .then((response) => {
+        setContest(response.data.data.contest);
+        setLoading(false);
+        console.log(response.data);
+        console.log(response.data.data.contest._id["$oid"]);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   };
 
   return (

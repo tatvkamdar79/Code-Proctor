@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { baseURL } from "../../config/config";
 import ongoingContestLoading from "../../assets/ongoingContestsLoading.gif";
 import { BiSearchAlt } from "react-icons/bi";
+import { getCookie } from "../../Hooks/useCookies";
 
 const OngoingContestsComponent = () => {
   const [contests, setContests] = useState([]);
@@ -12,6 +13,12 @@ const OngoingContestsComponent = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
     let time = new Date(Date.now()).toLocaleDateString().split("/");
     const formattedTime =
       `${time[2]}-${time[1]}-${time[0]}` +
@@ -21,14 +28,14 @@ const OngoingContestsComponent = () => {
     console.log(formattedTime);
     const data = {
       route: "contests/getActiveContests",
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI3MjY5NDd9.TUuWc-2EbVViBKjJMXK4OAK_GQarhn2qzHWG4JR4jmE",
+      authToken: jwt,
       time: formattedTime,
     };
 
     axios
       .post(baseURL, data)
       .then((response) => {
+        console.log("ONGOING", response);
         setContests(response.data.data);
         setFilteredContests(response.data.data);
       })
@@ -120,7 +127,7 @@ const OngoingContestsComponent = () => {
           {filteredContests &&
             filteredContests.map((contest, idx) => (
               <tr
-                key={contest.id}
+                key={idx}
                 className="border-b cursor-pointer hover:scale-105 transition-all duration-300 bg-green-50"
                 onClick={() =>
                   navigate(`/contest/manage/${contest.contestName}`)

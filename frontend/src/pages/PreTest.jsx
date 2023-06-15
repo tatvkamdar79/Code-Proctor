@@ -6,7 +6,7 @@ import ContestBanner from "../components/ContestComponents/ContestBanner";
 import { baseURL } from "../config/config";
 
 export default function PreTest() {
-  const { currentContestName } = useParams();
+  const { currentContestName, userHash } = useParams();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [agreement1, setAgreement1] = useState(false);
@@ -46,6 +46,24 @@ export default function PreTest() {
     return formattedTime.trim();
   }
 
+  const markPresence = async () => {
+    if (!contest) return;
+
+    let ipResponse = await axios.get("https://api.my-ip.io/ip.json");
+    const ipAddress = ipResponse.data.ip;
+
+    const data = {
+      route: "contests/markPresence",
+      contestantEmail: email,
+      contestId: contest._id.$oid,
+      userHash: userHash,
+      ipAddress: ipAddress,
+      fromTest: true,
+      email: email,
+    };
+    return axios.post(baseURL, data);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -72,12 +90,13 @@ export default function PreTest() {
       route: "contests/markPresence",
       contestantEmail: email,
       contestId: contest._id.$oid,
+      userHash: userHash,
     };
-    const response = await axios.post(baseURL, data);
+    const response = await markPresence();
     if (response.data.status === 200) {
       console.log("Email in");
       enterFullscreen();
-      navigate(`/test/${currentContestName}`, {
+      navigate(`/test/${currentContestName}/${userHash}`, {
         state: { validated: true, email },
       });
     } else {
@@ -88,8 +107,7 @@ export default function PreTest() {
 
   useEffect(() => {
     const data = {
-      authToken:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiYW1hbiIsImVtYWlsIjoiYW1hbkBnbWFpbC5jb20iLCJleHAiOjE3NzI1MjE1ODV9.3-O-JVP8eaYRPtXo0q8pTDc3HY3sN91PXDGPmrbqsDo",
+      userHash: userHash,
       route: "contests/getContestDetails",
       contestName: currentContestName,
     };

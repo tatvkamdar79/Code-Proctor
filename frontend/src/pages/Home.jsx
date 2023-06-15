@@ -8,24 +8,27 @@ import OngoingContestsComponent from "../components/ContestComponents/OngoingCon
 
 const Home = ({ previousRooms }) => {
   const [contestName, setContestName] = useState("ContestName");
-  const tailwindColors = [
-    "bg-orange-500",
-    "bg-teal-400",
-    "bg-pink-600",
-    "bg-purple-500",
-    "bg-blue-600",
-    "bg-yellow-400",
-  ];
+  // const tailwindColors = [
+  //   "bg-orange-500",
+  //   "bg-teal-400",
+  //   "bg-pink-600",
+  //   "bg-purple-500",
+  //   "bg-blue-600",
+  //   "bg-yellow-400",
+  // ];
 
   return (
     <div className="w-full h-[92.5vh] mx-auto bg-blac flex">
-      <div className={`w-1/2 bg-white border-r border-gray-400`}>
+      <div className="w-1/2 bg-white border-r border-gray-400">
         <OngoingContestsComponent />
       </div>
-      <div className="w-1/2 h-[92.5vh] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 place-items-center justify-center lg:gap-x-10 overflow-y-scroll bg-gray-200 border-l border-gray-400">
+
+      <div className="w-1/2 h-[92.5vh] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 place-items-center justify-center lg:gap-x-10 overflow-y-scroll bg-gray-200 border-l border-gray-400">
         {/* CARDS */}
-        <div className="w-96 h-52 rounded-3xl text-green-600 border border-black hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
-          Welcome user,
+        <div className="w-96 h-52 rounded-3xl text-green-600 border border-black hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300 bg-gradient-to-r ">
+          <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
+            Code Pair
+          </div>
         </div>
         <div className="w-96 h-52 rounded-3xl text-white bg-gradient-to-t from-orange-700 to-orange-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300">
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
@@ -105,13 +108,13 @@ const Home = ({ previousRooms }) => {
           </div>
         </Link>
         <Link
-          to={"/createChallenge"}
+          to={"/challenge/create"}
           className="w-96 h-52 rounded-3xl text-white bg-gradient-to-t from-emerald-700 to-emerald-400 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300"
         >
           <div className="w-11/12 h-full flex flex-col mx-auto justify-center place-items-center gap-y-5">
             <p className="text-2xl font-mono font-semibold">Create Challenge</p>
             <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300">
-              /createChallenge
+              /challenge/create
             </p>
           </div>
         </Link>
