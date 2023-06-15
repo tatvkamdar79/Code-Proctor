@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../../config/config";
 import loading from "../../assets/addQuestionsLoading.gif";
 import { MdOutlineAddCircle } from "react-icons/md";
+import { getCookie } from "../../Hooks/useCookies";
 
 const CreateContestAddQuestions = ({ contest, setContest }) => {
   const navigate = useNavigate();

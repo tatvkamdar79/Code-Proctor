@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import loading from "../assets/addQuestionsLoading.gif";
 import { baseURL } from "../config/config";
+import { getCookie } from "../Hooks/useCookies";
 
 const AllQuestions = () => {
   const [searchQuery, setSearchQuery] = useState("");

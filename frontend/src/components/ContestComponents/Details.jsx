@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../../config/config";
 import Instructions from "./Instructions";
 import AddingUsersToGroupLoadingGif from "../../assets/addingUsersLoading.gif";
+import { getCookie } from "../../Hooks/useCookies";
 
 const CreateChallangeDetails = ({ contest, setContest }) => {
   const navigate = useNavigate();
@@ -242,25 +243,31 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
     console.log(updatedContest);
 
     const response = await axios.post(baseURL, updatedContest);
+
     console.log(response);
-    if (response.data.status == 200) {
-      const data = {
-        authToken: jwt,
-        route: "contests/getContestDetails",
-        contestName: contestName,
-      };
-      axios
-        .post(baseURL, data)
-        .then((response) => {
-          setContest(response.data.data.contest);
-          setLoading(false);
-          console.log(response.data);
-          console.log(response.data.data.contest._id["$oid"]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+
+    if (response.data.status !== 200) {
+      // console.log("jdsfhfvds", response.data.message);
+      alert(response.data.message);
     }
+
+    const data = {
+      authToken: jwt,
+      route: "contests/getContestDetails",
+      contestName: contest?.contestName,
+    };
+    axios
+      .post(baseURL, data)
+      .then((response) => {
+        setContest(response.data.data.contest);
+        setLoading(false);
+        console.log(response.data);
+        console.log(response.data.data.contest._id["$oid"]);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   };
 
   return (

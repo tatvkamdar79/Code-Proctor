@@ -11,9 +11,6 @@ const Test = () => {
   const navigate = useNavigate();
 
   const { state } = useLocation();
-  if (!state || !state.validated || !state.email) {
-    navigate(`/pretest/${currentContestName}`);
-  }
 
   const contestantEmail = state?.email;
   const totalTime = 1800;
@@ -31,44 +28,9 @@ const Test = () => {
   const [helperQuestionIndex, setHelperQuestionIndex] = useState(0);
   // const [contest, setContest] = useState({});
 
-  useEffect(() => {
-    if (!contest) return;
-
-    axios
-      .get("https://api.ipify.org/?format=json")
-      .then((response) => {
-        const ipAddress = response.data.ip;
-        const data = {
-          route: "contests/markPresence",
-          contestantEmail: state.email,
-          contestId: contest._id.$oid,
-          ipAddress: ipAddress,
-        };
-        return axios.post(baseURL, data);
-      })
-      .then((response) => {
-        console.log(response.data);
-        if (response.data.status == 400) {
-          alert(response.data.message);
-        } else {
-          setShowTest(true);
-        }
-      })
-      .catch((err) => {
-        console.log("Error in marking user", err);
-      });
-
-    return () => {
-      const data = {
-        route: "contests/unmarkPresence",
-        contestantEmail: state.email,
-        contestId: contest._id.$oid,
-      };
-      axios.post(baseURL, data).then((response) => {
-        console.log(response.data);
-      });
-    };
-  }, [contest]);
+  if (!state || !state.validated || !state.email) {
+    navigate(`/pretest/${currentContestName}/${userHash}`);
+  }
 
   useEffect(() => {
     if (isSubmitted) {
@@ -218,16 +180,18 @@ const Test = () => {
 
     // TODO: Fetch the questions from API call
     const data = {
-      authToken: userHash,
       route: "contests/getContestDetails",
       contestName: currentContestName,
     };
     axios
       .post(baseURL, data)
       .then((response) => {
+        console.log("RESPONSE", response);
         setContest(response.data.data.contest);
         setQuestions(response.data.data.contest.questions);
+        console.log("ljhfkjdshf");
         console.log(response.data);
+        console.log("ljhfkjdshf");
         const questionsForContest = response.data.data.contest.questions;
         for (let question of questionsForContest) {
           initialTimeState.push(0);
@@ -317,7 +281,7 @@ const Test = () => {
       {
         base64Image: base64Image,
         route: `tests/storeImage`,
-        authToken: userHash,
+        email: contestantEmail,
       },
       { "Content-Type": "application/json" }
     );

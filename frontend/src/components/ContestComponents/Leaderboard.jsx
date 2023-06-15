@@ -12,6 +12,7 @@ import {
   incorrectSubmissions,
   getContestantScore,
 } from "./LeaderboardHelper";
+import { getCookie } from "../../Hooks/useCookies";
 
 const Leaderboard = ({ contest, setContest }) => {
   const [questionNames, setQuestionNames] = useState({});

@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import History from "../components/History";
 
 function CodePairHome(previousRooms) {
   //   const previousRooms = []; // Assuming previousRooms is an array
@@ -39,8 +38,6 @@ function CodePairHome(previousRooms) {
         <div>
           <hr />
           <br />
-          <h3>Your history</h3>
-          <History previousRooms={previousRooms} />
         </div>
       ) : (
         <div />

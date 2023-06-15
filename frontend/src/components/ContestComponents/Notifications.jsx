@@ -4,6 +4,7 @@ import { baseURL } from "../../config/config";
 import { SiMinutemailer } from "react-icons/si";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import loading from "../../assets/addQuestionsLoading.gif";
+import { getCookie } from "../../Hooks/useCookies";
 
 const Notifications = ({
   contest,

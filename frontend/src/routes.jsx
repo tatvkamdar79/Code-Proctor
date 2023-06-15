@@ -1,8 +1,8 @@
-import Room from "./pages/room";
+import Room from "./pages/Room";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
-import JoinRoom from "./pages/joinroom";
-import NewRoom from "./pages/newroom";
+import JoinRoom from "./pages/JoinRoom";
+import NewRoom from "./pages/NewRoom";
 
 let updatePreviousRooms = () => {
   console.log("default");

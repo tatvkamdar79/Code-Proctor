@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { baseURL } from "../config/config";
 import axios from "axios";
 import AddingUsersToGroupLoadingGif from "../assets/addingUsersLoading.gif";
+import { getCookie } from "../Hooks/useCookies";
 
 const AddParticipants = ({ contest, setContest }) => {
+  const navigate = useNavigate();
   const [previousGroups, setPreviousGroups] = useState([]);
   const [usersToBeAdded, setUsersToBeAdded] = useState(contest.contestants);
   const [newGroupName, setNewGroupName] = useState("");

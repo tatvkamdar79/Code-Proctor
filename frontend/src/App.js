@@ -1,22 +1,18 @@
 import React from "react";
 import { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from "./components/header";
 import Home from "./pages/Home";
-import JoinRoom from "./pages/joinroom";
-import NewRoom from "./pages/newroom";
+import JoinRoom from "./pages/JoinRoom";
+import NewRoom from "./pages/NewRoom";
 import NotFound from "./pages/NotFound";
-import Room from "./pages/room";
+import Room from "./pages/Room";
 import Test from "./pages/Test";
 import PreTest from "./pages/PreTest";
-import routes, { roomProps } from "./routes";
+import { roomProps } from "./routes";
 import ManageContest from "./pages/ManageContest";
 import CreateChallange from "./pages/CreateChallange";
 import CreateGroup from "./pages/CreateGroup";
 import CreateContest from "./pages/CreateContest";
-import ShowStages from "./pages/ShowStages";
-import IndividualContestProgressReport from "./components/ContestComponents/IndividualContestProgressReport";
-import RecruitmentTimeline from "./pages/RecruitmentTimeline";
 import AllQuestions from "./pages/AllQuestions";
 import Navbar from "./components/Navbar";
 import OngoingContestsComponent from "./components/ContestComponents/OngoingContests";
@@ -24,7 +20,7 @@ import CodePairHome from "./pages/CodePairHome";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { baseURL } from "./config/config";
-import { getCookie, setCookie } from "./Hooks/useCookies";
+import { getCookie } from "./Hooks/useCookies";
 import axios from "axios";
 
 const userContext = createContext("User Context");
@@ -155,8 +151,14 @@ const App = () => {
             <Route path="/challenge/all" element={<AllQuestions />} />
 
             {/* TEST ROUTES */}
-            <Route path="/preTest/:currentContestName/:userHash" element={<PreTest />} />
-            <Route path="/test/:currentContestName/:userHash" element={<Test />} />
+            <Route
+              path="/preTest/:currentContestName/:userHash"
+              element={<PreTest />}
+            />
+            <Route
+              path="/test/:currentContestName/:userHash"
+              element={<Test />}
+            />
             <Route
               path="/contest/manage/:currentContestName"
               element={<ManageContest />}
@@ -167,12 +169,7 @@ const App = () => {
             element={<IndividualContestProgressReport />}
           /> */}
 
-            {/* TRYING */}
-            <Route
-              path="/recruitment-timeline/create"
-              element={<RecruitmentTimeline />}
-            />
-
+          {/* TRYING */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

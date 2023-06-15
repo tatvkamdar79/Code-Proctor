@@ -15,6 +15,7 @@ import ContestInfo from "../components/ContestComponents/ContestInfo";
 import contestDetailsLoading from "../assets/contestDetailsLoading.gif";
 import contestDoesNotExistGif from "../assets/contestDoesNotExist.gif";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { getCookie } from "../Hooks/useCookies";
 
 const ManageContest = () => {
   const { currentContestName } = useParams("currentContestName");

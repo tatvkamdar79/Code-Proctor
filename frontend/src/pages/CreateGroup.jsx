@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 import { baseURL } from "../config/config";
+import { getCookie } from "../Hooks/useCookies";
 
 const CreateGroup = () => {
+  const navigate = useNavigate();
   const [previousGroups, setPreviousGroups] = useState([]);
   const [usersToBeAdded, setUsersToBeAdded] = useState([""]);
   const [newGroupName, setNewGroupName] = useState("");
