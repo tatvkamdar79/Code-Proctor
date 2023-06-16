@@ -31,3 +31,9 @@ export function checkCookie() {
     }
   }
 }
+
+export function deleteCookie(cname) {
+  const d = new Date();
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + " " + ";" + expires + ";path=/";
+}
