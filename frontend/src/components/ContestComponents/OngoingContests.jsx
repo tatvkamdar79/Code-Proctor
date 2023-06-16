@@ -66,7 +66,7 @@ const OngoingContestsComponent = () => {
 
   return (
     <div
-      className={`w-full h-[92.5vh] mx-auto p-4 transition-all duration-1000 ${
+      className={`w-full h-[94vh] mx-auto p-4 transition-all duration-1000 ${
         filteredContests ? "bg-stone-100" : "bg-white"
       }`}
     >
