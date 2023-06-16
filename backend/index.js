@@ -109,6 +109,7 @@ app.post("/", async (req, res) => {
     // console.log(response.data.data.groups[0]._id["$oid"]);
     return res.status(200).json(response.data);
   } catch (err) {
+    console.log(err);
     console.log("Error occurred: ");
     return res.status(400).json({ message: "Error occurred" });
   }
