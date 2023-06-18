@@ -648,6 +648,7 @@ const Modal = ({ isOpen, onClose }) => {
       setMessage("Sent invites successfully!");
       setIsError(false);
       const response = await axios.post(baseURL, data);
+      console.log(response.data);
     } catch (err) {
       setMessage("Some error occurred while sending, please try again");
       setIsError(true);

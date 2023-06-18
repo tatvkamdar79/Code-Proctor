@@ -23,6 +23,7 @@ import { baseURL } from "./config/config";
 import { getCookie } from "./Hooks/useCookies";
 import axios from "axios";
 import ThankYou from "./pages/ThankYou";
+import AllContestsComponent from "./components/ContestComponents/AllContests";
 
 const userContext = createContext("User Context");
 
@@ -146,6 +147,10 @@ const App = () => {
               element={<CreateChallange />}
             />
             <Route path="/create-group" element={<CreateGroup />} />
+            <Route
+              path="/contests/allContests"
+              element={<AllContestsComponent />}
+            />
             <Route
               path="/contests/ongoing"
               element={<OngoingContestsComponent />}

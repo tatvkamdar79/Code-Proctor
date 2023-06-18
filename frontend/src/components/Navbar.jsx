@@ -1,7 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { userContext } from "../App";
+import { getCookie, deleteCookie } from "../Hooks/useCookies";
 
 const Navbar = () => {
+  const { user } = useContext(userContext);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    deleteCookie("JWT_AUTH");
+    navigate("/login");
+  };
+
   return (
     <nav className="w-full h-16 border border-black bg-black text-white">
       <div className="w-11/12 h-full flex justify-between place-items-center mx-auto">
@@ -42,18 +52,30 @@ const Navbar = () => {
             </ul>
           </div>
         </div>
-        <div className="flex gap-x-3">
-          <Link to={"/login"}>
-            <p className="text-lg font-semibold font-mono px-4 py-0.5 bg-green-600 rounded-md hover:scale-[102%] hover:shadow-md hover:shadow-green-600 transition-all duration-300">
-              Login
-            </p>
-          </Link>
-          <Link to={"/contact"}>
-            <p className="text-lg font-semibold font-mono px-4 py-0.5 bg-white text-black rounded-md hover:scale-[102%] hover:shadow-md hover:shadow-gray-500 transition-all duration-300">
-              Contact
-            </p>
-          </Link>
-        </div>
+        {(user.loggedIn == false || getCookie("JWT_AUTH").length == 0) && (
+          <div className="flex gap-x-3">
+            <Link to={"/login"}>
+              <p className="text-lg font-semibold font-mono px-4 py-0.5 bg-green-600 rounded-md hover:scale-[102%] hover:shadow-md hover:shadow-green-600 transition-all duration-300">
+                Login
+              </p>
+            </Link>
+            <Link to={"/contact"}>
+              <p className="text-lg font-semibold font-mono px-4 py-0.5 bg-white text-black rounded-md hover:scale-[102%] hover:shadow-md hover:shadow-gray-500 transition-all duration-300">
+                Contact
+              </p>
+            </Link>
+          </div>
+        )}
+
+        {user.loggedIn == true && getCookie("JWT_AUTH").length > 0 && (
+          <div className="flex gap-x-3">
+            <button onClick={handleClick}>
+              <p className="text-lg font-semibold font-mono px-4 py-0.5 bg-green-600 rounded-md hover:scale-[102%] hover:shadow-md hover:shadow-green-600 transition-all duration-300">
+                Logout
+              </p>
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   );
