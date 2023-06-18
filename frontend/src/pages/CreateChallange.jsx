@@ -143,6 +143,7 @@ const CreateChallange = () => {
       console.log(response);
       setSubmitting(false);
       setSubmitted(true);
+      navigate("/challenge/all", { state: { questionTitle } });
     } catch (err) {
       console.log(err);
       setSubmitting(false);

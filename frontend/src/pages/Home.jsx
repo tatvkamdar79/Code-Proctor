@@ -11,6 +11,7 @@ import createGroupGif from "../assets/createGroup.gif";
 import viewContestsGif from "../assets/viewContests.gif";
 import viewContestsGif2 from "../assets/viewContests2.gif";
 import goToNextPageGif from "../assets/goToNextPage.gif";
+import codePairGif from "../assets/codePair.gif";
 
 const Home = ({ previousRooms }) => {
   const [contestName, setContestName] = useState("ContestName");
@@ -229,6 +230,21 @@ const Home = ({ previousRooms }) => {
               </p>
               <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300 -translate-y-1">
                 /create-group
+              </p>
+            </div>
+          </Link>{" "}
+          <Link
+            to={"/create-group"}
+            className="w-96 h-52 rounded-3xl bg-neutral-300 place-items-center hover:scale-105 transition-all duration-300 bg-no-repeat bg-cover border border-gray-300 flex relative text-cyan-800 hover:text-black"
+          >
+            <img src={codePairGif} alt="" className="w-1/2" />
+            <img src={codePairGif} alt="" className="w-1/2" />
+            <div className="w-full absolute left-3 top-2 transition-all duration-300">
+              <p className="w-fit text-2xl font-mono font-semibold">
+                Create Code-Pair Room
+              </p>
+              <p className="w-fit text-sm font-mono font-semibold hover:scale-125 transition-all duration-300 -translate-y-1">
+                /codepair
               </p>
             </div>
           </Link>
