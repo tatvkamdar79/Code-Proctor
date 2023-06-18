@@ -7,6 +7,7 @@ import { baseURL } from "../config/config";
 
 export default function PreTest() {
   const { currentContestName, userHash } = useParams();
+  console.log(userHash);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [agreement1, setAgreement1] = useState(false);
