@@ -12,6 +12,7 @@ const CreateChallange = () => {
   const [sampleInput, setSampleInput] = useState("");
   const [sampleOutput, setSampleOutput] = useState("");
   const [tags, setTags] = useState([""]);
+  const [difficulty, setDifficulty] = useState("");
   const [publicTestCases, setPublicTestCases] = useState([
     { input: "", output: "" },
   ]);
@@ -23,6 +24,10 @@ const CreateChallange = () => {
   const [score, setScore] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const EASY = "EASY";
+  const MEDIUM = "MEDIUM";
+  const HARD = "HARD";
 
   const handleAddPublicTestCase = () => {
     if (publicTestCases.length < 2) {
@@ -124,6 +129,10 @@ const CreateChallange = () => {
       { input: sampleInput, output: sampleOutput },
       ...correctPublicTestCases,
     ];
+    if ([EASY, MEDIUM, HARD].indexOf(difficulty) === -1) {
+      alert("Please Select Difficulty");
+      return;
+    }
     const questionData = {
       title: questionTitle,
       description: questionDescription,
@@ -131,6 +140,7 @@ const CreateChallange = () => {
       hiddenTCs: correctHiddenTestCases,
       score,
       tags,
+      difficulty,
     };
     setSubmitting(true);
     const data = {
@@ -338,6 +348,47 @@ const CreateChallange = () => {
               style={{ minWidth: "100px" }}
             />
           </div>
+
+          <div className="flex flex-col gap-x-4 place-items-start my-5">
+            <p className="font-semibold text-xl">
+              Choose Difficulty :
+              <span
+                className={`
+                  ${difficulty === EASY && "text-green-600"}
+                  ${difficulty === MEDIUM && "text-orange-500"}
+                  ${difficulty === HARD && "text-red-500"}
+                  text-gray-700 px-5
+                }`}
+              >
+                {difficulty ? difficulty : "Please Select Difficulty"}
+              </span>
+            </p>
+
+            <div className="flex gap-x-5 font-mono text-lg">
+              <button
+                type="button"
+                className="my-3 px-4 py-2 rounded-md font-semibold text-white bg-green-500 hover:bg-green-600 focus:bg-green-600 focus:outline-none transition-all duration-300 hover:scale-110"
+                onClick={() => setDifficulty(EASY)}
+              >
+                Easy
+              </button>
+              <button
+                type="button"
+                className="my-3 px-4 py-2 rounded-md font-semibold text-white bg-orange-500 hover:bg-orange-600 focus:bg-orange-600 focus:outline-none transition-all duration-300 hover:scale-110"
+                onClick={() => setDifficulty(MEDIUM)}
+              >
+                Medium
+              </button>
+              <button
+                type="button"
+                className="my-3 px-4 py-2 rounded-md font-semibold text-white bg-red-500 hover:bg-red-600 focus:bg-red-600 focus:outline-none transition-all duration-300 hover:scale-110"
+                onClick={() => setDifficulty(HARD)}
+              >
+                Hard
+              </button>
+            </div>
+          </div>
+
           <div className="mb-3">
             <label htmlFor="tags" className="block text-xl font-bold mb-2">
               Tags

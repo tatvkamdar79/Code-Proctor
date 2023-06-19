@@ -106,6 +106,15 @@ const Room = () => {
   const dmp = new diff_match_patch();
 
   useEffect(() => {
+    if (localStorage.getItem("rooms")) {
+      let rooms = JSON.parse(localStorage.getItem("rooms"));
+      if (rooms[id]) {
+        setNotes(rooms[id]["notes"]);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     socket.off("userjoined");
     socket.on("userjoined", () => {
       socket.emit("setBody", { value: body, roomId: id });
@@ -563,7 +572,19 @@ const Room = () => {
                 <button
                   className="w-[91%] h-[15%] bg-green-500 font-semibold font-mono text-xl text-center place-self-center justify-self-center pt-0.5 scale-[101%] rounded-lg mt-0.5 hover:scale-110 transition-all duration-300"
                   onClick={() => {
-                    console.log("Write controller to save notes");
+                    if (localStorage.getItem("rooms")) {
+                      let rooms = JSON.parse(localStorage.getItem("rooms"));
+                      if (rooms[id]) {
+                        rooms[id]["notes"] = notes;
+                      }
+                      localStorage.setItem("rooms", JSON.stringify(rooms));
+                    } else {
+                      let roomId = id;
+                      let rooms = {};
+                      rooms[id] = {};
+                      rooms[id]["notes"] = notes;
+                      localStorage.setItem("rooms", JSON.stringify(rooms));
+                    }
                   }}
                 >
                   Save

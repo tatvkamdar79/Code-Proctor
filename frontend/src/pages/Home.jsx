@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdWatchLater } from "react-icons/md";
 import { ImSigma } from "react-icons/im";
 import { BsFillGearFill } from "react-icons/bs";
 import { GiBackwardTime } from "react-icons/gi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OngoingContestsComponent from "../components/ContestComponents/OngoingContests";
 import createChallengeGif from "../assets/createChallenge.gif";
 import createChallengeGif2 from "../assets/createChallengeGif2.gif";
@@ -12,9 +12,25 @@ import viewContestsGif from "../assets/viewContests.gif";
 import viewContestsGif2 from "../assets/viewContests2.gif";
 import goToNextPageGif from "../assets/goToNextPage.gif";
 import codePairGif from "../assets/codePair.gif";
+import axios from "axios";
+import { baseURL } from "../config/config";
+import { getCookie } from "../Hooks/useCookies";
 
 const Home = ({ previousRooms }) => {
+  const navigate = useNavigate();
   const [contestName, setContestName] = useState("ContestName");
+  const [totalProblems, setTotalProblems] = useState("Loading...");
+
+  const EASY = "EASY";
+  const MEDIUM = "MEDIUM";
+  const HARD = "HARD";
+
+  const [problemSummary, setProblemSummary] = useState({
+    EASY: 0,
+    MEDIUM: 0,
+    HARD: 0,
+  });
+  
   // const tailwindColors = [
   //   "bg-orange-500",
   //   "bg-teal-400",
@@ -23,6 +39,36 @@ const Home = ({ previousRooms }) => {
   //   "bg-blue-600",
   //   "bg-yellow-400",
   // ];
+
+  useEffect(() => {
+    if (!getCookie("JWT_AUTH") && getCookie("JWT_AUTH").length === 0) {
+      navigate("/login");
+      return;
+    }
+    const getSummary = async () => {
+      const jwt = getCookie("JWT_AUTH");
+      const data = {
+        authToken: jwt,
+        route: "problems/getProblemsSummary",
+      };
+      const response = await axios.post(baseURL, data);
+      let totalProblemCount = 0;
+      let summary = { EASY: 0, MEDIUM: 0, HARD: 0 };
+      let problems = response.data.data.data;
+      console.log(problems);
+
+      for (let i = 0; i < problems.length; i++) {
+        totalProblemCount += problems[i].totalProblems;
+        if (problems[i]["_id"] != null) {
+          summary[problems[i]["_id"]] = problems[i].totalProblems;
+        }
+        setTotalProblems(totalProblemCount);
+        setProblemSummary(summary);
+        console.log(summary, totalProblemCount);
+      }
+    };
+    getSummary();
+  }, []);
 
   return (
     <div className="w-full h-[92.5vh] mx-auto flex">
@@ -198,21 +244,23 @@ const Home = ({ previousRooms }) => {
                 </div>
                 <p className="flex gap-x-1 h-7 place-items-center justify-center font-mono font-semibold text-lg">
                   <ImSigma size={17} className="text-white" />
-                  <span className="text-white translate-y-0.5 text-xl">65</span>
+                  <span className="text-white translate-y-0.5 text-xl">
+                    {totalProblems}
+                  </span>
                 </p>
               </div>
               <div className="flex gap-x-2 place-items-center justify-evenly">
                 <div className="flex flex-col place-items-center justify-center font-mono font-semibold">
                   <p className="text-green-600">Easy</p>
-                  <p className="text-green-600">20</p>
+                  <p className="text-green-600">{problemSummary[EASY]}</p>
                 </div>
                 <div className="flex flex-col place-items-center justify-center font-mono font-semibold">
                   <p className="text-amber-500">Medium</p>
-                  <p className="text-amber-500">20</p>
+                  <p className="text-amber-500">{problemSummary[MEDIUM]}</p>
                 </div>
                 <div className="flex flex-col place-items-center justify-center font-mono font-semibold">
                   <p className="text-orange-600">Hard</p>
-                  <p className="text-orange-600">20</p>
+                  <p className="text-orange-600">{problemSummary[HARD]}</p>
                 </div>
               </div>
             </div>
@@ -232,7 +280,14 @@ const Home = ({ previousRooms }) => {
                 /create-group
               </p>
             </div>
-          </Link>{" "}
+          </Link>
+          {/* CARDS */}
+        </div>
+        <div className="font-semibold font-mono text-2xl text-gray-600 w-full my-5">
+          <p className="w-11/12 mx-auto tracking-wider">Code Pair</p>
+          <div className="h-0.5 w-11/12 mx-auto bg-gray-400" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center justify-center lg:gap-x-10 gap-y-10">
           <Link
             to={"/create-group"}
             className="w-96 h-52 rounded-3xl bg-neutral-300 place-items-center hover:scale-105 transition-all duration-300 bg-no-repeat bg-cover border border-gray-300 flex relative text-cyan-800 hover:text-black"
@@ -248,7 +303,6 @@ const Home = ({ previousRooms }) => {
               </p>
             </div>
           </Link>
-          {/* CARDS */}
         </div>
       </div>
     </div>
