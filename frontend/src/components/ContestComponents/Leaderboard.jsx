@@ -13,8 +13,10 @@ import {
   getContestantScore,
 } from "./LeaderboardHelper";
 import { getCookie } from "../../Hooks/useCookies";
+import { useNavigate } from "react-router-dom";
 
 const Leaderboard = ({ contest, setContest }) => {
+  const navigate = useNavigate();
   const [questionNames, setQuestionNames] = useState({});
   const [questionTestCases, setQuestionTestCases] = useState({});
 

@@ -109,6 +109,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      <Routes>{/* CODE PAIR */}</Routes>
       <userContext.Provider value={{ user, setUser, getUserDetails }}>
         {block && !block && (
           <div className="w-full text-center text-2xl h-10 bg-yellow-200 flex justify-center place-items-center border-2 border-gray-400 bg-opacity-70">
@@ -121,15 +122,6 @@ const App = () => {
             !page.includes("/test/") &&
             !page.includes("/thank-you-for-taking-the-test") && <Navbar />}
           <Routes>
-            {/* NETRY AND HOME ROUTES */}
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-
-            {/* LOGIN and REGISTER */}
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-
-            {/* CODE PAIR */}
             <Route
               exact
               path="/codepair"
@@ -138,6 +130,13 @@ const App = () => {
             <Route path="/newroom" element={<NewRoom />} />
             <Route path="/joinroom" element={<JoinRoom />} />
             <Route path="/room/:id" element={<Room />} />
+            {/* NETRY AND HOME ROUTES */}
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+
+            {/* LOGIN and REGISTER */}
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
 
             {/* CONTEST, CHALLENGE AND GROUP ROUTES */}
             <Route exact path="/contest/create" element={<CreateContest />} />

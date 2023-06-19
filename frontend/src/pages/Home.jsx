@@ -290,7 +290,7 @@ const Home = ({ previousRooms }) => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center justify-center lg:gap-x-10 gap-y-10">
           <Link
-            to={"/create-group"}
+            to={"/codepair"}
             className="w-96 h-52 rounded-3xl bg-neutral-300 place-items-center hover:scale-105 transition-all duration-300 bg-no-repeat bg-cover border border-gray-300 flex relative text-cyan-800 hover:text-black"
           >
             <img src={codePairGif} alt="" className="w-1/2" />
