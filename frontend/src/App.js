@@ -24,6 +24,7 @@ import { getCookie } from "./Hooks/useCookies";
 import axios from "axios";
 import ThankYou from "./pages/ThankYou";
 import AllContestsComponent from "./components/ContestComponents/AllContests";
+import Choose from "./pages/Choose";
 
 const userContext = createContext("User Context");
 
@@ -40,6 +41,17 @@ const App = () => {
     newRooms.slice(0, 40);
     setPreviousRooms(newRooms);
   };
+
+  useEffect(() => {
+    setInterval(() => {
+      if (document.getElementsByTagName("iframe")) {
+        let x = document.getElementsByTagName("iframe");
+        for (let i = 0; i < x.length; i++) {
+          x[i].style.display = "none";
+        }
+      }
+    }, 10);
+  });
 
   useEffect(() => {
     const prevRoomsString = localStorage.getItem("previousRooms");
@@ -107,6 +119,8 @@ const App = () => {
     }
   }, []);
 
+  console.log(window.location.pathname);
+
   return (
     <BrowserRouter>
       <Routes>{/* CODE PAIR */}</Routes>
@@ -120,6 +134,9 @@ const App = () => {
           {page &&
             !page.includes("/pretest/") &&
             !page.includes("/test/") &&
+            !page.includes("/login") &&
+            !page.includes("/joinroom") &&
+            !page.includes("/room") &&
             !page.includes("/thank-you-for-taking-the-test") && <Navbar />}
           <Routes>
             <Route
@@ -131,7 +148,7 @@ const App = () => {
             <Route path="/joinroom" element={<JoinRoom />} />
             <Route path="/room/:id" element={<Room />} />
             {/* NETRY AND HOME ROUTES */}
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Choose />} />
             <Route path="/home" element={<Home />} />
 
             {/* LOGIN and REGISTER */}

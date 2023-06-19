@@ -108,6 +108,42 @@ const Test = () => {
     }
   };
 
+  const handleSubmit = async () => {
+    setSubmittingTest(true);
+    const data = {
+      route: "contests/submitTest",
+      contestId: contest._id.$oid,
+      contestantEmail: state.email,
+    };
+    try {
+      const response = await axios.post(baseURL, data);
+      console.log(response.data);
+      if (response.data.status === 200) {
+        setSubmittingTest(false);
+        alert("Test submitted");
+        setIsSubmitted(true);
+        if (localStorage.getItem("submittedTests")) {
+          let submittedTests = [
+            ...JSON.parse(localStorage.getItem("submittedTests")),
+            currentContestName,
+          ];
+          localStorage.setItem(
+            "submittedTests",
+            JSON.stringify(submittedTests)
+          );
+        } else {
+          localStorage.setItem(
+            "submittedTests",
+            JSON.stringify([currentContestName])
+          );
+        }
+      }
+    } catch (err) {
+      setSubmittingTest(false);
+      console.log("Error while submitting", err);
+    }
+  };
+
   const handleFullscreenExit = () => {
     // Perform actions when exiting full-screen mode
     console.log("Exitted full screen");
@@ -117,21 +153,34 @@ const Test = () => {
       if (window.confirm("FINAL WARNING!! YOUR TEST WILL BE SUBMITTED")) {
         enterFullscreen();
       } else {
-        navigate("/");
+        handleSubmit();
+        navigate("/thank-you-for-taking-the-test");
       }
     }
   };
 
   useEffect(() => {
-    const handleVisibilityChange = () => {
+    const handleVisibilityChange = async () => {
       // TODO UNCOMMENT THIS
-      // if (document.hidden) {
-      //   // Tab is now inactive
-      //   alert("PLEASE DO NOT SWITCH TABS!");
-      // } else {
-      //   // Tab is now active
-      //   console.log("Tab is now active");
-      // }
+      if (document.hidden) {
+        if (localStorage.getItem("warning")) {
+          if (Number(localStorage.getItem("warning")) > 1) {
+            handleSubmit();
+            navigate("/thank-you-for-taking-the-test");
+            return;
+          }
+        } else {
+          localStorage.setItem("warning", 0);
+        }
+        alert("PLEASE DO NOT SWITCH TABS! TEST WILL BE SUBMITTED!");
+      } else {
+        // Tab is now active
+        console.log("Tab is now active");
+        localStorage.setItem(
+          "warning",
+          Number(localStorage.getItem("warning") + 1)
+        );
+      }
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);

@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b0e74e2c.css",
+    "main.js": "/static/js/main.6c9d3e1c.js",
+    "static/media/createGroup.gif": "/static/media/createGroup.4eba2a752ece1f860265.gif",
+    "static/media/codePair.gif": "/static/media/codePair.bac4eda752a8021043fe.gif",
+    "static/media/contestDoesNotExist.gif": "/static/media/contestDoesNotExist.1cb01651daa62da555b0.gif",
+    "static/media/createChallengeGif2.gif": "/static/media/createChallengeGif2.536e7968f31b8523bf58.gif",
+    "static/media/submitTestLoading.gif": "/static/media/submitTestLoading.76c7f02b18eedbc8fbb6.gif",
+    "static/media/ongoingContestsLoading.gif": "/static/media/ongoingContestsLoading.d3cb234aa9b1dafff926.gif",
+    "static/media/contestDetailsLoading.gif": "/static/media/contestDetailsLoading.366dd21756756545490a.gif",
+    "static/media/addQuestionsLoading.gif": "/static/media/addQuestionsLoading.004a99402cab87ccc310.gif",
+    "static/media/goToNextPage.gif": "/static/media/goToNextPage.ab64599daa774e57f223.gif",
+    "static/media/viewContests2.gif": "/static/media/viewContests2.f6823bc23e8b67ba4728.gif",
+    "static/media/createContestLoading.gif": "/static/media/createContestLoading.fe937e25a2d0677dc27a.gif",
+    "static/media/createChallenge.gif": "/static/media/createChallenge.4bab7d986dc410c74595.gif",
+    "static/media/addingUsersLoading.gif": "/static/media/addingUsersLoading.555a53813433be3965a8.gif",
+    "static/media/createChallengeLoading.gif": "/static/media/createChallengeLoading.c9a8aab434d487e0ce33.gif",
+    "static/media/viewContests.gif": "/static/media/viewContests.537676f76e873a496d17.gif",
+    "static/media/leaderboardLoading1.gif": "/static/media/leaderboardLoading1.d2b119235540d2c32be0.gif",
+    "index.html": "/index.html",
+    "main.b0e74e2c.css.map": "/static/css/main.b0e74e2c.css.map",
+    "main.6c9d3e1c.js.map": "/static/js/main.6c9d3e1c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b0e74e2c.css",
+    "static/js/main.6c9d3e1c.js"
+  ]
+}
