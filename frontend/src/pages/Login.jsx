@@ -35,6 +35,7 @@ const Login = () => {
         setCookie("JWT_AUTH", jwt, 5);
         let fetchedUser = await getUserDetails();
         console.log("Fetched User", fetchedUser);
+        navigate("/");
       } else {
         setError(response.data.message);
       }
@@ -45,7 +46,7 @@ const Login = () => {
 
   async function getUserDetails() {
     let jwt = getCookie("JWT_AUTH");
-    
+
     if (jwt.length === 0) {
       return;
     }
