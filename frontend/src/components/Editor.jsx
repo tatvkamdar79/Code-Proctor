@@ -318,25 +318,53 @@ const Editor = ({
   return (
     <div className={`w-full flex flex-col overflow-x-scroll`}>
       {children}
-      <AceEditor
-        mode={language}
-        theme={theme}
-        onChange={(value) => setBody(value)}
-        // onChange={(e) => console.log(e)}
-        value={body}
-        width={width ? width : "100%"}
-        height={height ? height : "73vh"}
-        readOnly={readOnly ? readOnly : false}
-        fontSize={fontSize ? (isNaN(+fontSize) ? 12 : +fontSize) : 12}
-        name="UNIQUE_ID_OF_DIV"
-        showGutter={true}
-        editorProps={{ $blockScrolling: true }}
-        setOptions={{
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
-          enableSnippets: true,
-        }}
-      />
+      {() => {
+        try {
+          return (
+            <AceEditor
+              mode={language}
+              theme={theme}
+              onChange={(value) => setBody(value)}
+              // onChange={(e) => console.log(e)}
+              value={body}
+              width={width ? width : "100%"}
+              height={height ? height : "73vh"}
+              readOnly={readOnly ? readOnly : false}
+              fontSize={fontSize ? (isNaN(+fontSize) ? 12 : +fontSize) : 12}
+              name="UNIQUE_ID_OF_DIV"
+              showGutter={true}
+              editorProps={{ $blockScrolling: true }}
+              setOptions={{
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: true,
+                enableSnippets: true,
+              }}
+            />
+          );
+        } catch (e) {
+          return (
+            <AceEditor
+              mode={language}
+              theme={theme}
+              onChange={(value) => setBody(value)}
+              // onChange={(e) => console.log(e)}
+              value={body}
+              width={width ? width : "100%"}
+              height={height ? height : "73vh"}
+              readOnly={readOnly ? readOnly : false}
+              fontSize={fontSize ? (isNaN(+fontSize) ? 12 : +fontSize) : 12}
+              name="UNIQUE_ID_OF_DIV"
+              showGutter={true}
+              editorProps={{ $blockScrolling: true }}
+              setOptions={{
+                enableBasicAutocompletion: true,
+                enableLiveAutocompletion: true,
+                enableSnippets: true,
+              }}
+            />
+          );
+        }
+      }}
       <div id="ouput" className="flex justify-between border-t border-black">
         <div className="flex text-gray-600">
           <button
