@@ -4,14 +4,47 @@ import { AiFillDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../config/config";
 import { getCookie } from "../Hooks/useCookies";
+import AddingUsersToGroupLoadingGif from "../assets/addingUsersLoading.gif";
 
 const CreateGroup = () => {
   const navigate = useNavigate();
   const [previousGroups, setPreviousGroups] = useState([]);
   const [usersToBeAdded, setUsersToBeAdded] = useState([""]);
   const [newGroupName, setNewGroupName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [emailList, setEmailList] = useState([]);
+  const [emailInput, setEmailInput] = useState("");
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  const addEmail = () => {
+    if (emailInput.trim() !== "") {
+      if (!validateEmail(emailInput)) {
+        setMessage("Please enter a valid email");
+        setIsError(true);
+      } else {
+        setEmailList([...emailList, emailInput]);
+        setEmailInput("");
+        setMessage("");
+        setIsError(false);
+      }
+    }
+  };
+
+  const deleteEmail = (index) => {
+    setEmailList(emailList.filter((_, i) => i !== index));
+  };
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -19,17 +52,6 @@ const CreateGroup = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-  };
-
-  const addUserField = () => {
-    const newUsersState = [...usersToBeAdded, ""];
-    setUsersToBeAdded(newUsersState);
-  };
-
-  const removeUser = (idx) => {
-    const newUsersState = [...usersToBeAdded];
-    newUsersState.splice(idx, 1);
-    setUsersToBeAdded(newUsersState);
   };
 
   const handleCreateGroup = async () => {
@@ -40,7 +62,7 @@ const CreateGroup = () => {
       return;
     }
 
-    if (newGroupName == "" || usersToBeAdded.length == 0) {
+    if (newGroupName == "" || emailList.length == 0) {
       alert("Please fill the form correctly and make sure users are added");
     }
     let data = {
@@ -48,6 +70,7 @@ const CreateGroup = () => {
       route: "groups/checkIfNameIsAvailable",
       groupName: newGroupName,
     };
+    setLoading(true);
     try {
       // TODO ADD WAITING ANIMATION
       let response = await axios.post(baseURL, data);
@@ -56,12 +79,16 @@ const CreateGroup = () => {
         alert("Please enter a unique group name");
         return;
       }
-      const properUsers = usersToBeAdded.filter((user) => user.length > 0);
+      const properUsers = emailList.filter(
+        (user) => user.length > 0 && validateEmail(user)
+      );
       data["route"] = "groups/createGroup";
       data["groupMembers"] = properUsers;
       response = await axios.post(baseURL, data);
       // TODO: Handle redirection
-      alert("Group created successfully");
+      setIsError(false);
+      setMessage("Group created successfully");
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -111,70 +138,111 @@ const CreateGroup = () => {
           />
         </div>
 
-        <h3 className="text-2xl mb-7 ml-5">Add users</h3>
-        <div className="flex flex-col gap-y-5 mb-5">
-          {usersToBeAdded.map((user, idx) => {
-            return (
-              <div className="flex" key={idx}>
-                <label className="w-48 pl-5 text-lg">Enter User email:</label>
-                <input
-                  className="w-2/3 border-2 border-[#d4d9dd] outline-none pl-3"
-                  type="text"
-                  placeholder="Enter email"
-                  id={idx}
-                  value={user}
-                  onChange={(e) => {
-                    const newState = [...usersToBeAdded];
-                    newState[e.target.id] = e.target.value;
-                    setUsersToBeAdded(newState);
-                  }}
-                />
+        <div className="bg-white p-6 rounded">
+          {/* Modal content */}
+          <div className="flex gap-x-28">
+            <h2 className="text-xl font-bold mb-4">
+              Invite People to Participate
+            </h2>
 
-                <AiFillDelete
-                  className="ml-2 cursor-pointer text-red-500"
-                  size={25}
-                  onClick={() => removeUser(idx)}
-                />
-              </div>
-            );
-          })}
-        </div>
-        <div className="text-center mt-3" id="userFieldsContainer">
-          <button
-            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
-            style={{ alignItems: "end" }}
-            onClick={addUserField}
+            <h4 className="text-lg font-bold mb-4 place-items-end">
+              Number of Paritcipants: {emailList.length}
+            </h4>
+          </div>
+          <p
+            className={`text-sm ${
+              !isError ? "text-green-700" : "text-red-700"
+            } items-center mb-3`}
           >
-            + Add Users
-          </button>
+            {message}
+          </p>
+          <div className="flex justify-between w-full place-items-center">
+            <div className="flex justify-center place-items-center">
+              <input
+                type="email"
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                className="border border-gray-300 rounded px-4 py-2"
+                placeholder="Enter email address"
+              />
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-3 py-2 px-4 rounded mr-5"
+                onClick={addEmail}
+              >
+                Add Email
+              </button>
+            </div>
+            <div className="text-end">
+              <button
+                type="submit"
+                className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+                onClick={handleCreateGroup}
+              >
+                Create Group
+              </button>
+              <button
+                type="submit"
+                className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+                onClick={handleAddFromExistingGroup}
+              >
+                Add from existing Group
+              </button>
+              {/* <div className="h-96">
+                <Modal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                groups={previousGroups}
+                setUsersToBeAdded={setEmailList}
+                />
+              </div> */}
+            </div>
+          </div>
+          <br />
+          <hr />
+
+          <ul className="mt-4">
+            {emailList.map((email, index) => (
+              <li
+                key={index}
+                className="flex items-center justify-between border border-gray-300 rounded px-4 py-2 mb-2"
+              >
+                <span>{email}</span>
+                <button
+                  className="text-red-500 hover:text-red-700"
+                  onClick={() => deleteEmail(index)}
+                >
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
+
         <br />
       </div>
       <br />
       <div className="text-end" style={{ marginRight: "340px" }}>
-        <button
-          type="submit"
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
-          onClick={handleCreateGroup}
-        >
-          Create Group
-        </button>
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
-          onClick={handleAddFromExistingGroup}
-        >
-          Add from existing Group
-        </button>
         <div className="h-96">
           <Modal
             isOpen={isModalOpen}
             onClose={closeModal}
             groups={previousGroups}
-            setUsersToBeAdded={setUsersToBeAdded}
+            setUsersToBeAdded={setEmailList}
           />
         </div>
       </div>
+      {loading && (
+        <div className="absolute h-screen w-full top-0 left-0 flex justify-center place-items-center">
+          <div>
+            <p className="w-full text-center text-3xl font-semibold font-mono animate-bounce text-gray-800">
+              <span className="animate-pulse">
+                Creation of Group in Progress
+              </span>
+            </p>
+            <img src={AddingUsersToGroupLoadingGif} alt="" className="" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

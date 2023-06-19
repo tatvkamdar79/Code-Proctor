@@ -13,6 +13,37 @@ const AddParticipants = ({ contest, setContest }) => {
   const [newGroupName, setNewGroupName] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [emailList, setEmailList] = useState(contest.contestants);
+  const [emailInput, setEmailInput] = useState("");
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  const addEmail = () => {
+    if (emailInput.trim() !== "") {
+      if (!validateEmail(emailInput)) {
+        setMessage("Please enter a valid email");
+        setIsError(true);
+      } else {
+        setEmailList([...emailList, emailInput]);
+        setEmailInput("");
+        setMessage("");
+        setIsError(false);
+      }
+    }
+  };
+
+  const deleteEmail = (index) => {
+    setEmailList(emailList.filter((_, i) => i !== index));
+  };
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -35,11 +66,11 @@ const AddParticipants = ({ contest, setContest }) => {
   };
 
   const handleSaveUsers = async () => {
-    if (usersToBeAdded.length == 0) {
+    if (emailList.length == 0) {
       alert("Please fill the form correctly and make sure users are added");
       return;
     }
-    const properUsers = usersToBeAdded.filter(
+    const properUsers = emailList.filter(
       (user) =>
         user.length > 0 &&
         user.match(
@@ -76,6 +107,8 @@ const AddParticipants = ({ contest, setContest }) => {
           .then((response) => {
             console.log("Contest changed", response.data.data.contest);
             setContest(response.data.data.contest);
+            setIsError(false);
+            setMessage("Participants modified successfully");
           })
           .catch((err) => {
             console.log(err);
@@ -116,13 +149,13 @@ const AddParticipants = ({ contest, setContest }) => {
   return (
     <div>
       <div className={`${loading && "blur-[3px]"}`}>
-        <h1 className="text-4xl text-center mt-14">
+        <h1 className="text-4xl font-bold font-mono text-center mt-14">
           Add Particpants to the Contest
         </h1>
         <br /> <br />
-        <div className="container border border-gray-400 rounded-lg p-4 mx-auto w-2/3">
+        <div className="container border border-gray-400 rounded-lg p-4 mx-auto w-4/5">
           <br />
-          <h3 className="text-2xl mb-7 ml-5">Add users</h3>
+          {/* <h3 className="text-2xl mb-7 ml-5">Add users</h3>
           <div className="flex flex-col gap-y-5 mb-5">
             {usersToBeAdded.map((user, idx) => {
               return (
@@ -149,8 +182,93 @@ const AddParticipants = ({ contest, setContest }) => {
                 </div>
               );
             })}
+          </div> */}
+          <div className="bg-white p-6 rounded">
+            {/* Modal content */}
+            <div className="flex gap-x-28">
+              <h2 className="text-xl font-bold mb-4">
+                Invite People to Participate
+              </h2>
+
+              <h4 className="text-lg font-bold mb-4 place-items-end">
+                Number of Paritcipants: {emailList.length}
+              </h4>
+            </div>
+            <p
+              className={`text-sm ${
+                !isError ? "text-green-700" : "text-red-700"
+              } items-center mb-3`}
+            >
+              {message}
+            </p>
+            <div className="flex justify-between w-full place-items-center">
+              <div className="flex justify-center place-items-center">
+                <input
+                  type="email"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  className="border border-gray-300 rounded px-4 py-2"
+                  placeholder="Enter email address"
+                />
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold ml-3 py-2 px-4 rounded mr-5"
+                  onClick={addEmail}
+                >
+                  Add Email
+                </button>
+              </div>
+              <div className="text-end">
+                <button
+                  type="submit"
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+                  onClick={handleSaveUsers}
+                >
+                  Save Users
+                </button>
+                <Link
+                  to="/create-group"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-[11px] px-4 rounded-md shadow mr-5"
+                >
+                  Create Group
+                </Link>
+                <button
+                  type="submit"
+                  className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+                  onClick={handleAddFromExistingGroup}
+                >
+                  Add from existing Group
+                </button>
+                {/* <div className="h-96">
+                <Modal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                groups={previousGroups}
+                setUsersToBeAdded={setEmailList}
+                />
+              </div> */}
+              </div>
+            </div>
+            <br />
+            <hr />
+
+            <ul className="mt-4">
+              {emailList.map((email, index) => (
+                <li
+                  key={index}
+                  className="flex items-center justify-between border border-gray-300 rounded px-4 py-2 mb-2"
+                >
+                  <span>{email}</span>
+                  <button
+                    className="text-red-500 hover:text-red-700"
+                    onClick={() => deleteEmail(index)}
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="text-center mt-3" id="userFieldsContainer">
+          {/* <div className="text-center mt-3" id="userFieldsContainer">
             <button
               className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
               style={{ alignItems: "end" }}
@@ -158,37 +276,17 @@ const AddParticipants = ({ contest, setContest }) => {
             >
               + Add Users
             </button>
-          </div>
+          </div> */}
           <br />
         </div>
         <br />
         <div className="text-end" style={{ marginRight: "340px" }}>
-          <button
-            type="submit"
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
-            onClick={handleSaveUsers}
-          >
-            Save Users
-          </button>
-          <Link
-            to="/create-group"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-[11px] px-4 rounded-md shadow mr-5"
-          >
-            Create Group
-          </Link>
-          <button
-            type="submit"
-            className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
-            onClick={handleAddFromExistingGroup}
-          >
-            Add from existing Group
-          </button>
           <div className="h-96">
             <Modal
               isOpen={isModalOpen}
               onClose={closeModal}
               groups={previousGroups}
-              setUsersToBeAdded={setUsersToBeAdded}
+              setUsersToBeAdded={setEmailList}
             />
           </div>
         </div>
