@@ -148,7 +148,7 @@ const App = () => {
             <Route path="/joinroom" element={<JoinRoom />} />
             <Route path="/room/:id" element={<Room />} />
             {/* NETRY AND HOME ROUTES */}
-            <Route path="/" element={<Choose />} />
+            <Route path="/" element={<Login />} />
             <Route path="/home" element={<Home />} />
 
             {/* LOGIN and REGISTER */}
