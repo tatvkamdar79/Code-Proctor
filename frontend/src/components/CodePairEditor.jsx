@@ -32,28 +32,36 @@ const CodePairEditor = ({
   width,
   fontSize,
 }) => {
-  return (
-    <div>
-      <AceEditor
-        mode={language}
-        theme={theme}
-        onChange={(value) => setBody(value)}
-        value={body}
-        width={width ? width : "100%"}
-        height={height ? height : "73vh"}
-        readOnly={readOnly ? readOnly : false}
-        fontSize={fontSize ? (isNaN(+fontSize) ? 12 : +fontSize) : 12}
-        name="UNIQUE_ID_OF_DIV"
-        showGutter={true}
-        editorProps={{ $blockScrolling: true }}
-        setOptions={{
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
-          enableSnippets: true,
-        }}
-      />
-    </div>
-  );
+  const x = () => {
+    console.log("Hello from editor");
+    let editor;
+    try {
+      editor = (
+        <AceEditor
+          mode={language}
+          theme={theme}
+          onChange={(value) => setBody(value)}
+          value={body}
+          width={width ? width : "100%"}
+          height={height ? height : "73vh"}
+          readOnly={readOnly ? readOnly : false}
+          fontSize={fontSize ? (isNaN(+fontSize) ? 12 : +fontSize) : 12}
+          name="UNIQUE_ID_OF_DIV"
+          showGutter={true}
+          editorProps={{ $blockScrolling: true }}
+          setOptions={{
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: true,
+          }}
+        />
+      );
+    } catch (e) {
+      console.log("In catch");
+    }
+    return editor;
+  };
+  return <div id="hi">{x()};</div>;
 };
 
 export default CodePairEditor;

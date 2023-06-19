@@ -228,39 +228,41 @@ const Test = () => {
 
   useEffect(() => {
     // Check if the browser supports getUserMedia (camera access)
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      // Get video stream from the camera
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(function (stream) {
-          // Create a video element to display the camera feed
-          let video = document.createElement("video");
-          video.style.display = "none";
-          video.srcObject = stream;
-          video.autoplay = true;
-          document.body.appendChild(video);
+    if (state && state.validated && state.email) {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        // Get video stream from the camera
+        navigator.mediaDevices
+          .getUserMedia({ video: true })
+          .then(function (stream) {
+            // Create a video element to display the camera feed
+            let video = document.createElement("video");
+            video.style.display = "none";
+            video.srcObject = stream;
+            video.autoplay = true;
+            document.body.appendChild(video);
 
-          // Create a canvas element to capture the photo
-          let canvas = document.createElement("canvas");
-          canvas.style.display = "none";
-          document.body.appendChild(canvas);
+            // Create a canvas element to capture the photo
+            let canvas = document.createElement("canvas");
+            canvas.style.display = "none";
+            document.body.appendChild(canvas);
 
-          setCameraStream(stream);
+            setCameraStream(stream);
 
-          setTimeout(() => {
-            // We can store the ID returned from setInterval and clear the interval later if we want.
-            // Click Image every 5 seconds
-            // TODO Uncomment in real project
-            setInterval(() => {
-              clickImageAndCheckIfUserIsCopying(canvas, video);
-            }, 10000);
-          }, 1000);
-        })
-        .catch(function (error) {
-          console.error("Error accessing camera:", error);
-        });
-    } else {
-      console.error("Camera access not supported by the browser");
+            setTimeout(() => {
+              // We can store the ID returned from setInterval and clear the interval later if we want.
+              // Click Image every 5 seconds
+              // TODO Uncomment in real project
+              setInterval(() => {
+                clickImageAndCheckIfUserIsCopying(canvas, video);
+              }, 10000);
+            }, 1000);
+          })
+          .catch(function (error) {
+            console.error("Error accessing camera:", error);
+          });
+      } else {
+        console.error("Camera access not supported by the browser");
+      }
     }
     return () => {
       if (cameraStream && cameraStream.stop) {
@@ -350,10 +352,9 @@ const Test = () => {
           };
           axios
             .post(baseURL, data)
-            .then((response) => {
-              navigate("/thank-you-for-taking-the-test");
-            })
+            .then((response) => {})
             .catch((err) => console.log(err));
+          navigate("/thank-you-for-taking-the-test");
         }
         console.log(keywords);
       })
