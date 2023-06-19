@@ -10,6 +10,7 @@ const AllContestsComponent = () => {
   const [contests, setContests] = useState([]);
   const [filteredContests, setFilteredContests] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState("allContests");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const AllContestsComponent = () => {
       ".000Z";
     console.log(formattedTime);
     const data = {
-      route: "contests/getAllContests",
+      route: "contests/getContestSummary",
       authToken: jwt,
       time: formattedTime,
     };
@@ -35,7 +36,6 @@ const AllContestsComponent = () => {
     axios
       .post(baseURL, data)
       .then((response) => {
-        console.log("Active contests", response);
         setContests(response.data.data);
         setFilteredContests(response.data.data);
       })
@@ -80,86 +80,159 @@ const AllContestsComponent = () => {
           className="w-11/12 p-4 border-2 border-gray-300 rounded-lg mx-auto outline-none transition-all duration-300 focus:border-green-500 hover:border-green-600"
         />
       </div>
-      {!filteredContests && (
-        <div className="absolute flex top-[28%] w-[97%]">
-          <img
-            src={
-              "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
-            }
-            alt=""
-            className="w-[12.5%]"
-          />
-          <img
-            src={
-              "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
-            }
-            alt=""
-            className="w-[12.5%]"
-          />
-          <img
-            src={
-              "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
-            }
-            alt=""
-            className="w-[12.5%]"
-          />
-          <img
-            src={
-              "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
-            }
-            alt=""
-            className="w-[12.5%]"
-          />
-        </div>
-      )}
-      <table className="w-full">
-        <thead>
-          <tr className="bg-sky-500 text-white">
-            <th className="p-4">Contest Number</th>
-            <th className="p-4">Contest Name</th>
-            <th className="p-4">No. of Contestants</th>
-            <th className="p-4">No. of Questions</th>
-            <th className="p-4">Start Date</th>
-            <th className="p-4">End Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredContests &&
-            filteredContests.map((contest, idx) => (
-              <tr
-                key={idx}
-                className="border-b cursor-pointer hover:scale-105 transition-all duration-300 bg-green-50"
-                onClick={() =>
-                  navigate(`/contest/manage/${contest.contestName}`)
+      <div className="flex w-full gap-x-5">
+        <div className="w-4/5">
+          {!filteredContests && (
+            <div className="absolute flex top-[17%] w-[97%]">
+              <img
+                src={
+                  "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
                 }
+                alt=""
+                className="w-[20%]"
+              />
+              <img
+                src={
+                  "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
+                }
+                alt=""
+                className="w-[20%]"
+              />
+              <img
+                src={
+                  "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
+                }
+                alt=""
+                className="w-[20%]"
+              />
+              <img
+                src={
+                  "https://i.pinimg.com/originals/3a/81/05/3a8105197bf6472fa8e825c06a3e5041.gif"
+                }
+                alt=""
+                className="w-[20%]"
+              />
+            </div>
+          )}
+          <div className="h-[78vh] overflow-y-scroll p-2">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-cyan-700 text-white">
+                  <th className="p-4 border border-gray-400">Contest Number</th>
+                  <th className="p-4 border border-gray-400">Contest Name</th>
+                  <th className="p-4 border border-gray-400">
+                    No. of Contestants
+                  </th>
+                  <th className="p-4 border border-gray-400">
+                    No. of Questions
+                  </th>
+                  <th className="p-4 border border-gray-400">Start Date</th>
+                  <th className="p-4 border border-gray-400">End Date</th>
+                  <th className="p-4 border border-gray-400">Manage</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredContests &&
+                  filteredContests[filter].map((contest, idx) => (
+                    <tr
+                      key={idx}
+                      className="border-b cursor-pointer hover:bg-green-100 transition-all duration-300 bg-green-50"
+                      onClick={() =>
+                        navigate(`/contest/manage/${contest.contestName}`)
+                      }
+                    >
+                      <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                        {idx + 1}
+                      </td>
+                      <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                        {contest.contestName}
+                      </td>
+                      <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                        {contest.contestants.length}
+                      </td>
+                      <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                        {contest.questions.length}
+                      </td>
+                      <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                        {formatDate(contest.contestStartDate.sec * 1000)}
+                      </td>
+                      <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                        {formatDate(contest.contestEndDate.sec * 1000)}
+                      </td>
+                      <td className="p-4 text-center font-semibold font-mono border border-green-700">
+                        <p className="text-white font-semibold font-mono px-8 py-2 bg-cyan-500 rounded-md tracking-wider">
+                          Manage
+                        </p>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p className="mt-5 text-lg font-semibold font-mono mx-auto text-center">
+            {filteredContests
+              ? "Tip: Click on a contest for details"
+              : "Hold on! We're fetching data from our servers..."}
+          </p>
+        </div>
+        <div className="w-1/5 bg-gray-100 h-[88vh] p-5 border-2 border-gray-400">
+          <p className="font-semibold font-mono text-2xl text-gray-800">
+            Filter Contests
+          </p>
+          <div className="h-1 w-full bg-gray-300 mb-4" />
+          <ul className="flex flex-col gap-3 font-mono font-semibold text-xl text-white">
+            <li>
+              <button
+                onClick={() => setFilter("allContests")}
+                className={`px-4 py-2 transition-all duration-300 rounded-md ${
+                  filter === "allContests"
+                    ? "bg-gray-400"
+                    : "bg-green-500 hover:bg-green-600 shadow-md shadow-gray-700"
+                }`}
               >
-                <td className="p-4 text-center font-semibold font-mono border border-green-700">
-                  {idx + 1}
-                </td>
-                <td className="p-4 text-center font-semibold font-mono border border-green-700">
-                  {contest.contestName}
-                </td>
-                <td className="p-4 text-center font-semibold font-mono border border-green-700">
-                  {contest.contestants.length}
-                </td>
-                <td className="p-4 text-center font-semibold font-mono border border-green-700">
-                  {contest.questions.length}
-                </td>
-                <td className="p-4 text-center font-semibold font-mono border border-green-700">
-                  {formatDate(contest.contestStartDate.sec * 1000)}
-                </td>
-                <td className="p-4 text-center font-semibold font-mono border border-green-700">
-                  {formatDate(contest.contestEndDate.sec * 1000)}
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-      <p className="mt-5 text-lg font-semibold font-mono mx-auto text-center">
-        {filteredContests
-          ? "Tip: Click on a contest for details"
-          : "Hold on! We're fetching data from our servers..."}
-      </p>
+                All Contests
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setFilter("ongoingContests")}
+                className={`px-4 py-2 transition-all duration-300 rounded-md ${
+                  filter === "ongoingContests"
+                    ? "bg-gray-400"
+                    : "bg-green-500 hover:bg-green-600 shadow-md shadow-gray-700"
+                }`}
+              >
+                Ongoing Contests
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setFilter("upcomingContests")}
+                className={`px-4 py-2 transition-all duration-300 rounded-md ${
+                  filter === "upcomingContests"
+                    ? "bg-gray-400"
+                    : "bg-green-500 hover:bg-green-600 shadow-md shadow-gray-700"
+                }`}
+              >
+                Upcoming Contests
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => setFilter("pastContests")}
+                className={`px-4 py-2 transition-all duration-300 rounded-md ${
+                  filter === "pastContests"
+                    ? "bg-gray-400"
+                    : "bg-green-500 hover:bg-green-600 shadow-md shadow-gray-700"
+                }`}
+              >
+                Past Contests
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

@@ -147,10 +147,7 @@ const App = () => {
               element={<CreateChallange />}
             />
             <Route path="/create-group" element={<CreateGroup />} />
-            <Route
-              path="/contests/allContests"
-              element={<AllContestsComponent />}
-            />
+            <Route path="/contest/all" element={<AllContestsComponent />} />
             <Route
               path="/contests/ongoing"
               element={<OngoingContestsComponent />}

@@ -30,7 +30,7 @@ const Home = ({ previousRooms }) => {
     MEDIUM: 0,
     HARD: 0,
   });
-  
+
   // const tailwindColors = [
   //   "bg-orange-500",
   //   "bg-teal-400",
@@ -89,7 +89,8 @@ const Home = ({ previousRooms }) => {
         </div> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center justify-center lg:gap-x-10 gap-y-10">
-          <div
+          <Link
+            to="/contest/all"
             className="w-96 h-52 rounded-3xl text-black bg-cyan-300 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300 bg-repeat-round"
             style={{
               backgroundImage:
@@ -127,7 +128,7 @@ const Home = ({ previousRooms }) => {
                 className="absolute w-10 bg-transparent border-2 border-white rounded-full place-self-end -bottom-3 -right-6 hover:scale-110 cursor-pointer transition-all duration-300"
               />
             </div>
-          </div>
+          </Link>
           <div
             to={`/contest/manage/${contestName}`}
             className="w-96 h-52 rounded-3xl text-white bg-gradient-to-b from-cyan-600 to-cyan-400 hover:text-black place-items-center p-2 px-4 hover:scale-105 transition-all duration-300 bg-no-repeat bg-cover border border-cyan-700 relative"
