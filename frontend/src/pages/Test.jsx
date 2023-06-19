@@ -35,6 +35,19 @@ const Test = () => {
   }
 
   useEffect(() => {
+    if (
+      localStorage.getItem("submittedTests") &&
+      JSON.parse(localStorage.getItem("submittedTests")).includes(
+        currentContestName
+      )
+    ) {
+      navigate("/thank-you-for-taking-the-test", {
+        state: { email: state.email },
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (isSubmitted) {
       navigate("/thank-you-for-taking-the-test", {
         state: { email: state.email },
@@ -381,7 +394,8 @@ const Test = () => {
           state.email,
           setIsSubmitted,
           submittingTest,
-          setSubmittingTest
+          setSubmittingTest,
+          currentContestName
         )}
 
       {selected === "INSTRUCTIONS" && TestInstructions(allInstructions)}
@@ -478,7 +492,8 @@ const ViewAllQuestionsList = (
   contestantEmail,
   setIsSubmitted,
   submittingTest,
-  setSubmittingTest
+  setSubmittingTest,
+  currentContestName
 ) => {
   const handleSubmit = async () => {
     setSubmittingTest(true);
@@ -494,6 +509,21 @@ const ViewAllQuestionsList = (
         setSubmittingTest(false);
         alert("Test submitted");
         setIsSubmitted(true);
+        if (localStorage.getItem("submittedTests")) {
+          let submittedTests = [
+            ...JSON.parse(localStorage.getItem("submittedTests")),
+            currentContestName,
+          ];
+          localStorage.setItem(
+            "submittedTests",
+            JSON.stringify(submittedTests)
+          );
+        } else {
+          localStorage.setItem(
+            "submittedTests",
+            JSON.stringify([currentContestName])
+          );
+        }
       }
     } catch (err) {
       setSubmittingTest(false);

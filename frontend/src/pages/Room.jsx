@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Editor from "../components/Editor";
 import { languageToEditorMode } from "../config/mappings";
 import API from "../utils/API";
-import { debounce } from "../utils/utils";
 import SplitPane from "react-split-pane";
 
 import socket from "../utils/socket";
@@ -12,6 +10,8 @@ import { diff_match_patch } from "diff-match-patch";
 import { useNavigate, useParams } from "react-router-dom";
 import CodePairEditor from "../components/CodePairEditor";
 import axios from "axios";
+
+import { AiOutlineCaretDown } from "react-icons/ai";
 
 // interface RoomProps {
 //     updatePreviousRooms: (room: string) => any;
@@ -39,6 +39,9 @@ const Room = () => {
   const [widthRight, setWidthRight] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [openNotes, setOpenNotes] = useState(false);
+  const [showNoteContent, setShowNoteContent] = useState(false);
+  const [notes, setNotes] = useState("");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -426,7 +429,6 @@ const Room = () => {
       }
     }
   }, [isMuted]);
-
   return (
     <div className="">
       {/* <Modal /> */}
@@ -519,6 +521,56 @@ const Room = () => {
         )}
         <div className="flex flex-col items-center justify-center col-span-2 md:col-span-2">
           <label className="text-center">Status: {submissionStatus}</label>
+        </div>
+        <div className="w-80 bg-gray-400 flex place-items-center justify-center relative rounded-lg">
+          <div
+            className="w-11/12 mx-auto flex justify-between font-semibold font-mono text-xl px-5 cursor-pointer"
+            onClick={() => {
+              setOpenNotes((openNotes) => !openNotes);
+              if (openNotes) {
+                setShowNoteContent(false);
+              } else {
+                setTimeout(() => {
+                  setShowNoteContent(true);
+                }, 200);
+              }
+            }}
+          >
+            <p>My Notes</p>
+            <AiOutlineCaretDown
+              size={25}
+              className={`${
+                openNotes && "rotate-180"
+              } transition-all duration-500`}
+            />
+          </div>
+          <div
+            className={`absolute w-full mx-auto top-0 mt-10 border bg-gray-100 rounded-b-lg z-50 ${
+              openNotes ? "h-64 min-h-[200px]" : "h-0 min-h-0"
+            } transition-all duration-500`}
+          >
+            {showNoteContent && (
+              <div className="flex flex-col h-full place-items-center justify-center">
+                <textarea
+                  name=""
+                  id=""
+                  autoFocus
+                  className="w-full h-[85%] resize-none p-3 font-semibold bg-gray-200 outline-gray-400"
+                  style={{ fontVariant: "5px" }}
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                />
+                <button
+                  className="w-[91%] h-[15%] bg-green-500 font-semibold font-mono text-xl text-center place-self-center justify-self-center pt-0.5 scale-[101%] rounded-lg mt-0.5 hover:scale-110 transition-all duration-300"
+                  onClick={() => {
+                    console.log("Write controller to save notes");
+                  }}
+                >
+                  Save
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

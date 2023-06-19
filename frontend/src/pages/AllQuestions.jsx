@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BiSearchAlt } from "react-icons/bi";
+import { useLocation, useNavigate } from "react-router-dom";
 import loading from "../assets/addQuestionsLoading.gif";
 import { baseURL } from "../config/config";
 import { getCookie } from "../Hooks/useCookies";
 
 const AllQuestions = () => {
+  const { state } = useLocation();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState(null);
   const [problems, setProblems] = useState([]);
@@ -29,6 +32,20 @@ const AllQuestions = () => {
         setProblems(response.data.data.allProblems);
         setSearchResults(response.data.data.allProblems);
         setViewProblem(response.data.data.allProblems[0]);
+        return response.data.data.allProblems;
+      })
+      .then((allProblems) => {
+        // console.log(allProblems);
+        if (state && state?.questionTitle) {
+          handleSearch(state.questionTitle);
+          let question = allProblems.filter(
+            (q) => q.title === state.questionTitle
+          );
+          console.log(question);
+          setSearchQuery(state.questionTitle);
+          setSearchResults(question);
+          setViewProblem(question[0]);
+        }
       })
       .catch((err) => console.log(err));
   }, []);
@@ -38,6 +55,8 @@ const AllQuestions = () => {
     );
     setSearchResults(results);
   };
+
+  useEffect(() => {}, []);
   return (
     <div className="w-full h-[92.5vh]">
       <div className="flex w-11/12 h-full mx-auto border">
@@ -168,6 +187,28 @@ const ViewQuestion = ({ question }) => {
               ))}
             </div>
             <p className="text-lg font-medium">Sample Output {index + 1} :</p>
+            <div className="mx-10 bg-white p-4 shadow-sm text-gray-800">
+              <p>{output}</p>
+            </div>
+          </div>
+        ))}
+      </section>
+      <br />
+      <p className="text-2xl font-semibold">Hidden Test Cases</p>
+      <hr />
+      <section className="flex flex-col gap-y-8 text-gray-800">
+        {question.hiddenTCs.map(({ input, output }, index) => (
+          <div
+            key={index}
+            className="flex flex-col gap-y-2 border-b border-gray-400 pb-4"
+          >
+            <p className="text-lg font-medium">Hidden Input {index + 1} :</p>
+            <div className="mx-10 bg-white p-4 shadow-sm text-gray-800">
+              {input.split("\n").map((line, innerIndex) => (
+                <p key={innerIndex}>{line}</p>
+              ))}
+            </div>
+            <p className="text-lg font-medium">Hidden Output {index + 1} :</p>
             <div className="mx-10 bg-white p-4 shadow-sm text-gray-800">
               <p>{output}</p>
             </div>

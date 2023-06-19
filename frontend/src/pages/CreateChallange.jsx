@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { baseURL } from "../config/config";
 import { getCookie } from "../Hooks/useCookies";
+import createChallengeLoadingGif from "../assets/createChallengeLoading.gif";
 
 const CreateChallange = () => {
+  const navigate = useNavigate();
   const [questionTitle, setQuestionTitle] = useState("");
   const [questionDescription, setQuestionDescription] = useState("");
   const [sampleInput, setSampleInput] = useState("");
@@ -19,6 +22,8 @@ const CreateChallange = () => {
   ]);
   const [score, setScore] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
   const handleAddPublicTestCase = () => {
     if (publicTestCases.length < 2) {
       setPublicTestCases([...publicTestCases, { input: "", output: "" }]);
@@ -127,7 +132,7 @@ const CreateChallange = () => {
       score,
       tags,
     };
-    setSubmitted(true);
+    setSubmitting(true);
     const data = {
       authToken: jwt,
       route: "problems/create",
@@ -136,13 +141,17 @@ const CreateChallange = () => {
     try {
       const response = await axios.post(baseURL, data);
       console.log(response);
+      setSubmitting(false);
+      setSubmitted(true);
+      navigate("/challenge/all", { state: { questionTitle } });
     } catch (err) {
       console.log(err);
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-white">
+    <div className={`bg-white ${submitting && "blur-[3px]"}`}>
       <h2 className="w-11/12 mx-auto mb-4 underline text-4xl font-semibold">
         Create a Challenge
       </h2>
@@ -366,20 +375,26 @@ const CreateChallange = () => {
           <div className="w-full flex place-items-center justify-center">
             <button
               type="submit"
-              className={`w-[65%] mx-auto my-6 px-6 py-3 rounded-md text-lg font-semibold text-white ${
+              className={`w-[65%] mx-auto my-6 px-6 py-3 rounded-md text-lg font-semibold text-white opacity-60 ${
                 submitted
-                  ? "bg-green-500"
+                  ? "bg-green-600"
                   : "bg-cyan-500 hover:bg-cyan-600 focus:bg-cyan-600"
               } focus:outline-none`}
               disabled={submitted}
             >
-              {submitted
-                ? "Added to Question List"
-                : "Add Question to Question List"}
+              {submitted ? "Challenge Added" : "Add Challenge"}
             </button>
           </div>
         </form>
       </div>
+      {submitting && (
+        <div className="absolute w-full h-screen top-0 left-0 justify-center place-items-center flex">
+          <div
+            className="w-1/2 h-1/2 translate-x-9"
+            style={{ backgroundImage: `url(${createChallengeLoadingGif})` }}
+          />
+        </div>
+      )}
     </div>
   );
 };

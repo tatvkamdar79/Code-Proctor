@@ -55,7 +55,6 @@ const Editor = ({
   question,
   contestantEmail,
 }) => {
-  console.count("hello");
   // TODO: Change the questionId and contestId
   let questionId = question._id["$oid"];
 
@@ -159,21 +158,32 @@ const Editor = ({
         );
       }
       responses = await Promise.all(responses);
+      console.log("responses", responses);
       let index = 0,
         score = 0;
       let results = [];
       let time = 0;
       for (let res of responses) {
-        // console.log(res.data);
+        console.log(res.data);
         const { stdout, stderr, build_stderr } = res.data;
         let output = "";
         if (stdout) output += stdout;
 
+        console.log(`Before modificationsssss-${output}`);
+
         output = output.split("\n");
         output.splice(output.length - 1, 1);
         output = output.join("\n");
-        // console.log("AFTER", output);
-        console.log(`Final Output-----${output}-----END OUTPUT`);
+        output = output.trim();
+
+        // console.log(
+        //   `After modification\nFinal Output-----${output}-----END OUTPUT`
+        // );
+
+        console.log("Expected Output");
+        console.log(question.hiddenTCs);
+        console.log("Our Output");
+        console.log(output);
 
         if (question.hiddenTCs[index].output === output) {
           score += 1;
@@ -182,7 +192,7 @@ const Editor = ({
         } else {
           results.push(0);
         }
-        console.log(output, question.hiddenTCs[index].output);
+        // console.log(output, question.hiddenTCs[index].output);
         index += 1;
       }
       console.log("Time: " + time);
@@ -409,7 +419,9 @@ const Editor = ({
             <p className="text-gray-700 text-2xl font-semibold mb-2">Input :</p>
             <div className="bg-white p-4 rounded-md w-full overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] mb-4">
               {input ? (
-                input.split("\n").map((line) => <p>{line}</p>)
+                input
+                  .split("\n")
+                  .map((line, index) => <p key={index}>{line}</p>)
               ) : (
                 <p> </p>
               )}
@@ -434,8 +446,8 @@ const Editor = ({
                   Output :
                 </p>
                 <div className="bg-white p-4 rounded-md w-full overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-                  {output.split("\n").map((line) => (
-                    <p>{line}</p>
+                  {output.split("\n").map((line, index) => (
+                    <p key={index}>{line}</p>
                   ))}
                 </div>
               </>
@@ -457,7 +469,9 @@ const Editor = ({
             </p>
             <div className="bg-white p-4 rounded-md w-full overflow-scroll [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
               {output ? (
-                output.split("\n").map((line) => <p>{line}</p>)
+                output
+                  .split("\n")
+                  .map((line, index) => <p key={index}>{line}</p>)
               ) : (
                 <p> </p>
               )}
