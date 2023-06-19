@@ -251,9 +251,9 @@ const Test = () => {
             // We can store the ID returned from setInterval and clear the interval later if we want.
             // Click Image every 5 seconds
             // TODO Uncomment in real project
-            // setInterval(() => {
-            //   clickImageAndCheckIfUserIsCopying(canvas, video);
-            // }, 10000);
+            setInterval(() => {
+              clickImageAndCheckIfUserIsCopying(canvas, video);
+            }, 10000);
           }, 1000);
         })
         .catch(function (error) {
@@ -342,7 +342,7 @@ const Test = () => {
         // Mark user as copying
         if (!isAlone || isMobilePresent) {
           // Send server request and mark as copy
-          alert("You are seem to be copying");
+          alert("You seem to be copying");
           const data = {
             contestId: contest?._id.$oid,
             contestantEmail,
@@ -351,7 +351,7 @@ const Test = () => {
           axios
             .post(baseURL, data)
             .then((response) => {
-              navigate("/home");
+              navigate("/thank-you-for-taking-the-test");
             })
             .catch((err) => console.log(err));
         }
