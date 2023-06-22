@@ -14,7 +14,7 @@ const Test = () => {
   const { state } = useLocation();
 
   const contestantEmail = state?.email;
-  const totalTime = 1800;
+  const [totalTime, setTotalTime] = useState(0);
   const [selected, setSelected] = useState("ALL");
   const [questionsComponent, setQuestionsComponent] = useState([]);
   const [contest, setContest] = useState(null);
@@ -172,8 +172,8 @@ const Test = () => {
         if (localStorage.getItem("warning")) {
           if (Number(localStorage.getItem("warning")) > 1) {
             console.log("SWITCHED TAB", contest);
-            await handleSwitchTabSubmit();
-            navigate("/thank-you-for-taking-the-test");
+            // await handleSwitchTabSubmit();
+            // navigate("/thank-you-for-taking-the-test");
             return;
           }
         } else {
@@ -261,10 +261,44 @@ const Test = () => {
       .then((response) => {
         console.log("RESPONSE", response);
         setContest(response.data.data.contest);
+
+        let contestStartTime = response.data.data.contest.contestStartDate.sec;
+        let contestEndTime = response.data.data.contest.contestEndDate.sec;
+
+        contestStartTime = new Date(contestStartTime * 1000);
+        contestEndTime = new Date(contestEndTime * 1000);
+
+        console.log("HEROOOOOOOOOOOOOOOOOOOOOO");
+        // contestStartTime;
+        const now = new Date(Date.now());
+        now.setDate(now.getDate() + 1);
+        now.setHours(now.getHours() + 5);
+        now.setMinutes(now.getMinutes() + 30);
+        // console.log(
+        //   contestStartTime.toUTCString(),
+        //   "\n",
+        //   now.toUTCString(),
+        //   "\n",
+        //   contestEndTime.toUTCString(),
+        //   "\n",
+        //   (contestEndTime - contestStartTime) / 1000
+        // );
+        // console.log(
+        //   contestStartTime.getTime() +
+        //     "\n" +
+        //     now.getTime() +
+        //     "\n" +
+        //     contestEndTime.getTime() +
+        //     "\n" +
+        //     (contestEndTime - contestStartTime) / 1000
+        // );
+        let timeLeft = (contestEndTime.getTime() - now.getTime()) / 1000;
+        setTotalTime(timeLeft);
+        console.log(timeLeft);
+        // setTotalTime((contestEndTime.getTime() - Date.now()) / 1000);
+
         setQuestions(response.data.data.contest.questions);
-        console.log("ljhfkjdshf");
         console.log(response.data);
-        console.log("ljhfkjdshf");
         const questionsForContest = response.data.data.contest.questions;
         for (let question of questionsForContest) {
           initialTimeState.push(0);
@@ -440,7 +474,14 @@ const Test = () => {
         Enter Full Screen
       </button> */}
       {/* TEST NAVBAR */}
-      {TestNavbar({ totalTime, selected, setSelected, questions })}
+      <TestNavbar
+        totalTime={totalTime}
+        setTotalTime={setTotalTime}
+        selected={selected}
+        setSelected={setSelected}
+        questions={questions}
+        handleSubmit={handleSwitchTabSubmit}
+      />
 
       {contest &&
         selected === "ALL" &&
@@ -466,12 +507,36 @@ const Test = () => {
   );
 };
 
-const TestNavbar = ({ totalTime, selected, setSelected, questions }) => {
+const TestNavbar = ({
+  totalTime,
+  setTotalTime,
+  selected,
+  setSelected,
+  questions,
+  handleSubmit,
+}) => {
   const [showTime, setShowTime] = useState(true);
-  const [remainingTime, setRemainingTime] = useState(totalTime);
+  const [remainingTime, setRemainingTime] = useState(1800);
   const [timeBasedColor, setTimeBasedColor] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleTimeUpSubmit = async () => {
+    alert("Time Up. Your Test Will Be Submitted");
+    await handleSubmit();
+  };
+  useEffect(() => {
+    console.log("RT", remainingTime);
+    if (!submitting && remainingTime <= 1) {
+      handleTimeUpSubmit();
+      setSubmitting(true);
+    }
+  }, [remainingTime]);
 
   useEffect(() => {
+    if (totalTime === 0) {
+      return;
+    }
+    setRemainingTime(Math.round(totalTime));
     const timer = setInterval(() => {
       setRemainingTime((prevTime) => prevTime - 1);
     }, 1000);
@@ -479,7 +544,7 @@ const TestNavbar = ({ totalTime, selected, setSelected, questions }) => {
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [totalTime]);
 
   useEffect(() => {
     const percentage = (remainingTime / totalTime) * 100;
