@@ -155,12 +155,17 @@ const Room = () => {
       .post(baseURL, data)
       .then((response) => {
         console.log(response.data);
-        setBody(response.data.data.body);
-        setInput(response.data.data.input);
-        setLanguage(response.data.data.language);
+        if (response.data.status !== 200) {
+          alert(response.data.message);
+        } else {
+          setBody(response.data.data.body);
+          setInput(response.data.data.input);
+          setLanguage(response.data.data.language);
+        }
       })
       .catch((err) => {
         console.log("Error", err);
+        alert("Some Error Occured");
       });
     return () => {
       if (myPeer) {

@@ -150,109 +150,106 @@ const Leaderboard = ({ contest, setContest }) => {
         </div>
       )}
       {/* <div className=""></div> */}
-      <table className="table-auto w-full">
-        <thead>
-          <tr>
-            {headers.map((header) => (
-              <th
-                key={header.key}
-                className="px-4 py-2 bg-green-500 text-white text-left border border-gray-200"
-              >
-                {header.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {submissions &&
-            submissions.map((contestant, index) => (
-              <tr key={index}>
-                <td className="border w-40 px-4 py-2">{contestant.email}</td>
-                <td
-                  className="border w-40 px-4 py-2 underline decoration-cyan-500 decoration-[2px] font-semibold text-gray-800 cursor-pointer hover:scale-105 transition-all duration-300"
-                  onClick={() => {
-                    console.log("Contestant clicked", contestant);
-                    setShowIndividualReport(true);
-                    let myQuestions = [];
-                    console.log(
-                      individualSubmissionCandidateDetails[
-                        contestant.indexInSubmissionsDetails
-                      ]
-                    );
-
-                    let dataToDisplay = [];
-                    let totalTimeTaken = 0;
-
-                    for (let [questionId, details] of Object.entries(
-                      individualSubmissionCandidateDetails[
-                        contestant.indexInSubmissionsDetails
-                      ].submissions
-                    )) {
-                      let newSubmissionItem = {
-                        questionName: questionNames[questionId],
-                        timeSpentOnQuestion: details.timeSpentOnQuestion,
-                        code: details.code,
-                        codeExecutionTime: details.executionTime * 1000,
-                        correctSubmissions: details.correctSubmissions,
-                        incorrectSubmissions: details.incorrectSubmissions,
-                        totalTestCases: questionTestCases[questionId],
-                        language: details.language,
-                        testCasesPassed: details.submissionStatus.reduce(
-                          (total, x) => (x == "Correct" ? total + 1 : total),
-                          0
-                        ),
-                      };
-                      totalTimeTaken += details.timeSpentOnQuestion;
-                      dataToDisplay.push(newSubmissionItem);
-                    }
-
-                    console.log("New data to display", dataToDisplay);
-
-                    console.log(questionNames);
-                    setCandidateEmail(contestant.email);
-                    setCandidateData({
-                      name: contestant.email,
-                      email: contestant.email,
-                      questionsSolved: contestant.correctSubmissions,
-                      totalTime: totalTimeTaken,
-                      questions: dataToDisplay,
-                    });
-                  }}
+      <div className="max-h-[50vh] overflow-auto">
+        <table className="table-auto w-full relative">
+          <thead className="sticky -top-0.5">
+            <tr>
+              {headers.map((header) => (
+                <th
+                  key={header.key}
+                  className="px-4 py-2 bg-green-500 text-white text-left border border-gray-200"
                 >
-                  {contestant.email}
-                </td>
-                <td className="border w-40 px-4 py-2">
-                  {contestant.questionsAttempted}
-                </td>
-                <td className="w-40 border px-4 py-2">
-                  {contestant.totalTime}
-                </td>
-                <td className="w-40 border px-4 py-2">
-                  <div className="flex justify-evenly">
-                    {contestant.correctSubmissions}
-                    <BsCheck size={30} className="inline text-green-500" />
-                  </div>
-                </td>
-                <td className="w-40 border px-4 py-2">
-                  <div className="flex justify-evenly">
-                    {contestant.incorrectSubmissions}
-                    <BsX size={30} className="text-red-500 inline" />
-                  </div>
-                </td>
-                <td className="w-40 border px-4 py-2">
-                  <div className="flex justify-evenly">{contestant.score}</div>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+                  {header.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {submissions &&
+              submissions.map((contestant, index) => (
+                <tr key={index}>
+                  <td className="border w-40 px-4 py-2">{contestant.email}</td>
+                  <td
+                    className="border w-40 px-4 py-2 underline decoration-cyan-500 decoration-[2px] font-semibold text-gray-800 cursor-pointer hover:scale-105 transition-all duration-300"
+                    onClick={() => {
+                      console.log("Contestant clicked", contestant);
+                      setShowIndividualReport(true);
+                      let myQuestions = [];
+                      console.log(
+                        individualSubmissionCandidateDetails[
+                          contestant.indexInSubmissionsDetails
+                        ]
+                      );
 
-      {/* <div className="w-1/6 h-screen">
-        {Object.keys(suspiciousUsers).map((ip) => {
-          let susEmails = suspiciousUsers[ip];
-          return susEmails.join(" ");
-        })}
-      </div> */}
+                      let dataToDisplay = [];
+                      let totalTimeTaken = 0;
+
+                      for (let [questionId, details] of Object.entries(
+                        individualSubmissionCandidateDetails[
+                          contestant.indexInSubmissionsDetails
+                        ].submissions
+                      )) {
+                        let newSubmissionItem = {
+                          questionName: questionNames[questionId],
+                          timeSpentOnQuestion: details.timeSpentOnQuestion,
+                          code: details.code,
+                          codeExecutionTime: details.executionTime * 1000,
+                          correctSubmissions: details.correctSubmissions,
+                          incorrectSubmissions: details.incorrectSubmissions,
+                          totalTestCases: questionTestCases[questionId],
+                          language: details.language,
+                          testCasesPassed: details.submissionStatus.reduce(
+                            (total, x) => (x == "Correct" ? total + 1 : total),
+                            0
+                          ),
+                        };
+                        totalTimeTaken += details.timeSpentOnQuestion;
+                        dataToDisplay.push(newSubmissionItem);
+                      }
+
+                      console.log("New data to display", dataToDisplay);
+
+                      console.log(questionNames);
+                      setCandidateEmail(contestant.email);
+                      setCandidateData({
+                        name: contestant.email,
+                        email: contestant.email,
+                        questionsSolved: contestant.correctSubmissions,
+                        totalTime: totalTimeTaken,
+                        questions: dataToDisplay,
+                      });
+                    }}
+                  >
+                    {contestant.email}
+                  </td>
+                  <td className="border w-40 px-4 py-2">
+                    {contestant.questionsAttempted}
+                  </td>
+                  <td className="w-40 border px-4 py-2">
+                    {contestant.totalTime}
+                  </td>
+                  <td className="w-40 border px-4 py-2">
+                    <div className="flex justify-evenly">
+                      {contestant.correctSubmissions}
+                      <BsCheck size={30} className="inline text-green-500" />
+                    </div>
+                  </td>
+                  <td className="w-40 border px-4 py-2">
+                    <div className="flex justify-evenly">
+                      {contestant.incorrectSubmissions}
+                      <BsX size={30} className="text-red-500 inline" />
+                    </div>
+                  </td>
+                  <td className="w-40 border px-4 py-2">
+                    <div className="flex justify-evenly">
+                      {contestant.score}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className="mt-4 text-center">
         {/* TODO DATE CHANGE */}
@@ -265,6 +262,46 @@ const Leaderboard = ({ contest, setContest }) => {
           </CSVLink>
         )}
       </div>
+
+      <table className="table-auto my-10">
+        <thead>
+          <tr className="text-xl font-semibold text-center text-gray-600">
+            <td className="border w-40 px-4 py-2">IP</td>
+            <td className="border w-40 px-4 py-2">Users</td>
+          </tr>
+        </thead>
+        <tbody>
+          {suspiciousUsers &&
+            Object.keys(suspiciousUsers).map((ip) => {
+              return (
+                <tr>
+                  <td className="border px-4 py-2 text-lg font-semibold w-36">
+                    {ip}
+                  </td>
+                  <td className="border px-4 py-2 font-serif font-semibold w-48">
+                    <ol className="flex flex-col gap-y-1">
+                      {suspiciousUsers[ip].map((user, index) => (
+                        <li
+                          key={index}
+                          className="px-1 border py-1 rounded-lg bg-gray-100 cursor-pointer hover:scale-105 transition-all duration-300"
+                        >
+                          {user}
+                        </li>
+                      ))}
+                    </ol>
+                  </td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+
+      {/* <div className="w-1/6 h-screen">
+        {Object.keys(suspiciousUsers).map((ip) => {
+          let susEmails = suspiciousUsers[ip];
+          return susEmails.join(" ");
+        })}
+      </div> */}
       {showIndividualReport && (
         <IndividualContestProgressReport
           setOpen={setShowIndividualReport}
