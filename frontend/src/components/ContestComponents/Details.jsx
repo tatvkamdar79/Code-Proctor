@@ -21,9 +21,9 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
   const [endTime, setEndTime] = useState(contest?.endTime || "");
   const [showStartTime, setShowStartTime] = useState(false);
   const [showEndTime, setShowEndTime] = useState(false);
-  const [instructions, setInstructions] = useState(contest?.instructions || "");
+  const [instructions, setInstructions] = useState(contest?.instructions);
   const [instructionsTitle, setInstructionsTitle] = useState(
-    contest?.instructionsTitle || ""
+    contest?.instructionsTitle
   );
   const [loading, setLoading] = useState(false);
 
@@ -246,28 +246,33 @@ const CreateChallangeDetails = ({ contest, setContest }) => {
 
     console.log(response);
 
+    setLoading(false);
+
     if (response.data.status !== 200) {
       // console.log("jdsfhfvds", response.data.message);
       alert(response.data.message);
+      return;
     }
 
-    const data = {
-      authToken: jwt,
-      route: "contests/getContestDetails",
-      contestName: contest?.contestName,
-    };
-    axios
-      .post(baseURL, data)
-      .then((response) => {
-        setContest(response.data.data.contest);
-        setLoading(false);
-        console.log(response.data);
-        console.log(response.data.data.contest._id["$oid"]);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
+    navigate(`/contest/manage/${contestName}`);
+
+    // const data = {
+    //   authToken: jwt,
+    //   route: "contests/getContestDetails",
+    //   contestName: contest?.contestName,
+    // };
+    // axios
+    //   .post(baseURL, data)
+    //   .then((response) => {
+    //     setContest(response.data.data.contest);
+    //     setLoading(false);
+    //     console.log(response.data);
+    //     console.log(response.data.data.contest._id["$oid"]);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setLoading(false);
+    //   });
   };
 
   return (

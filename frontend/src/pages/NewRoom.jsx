@@ -29,7 +29,7 @@ const NewRoom = (props) => {
   return (
     <div className="container mx-auto">
       <div className="flex flex-col items-center pt-5 mt-5">
-        <div className="w-64">
+        <div className="w-64 flex flex-col justify-center place-items-center">
           <h1 className="text-3xl font-bold mb-4">Create New Room</h1>
           <input
             type="text"
@@ -38,7 +38,7 @@ const NewRoom = (props) => {
             className="w-full border border-gray-300 rounded px-4 py-2 mb-2"
             placeholder="Enter room name"
           />
-          <small className="text-gray-500">
+          <small className="text-gray-600">
             Create your room or <a href="/joinroom">Join another</a>
           </small>
         </div>

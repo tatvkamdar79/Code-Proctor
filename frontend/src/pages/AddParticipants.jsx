@@ -139,6 +139,7 @@ const AddParticipants = ({ contest, setContest }) => {
     axios
       .post(baseURL, data)
       .then((response) => {
+        console.log(response.data.data.groups);
         setPreviousGroups(response.data.data.groups);
       })
       .catch((err) => {
@@ -306,10 +307,10 @@ const AddParticipants = ({ contest, setContest }) => {
 };
 
 const Modal = ({ isOpen, onClose, groups, setUsersToBeAdded }) => {
-  const [groupSelected, setGroupSelected] = useState("");
+  const [groupSelected, setGroupSelected] = useState(0);
 
   const handleImport = () => {
-    const users = groups[groupSelected].groupMembers;
+    const users = groups[groupSelected]?.groupMembers;
     setUsersToBeAdded(users);
     console.log("Import", users);
     onClose();

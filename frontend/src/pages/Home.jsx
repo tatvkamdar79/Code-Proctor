@@ -71,7 +71,7 @@ const Home = ({ previousRooms }) => {
   }, []);
 
   return (
-    <div className="w-full h-[92.5vh] mx-auto flex">
+    <div className="w-full h-[92.5vh] mx-auto overflow-y-scroll">
       {/* <div className="w-1/2 bg-white border-r border-gray-400">
         <OngoingContestsComponent />
       </div> */}

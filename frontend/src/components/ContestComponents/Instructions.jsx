@@ -10,7 +10,7 @@ const Instructions = ({
 }) => {
   return (
     <section className="w-full">
-      <form className="p-4">
+      <div className="p-4">
         <div className="py-2">
           <label className="flex place-items-center gap-x-7">
             <p className="w-60 text-3xl text-gray-600">Instructions</p>
@@ -18,7 +18,7 @@ const Instructions = ({
 
           <input
             type="text"
-            value={instructionsTitle}
+            value={instructionsTitle || ""}
             onChange={(e) => setInstructionsTitle(e.target.value)}
             placeholder="Instructions Title"
             className="w-full px-4 py-2 border rounded-md mt-4"
@@ -29,7 +29,7 @@ const Instructions = ({
           {instructions &&
             instructions.map((instruction, idx) => {
               return (
-                <div className="mt-2">
+                <div className="mt-2" key={idx}>
                   <label className="flex place-items-center gap-x-7">
                     <p className="w-60 font-medium text-gray-600 pl-3">
                       Instruction {idx + 1}
@@ -76,7 +76,7 @@ const Instructions = ({
         >
           Add Instructions
         </button>
-      </form>
+      </div>
     </section>
   );
 };

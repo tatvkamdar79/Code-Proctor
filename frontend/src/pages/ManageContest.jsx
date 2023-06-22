@@ -40,6 +40,7 @@ const ManageContest = () => {
   const [subject, setSubject] = useState("");
   const [showFirstTimePopup, setShowFirstTimePopup] = useState(false);
   const [closeShowFirstTimePopup, setCloseShowFirstTimePopup] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
 
   const { state } = useLocation();
   console.log("state", state);
@@ -75,6 +76,13 @@ const ManageContest = () => {
     axios
       .post(baseURL, data)
       .then((response) => {
+        console.log(response, response.data.status);
+        if (response.data.status !== 200) {
+          setLoading(false);
+          setContestDoesNotExist(true);
+          return;
+        }
+        // if(response.data.data.status)
         setContest(response.data.data.contest);
         console.log(response.data);
         console.log(response.data.data.contest._id["$oid"]);
@@ -163,7 +171,13 @@ const ManageContest = () => {
         </div>
       )}
 
-      {selection !== DETAILS && <ContestInfo contest={contest} />}
+      {selection !== DETAILS && (
+        <ContestInfo
+          contest={contest}
+          sendingEmail={sendingEmail}
+          setSendingEmail={setSendingEmail}
+        />
+      )}
 
       {selection === DETAILS && (
         <Details contest={contest} setContest={setContest} />
@@ -186,6 +200,8 @@ const ManageContest = () => {
           setBody={setBody}
           subject={subject}
           setSubject={setSubject}
+          sendingEmail={sendingEmail}
+          setSendingEmail={setSendingEmail}
         />
       )}
       {contest && selection === LEADERBOARD && (

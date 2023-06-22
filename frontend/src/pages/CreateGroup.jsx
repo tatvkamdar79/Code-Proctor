@@ -79,6 +79,11 @@ const CreateGroup = () => {
         alert("Please enter a unique group name");
         return;
       }
+      if (response.data.status === 400) {
+        alert("Duplicate group name");
+        setLoading(false);
+        return;
+      }
       const properUsers = emailList.filter(
         (user) => user.length > 0 && validateEmail(user)
       );

@@ -35,6 +35,10 @@ const Test = () => {
   }
 
   useEffect(() => {
+    console.log("CONTEST CHANGED", contest);
+  }, [contest]);
+
+  useEffect(() => {
     if (
       localStorage.getItem("submittedTests") &&
       JSON.parse(localStorage.getItem("submittedTests")).includes(
@@ -108,8 +112,10 @@ const Test = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSwitchTabSubmit = async () => {
+    // debugger;
     setSubmittingTest(true);
+    console.log(contest);
     const data = {
       route: "contests/submitTest",
       contestId: contest._id.$oid,
@@ -144,7 +150,7 @@ const Test = () => {
     }
   };
 
-  const handleFullscreenExit = () => {
+  const handleFullscreenExit = async () => {
     // Perform actions when exiting full-screen mode
     console.log("Exitted full screen");
     if (window.confirm("DO NOT EXIT FULL SCREEN MODE")) {
@@ -153,7 +159,7 @@ const Test = () => {
       if (window.confirm("FINAL WARNING!! YOUR TEST WILL BE SUBMITTED")) {
         enterFullscreen();
       } else {
-        handleSubmit();
+        await handleSwitchTabSubmit();
         navigate("/thank-you-for-taking-the-test");
       }
     }
@@ -165,7 +171,8 @@ const Test = () => {
       if (document.hidden) {
         if (localStorage.getItem("warning")) {
           if (Number(localStorage.getItem("warning")) > 1) {
-            handleSubmit();
+            console.log("SWITCHED TAB", contest);
+            await handleSwitchTabSubmit();
             navigate("/thank-you-for-taking-the-test");
             return;
           }
@@ -178,7 +185,7 @@ const Test = () => {
         console.log("Tab is now active");
         localStorage.setItem(
           "warning",
-          Number(localStorage.getItem("warning") + 1)
+          Number(localStorage.getItem("warning")) + 1
         );
       }
     };
@@ -188,7 +195,7 @@ const Test = () => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
+  });
 
   useEffect(() => {
     const handleExit = () => {

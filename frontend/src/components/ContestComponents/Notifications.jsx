@@ -15,9 +15,10 @@ const Notifications = ({
   setBody,
   subject,
   setSubject,
+  sendingEmail,
+  setSendingEmail,
 }) => {
   const navigate = useNavigate();
-  const [sendingEmail, setSendingEmail] = useState(false);
 
   useEffect(() => {
     console.log("Contest changed and reflected in Notificaions");
@@ -180,7 +181,9 @@ Best regards,
         {/* Main component */}
         <div className="flex-1 px-3">
           <div className="w-full flex place-items-center mb-4">
-            <p className="w-1/12 text-xl font-bold">Compose Email</p>
+            <p className="w-1/12 text-xl font-bold text-center">
+              Compose Email
+            </p>
             <div className="w-11/12 flex flex-col gap-y-1">
               <div className="grid grid-cols-5 place-items-center">
                 <p
@@ -452,7 +455,7 @@ Best regards,
           </div>
         )}
       </div>
-      {sendingEmail && (
+      {/* {sendingEmail && (
         <div className="absolute top-0 left-0 h-screen w-full flex justify-center place-items-center">
           <div className="flex flex-col">
             <img
@@ -465,7 +468,7 @@ Best regards,
             </p>
           </div>
         </div>
-      )}
+      )} */}
     </section>
   );
 };

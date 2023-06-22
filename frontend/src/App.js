@@ -42,16 +42,16 @@ const App = () => {
     setPreviousRooms(newRooms);
   };
 
-  useEffect(() => {
-    setInterval(() => {
-      if (document.getElementsByTagName("iframe")) {
-        let x = document.getElementsByTagName("iframe");
-        for (let i = 0; i < x.length; i++) {
-          x[i].style.display = "none";
-        }
-      }
-    }, 10);
-  });
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     if (document.getElementsByTagName("iframe")) {
+  //       let x = document.getElementsByTagName("iframe");
+  //       for (let i = 0; i < x.length; i++) {
+  //         x[i].style.display = "none";
+  //       }
+  //     }
+  //   }, 10);
+  // });
 
   useEffect(() => {
     const prevRoomsString = localStorage.getItem("previousRooms");
@@ -139,11 +139,7 @@ const App = () => {
             !page.includes("/room") &&
             !page.includes("/thank-you-for-taking-the-test") && <Navbar />}
           <Routes>
-            <Route
-              exact
-              path="/codepair"
-              element={<CodePairHome previousRooms={previousRooms} />}
-            />
+            <Route exact path="/codepair" element={<CodePairHome />} />
             <Route path="/newroom" element={<NewRoom />} />
             <Route path="/joinroom" element={<JoinRoom />} />
             <Route path="/room/:id" element={<Room />} />

@@ -19,6 +19,7 @@ const Leaderboard = ({ contest, setContest }) => {
   const navigate = useNavigate();
   const [questionNames, setQuestionNames] = useState({});
   const [questionTestCases, setQuestionTestCases] = useState({});
+  const [suspiciousUsers, setSuspiciousUsers] = useState([]);
 
   const [submissions, setSubmissions] = useState(null);
   const [
@@ -112,6 +113,30 @@ const Leaderboard = ({ contest, setContest }) => {
     data: csvData,
   };
 
+  const getSuspiciousUsers = async () => {
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
+    const data = {
+      contestId: contest._id.$oid,
+      authToken: jwt,
+      route: "contests/getSuspiciousIps",
+    };
+    try {
+      const response = await axios.post(baseURL, data);
+      console.log("Suspicious Ips", response.data.data);
+      setSuspiciousUsers(response.data.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    getSuspiciousUsers();
+  }, []);
+
   return (
     <section className="w-11/12 mx-auto">
       {submissions === null && (
@@ -124,6 +149,7 @@ const Leaderboard = ({ contest, setContest }) => {
           </div>
         </div>
       )}
+      {/* <div className=""></div> */}
       <table className="table-auto w-full">
         <thead>
           <tr>
@@ -220,6 +246,14 @@ const Leaderboard = ({ contest, setContest }) => {
             ))}
         </tbody>
       </table>
+
+      {/* <div className="w-1/6 h-screen">
+        {Object.keys(suspiciousUsers).map((ip) => {
+          let susEmails = suspiciousUsers[ip];
+          return susEmails.join(" ");
+        })}
+      </div> */}
+
       <div className="mt-4 text-center">
         {/* TODO DATE CHANGE */}
         {submissions !== null && (

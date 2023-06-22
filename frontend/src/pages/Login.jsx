@@ -35,7 +35,7 @@ const Login = () => {
         setCookie("JWT_AUTH", jwt, 5);
         let fetchedUser = await getUserDetails();
         console.log("Fetched User", fetchedUser);
-        navigate("/");
+        navigate("/home");
       } else {
         setError(response.data.message);
       }
