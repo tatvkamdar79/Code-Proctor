@@ -150,9 +150,9 @@ const NewRoom = (props) => {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="w-11/12 mx-auto my-5 py-5">
       <div className="flex flex-col items-center pt-5 mt-5">
-        <div className="w-64 flex flex-col justify-center place-items-center">
+        <section className="w-64 flex flex-col justify-center place-items-center">
           <h1 className="text-3xl font-bold mb-4">Create New Room</h1>
           <input
             type="text"
@@ -161,120 +161,138 @@ const NewRoom = (props) => {
             className="w-full border border-gray-300 rounded px-4 py-2 mb-2"
             placeholder="Enter room name"
           />
+        </section>
 
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Interviewer Name: <span className="text-red-500">*</span>
-              </p>
-              <input
-                type="text"
-                value={interviewer}
-                onChange={(e) => setInterviewer(e.target.value)}
-                required
-                className="w-60 px-4 py-2 border rounded-md"
-              />
-            </label>
-          </div>
-
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Interviewer Email: <span className="text-red-500">*</span>
-              </p>
-              <input
-                type="text"
-                value={interviewerEmail}
-                onChange={(e) => setInterviewerEmail(e.target.value)}
-                required
-                className="w-60 px-4 py-2 border rounded-md"
-              />
-            </label>
-          </div>
-
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Interviewee Name: <span className="text-red-500">*</span>
-              </p>
-              <input
-                type="text"
-                value={interviewee}
-                onChange={(e) => setInterviewee(e.target.value)}
-                required
-                className="w-60 px-4 py-2 border rounded-md"
-              />
-            </label>
-          </div>
-
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Interviewee Email: <span className="text-red-500">*</span>
-              </p>
-              <input
-                type="text"
-                value={intervieweeEmail}
-                onChange={(e) => setIntervieweeEmail(e.target.value)}
-                required
-                className="w-60 px-4 py-2 border rounded-md"
-              />
-            </label>
-          </div>
-
-          <div className="py-2 w-fit">
-            <label className="flex place-items-center gap-x-7">
-              <p className="w-60 font-medium text-gray-600">
-                Interview Date<span className="text-red-500">*</span>
-              </p>
-              <input
-                type="date"
-                name=""
-                id=""
-                className="border border-gray-300 pl-3"
-                onChange={(e) => setInterviewDate(e.target.value)}
-                required
-              />
-            </label>
-          </div>
-          {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
-          <div className="py-2 w-fit">
-            <label className="flex gap-x-7">
-              <p className="w-60 mt-3 font-medium text-gray-600">
-                Interview Time (IST, 24 hour time):{" "}
-                <span className="text-red-500">*</span>
-              </p>
-              <div>
+        <div className="flex w-full justify-evenly place-items-center my-5">
+          <section className="border border-gray-300 p-5 rounded-lg shadow-lg shadow-gray-300">
+            <p className="text-2xl font-semibold font-mono text-center border-b border-gray-300">
+              Interviewer
+            </p>
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center">
+                <p className="w-48 font-medium text-gray-600">
+                  Name: <span className="text-red-500">*</span>
+                </p>
                 <input
                   type="text"
-                  value={startTime}
-                  readOnly
-                  onChange={(e) => setStartTime(e.target.value)}
+                  value={interviewer}
+                  onChange={(e) => setInterviewer(e.target.value)}
+                  required
                   className="w-60 px-4 py-2 border rounded-md"
-                  onFocus={() => setShowStartTime(true)}
-                  onBlur={() => setTimeout(() => setShowStartTime(false), 200)}
                 />
-                <ul
-                  className={`${
-                    !showStartTime && "hidden"
-                  } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
-                >
-                  {possibleTimes.map((time) => (
-                    <li onClick={(e) => setStartTime(e.target.innerText)}>
-                      {time}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </label>
-          </div>
+              </label>
+            </div>
+
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center">
+                <p className="w-48 font-medium text-gray-600">
+                  Email: <span className="text-red-500">*</span>
+                </p>
+                <input
+                  type="text"
+                  value={interviewerEmail}
+                  onChange={(e) => setInterviewerEmail(e.target.value)}
+                  required
+                  className="w-60 px-4 py-2 border rounded-md"
+                />
+              </label>
+            </div>
+          </section>
+          <section className="border border-gray-300 p-5 rounded-lg shadow-lg shadow-gray-300">
+            <p className="text-2xl font-semibold font-mono text-center border-b border-gray-300">
+              Interviewee
+            </p>
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center">
+                <p className="w-48 font-medium text-gray-600">
+                  Interviewee Name: <span className="text-red-500">*</span>
+                </p>
+                <input
+                  type="text"
+                  value={interviewee}
+                  onChange={(e) => setInterviewee(e.target.value)}
+                  required
+                  className="w-60 px-4 py-2 border rounded-md"
+                />
+              </label>
+            </div>
+
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center">
+                <p className="w-48 font-medium text-gray-600">
+                  Interviewee Email: <span className="text-red-500">*</span>
+                </p>
+                <input
+                  type="text"
+                  value={intervieweeEmail}
+                  onChange={(e) => setIntervieweeEmail(e.target.value)}
+                  required
+                  className="w-60 px-4 py-2 border rounded-md"
+                />
+              </label>
+            </div>
+          </section>
+
+          <section className="border border-gray-300 p-5 rounded-lg shadow-lg shadow-gray-300">
+            <p className="text-2xl font-semibold font-mono text-center border-b border-gray-300">
+              Interview
+            </p>
+            <div className="py-2 w-fit">
+              <label className="flex place-items-center">
+                <p className="w-48 font-medium text-gray-600">
+                  Interview Date<span className="text-red-500">*</span>
+                </p>
+                <input
+                  type="date"
+                  name=""
+                  id=""
+                  className="border border-gray-300 p-1 px-2 w-60"
+                  onChange={(e) => setInterviewDate(e.target.value)}
+                  required
+                />
+              </label>
+            </div>
+            {/* <hr className="w-full my-2 h-0.5 mx-auto bg-gray-200 border-0 rounded dark:bg-gray-700" /> */}
+            <div className="py-2 w-fit">
+              <label className="flex">
+                <p className="w-48 mt-3 font-medium text-gray-600">
+                  Interview Time (24 H):
+                  <span className="text-red-500">*</span>
+                </p>
+                <div>
+                  <input
+                    type="text"
+                    value={startTime}
+                    readOnly
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="w-60 px-4 py-2 border rounded-md"
+                    onFocus={() => setShowStartTime(true)}
+                    onBlur={() =>
+                      setTimeout(() => setShowStartTime(false), 200)
+                    }
+                  />
+                  <ul
+                    className={`${
+                      !showStartTime && "hidden"
+                    } absolute bg-white w-60 border px-2 flex flex-col gap-y-1 h-40 overflow-y-scroll`}
+                  >
+                    {possibleTimes.map((time) => (
+                      <li onClick={(e) => setStartTime(e.target.innerText)}>
+                        {time}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </label>
+            </div>
+          </section>
         </div>
 
         <button
           onClick={handleSubmit}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-3 rounded-lg w-48 text-xl transition-all duration-300 hover:scale-105"
         >
-          <h3 className="text-lg">Create Room</h3>
+          Create Room
         </button>
       </div>
     </div>
