@@ -14,7 +14,6 @@ const CreateContest = () => {
   const [startTime, setStartTime] = useState("");
   const [contestEndDate, setContestEndDate] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [duration, setDuration] = useState("");
   const [showStartTime, setShowStartTime] = useState(false);
   const [showEndTime, setShowEndTime] = useState(false);
   const [submitting, setSubmitting] = useState(false);
