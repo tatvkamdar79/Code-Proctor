@@ -14,12 +14,15 @@ import {
 } from "./LeaderboardHelper";
 import { getCookie } from "../../Hooks/useCookies";
 import { useNavigate } from "react-router-dom";
+import CreateCodePairSessionModal from "./CreateCodePairSessionModal";
 
 const Leaderboard = ({ contest, setContest }) => {
   const navigate = useNavigate();
   const [questionNames, setQuestionNames] = useState({});
   const [questionTestCases, setQuestionTestCases] = useState({});
   const [suspiciousUsers, setSuspiciousUsers] = useState([]);
+  const [showCreateCodePairSessionsModal, setShowCreateCodePairSessionsModal] =
+    useState(false);
 
   const [submissions, setSubmissions] = useState(null);
   const [
@@ -52,8 +55,92 @@ const Leaderboard = ({ contest, setContest }) => {
     axios.post(baseURL, data).then((response) => {
       console.log(response.data.data);
       getSubmissionsTableFormat(response.data.data);
+      convertToCsvFormatJson(response.data.data);
+      // setCsvReport(response.data.data);
     });
   }, []);
+
+  const convertToCsvFormatJson = (data) => {
+    let rows = [];
+    console.log(data);
+    for (let datum of data) {
+      let candidateEmail = datum.contestantEmail;
+      let caughtCopying = datum.isCopying;
+      let questionIds = datum.submissions;
+
+      let totalTimeSpent = 0;
+      let correctAnswers = 0;
+      let incorrectAnswers = 0;
+      let ip = datum.ips[0];
+
+      for (let questionId of Object.keys(questionIds)) {
+        let question = questionNames[questionId];
+        let code = question?.code;
+        let language = question?.language;
+
+        let timeSpentOnQuestion = question?.timeSpentOnQuestion;
+        totalTimeSpent += timeSpentOnQuestion;
+
+        let correctSubmissions = question?.correctSubmissions;
+        correctAnswers += correctSubmissions;
+
+        let incorrectSubmissions = question?.incorrectSubmissions;
+        incorrectAnswers += incorrectSubmissions;
+
+        let executionTime = question?.executionTime;
+      }
+      let row = {
+        Candidate: candidateEmail,
+        "Caught Copying": caughtCopying,
+        "Total Time Spent": totalTimeSpent,
+        "Correct Answers": correctAnswers,
+        "Incorrect Answers": incorrectAnswers,
+        "IP Address": ip,
+      };
+      rows.push(row);
+    }
+
+    let csvString = "";
+
+    const headers = [
+      "Candidate",
+      "Caught Copying",
+      "Total Time Spent",
+      "Correct Answers",
+      "Incorrect Answers",
+      "IP Address",
+    ];
+
+    const rowsJSON = rows.map((row) => headers.map((header) => row[header]));
+    csvString = [headers, ...rowsJSON].map((row) => row.join(",")).join("\n");
+    setCsvReport(csvString);
+  };
+
+  const getSuspiciousUsers = async () => {
+    let jwt = getCookie("JWT_AUTH");
+    if (jwt.length === 0) {
+      navigate("/login");
+      return;
+    }
+
+    const data = {
+      contestId: contest._id.$oid,
+      authToken: jwt,
+      route: "contests/getSuspiciousIps",
+    };
+    try {
+      const response = await axios.post(baseURL, data);
+      console.log("Suspicious Ips", response.data.data);
+      setSuspiciousUsers(response.data.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    if (contest) {
+      getSuspiciousUsers(contest._id.$oid);
+    }
+  }, [contest]);
 
   const getSubmissionsTableFormat = (submissionDetails) => {
     setIndividualSubmissionCandidateDetails(submissionDetails);
@@ -78,6 +165,8 @@ const Leaderboard = ({ contest, setContest }) => {
       return contestant2.score - contestant1.score;
     });
     setSubmissions(leaderboardData);
+    console.log("LDATA", submissionDetails);
+    console.log("LDATA", submissionDetails);
   };
 
   const [showIndividualReport, setShowIndividualReport] = useState(false);
@@ -94,8 +183,8 @@ const Leaderboard = ({ contest, setContest }) => {
     { label: "Score", key: "score" },
   ];
 
-  const csvData = submissions;
-  // .map((row) => ({
+  const csvData = { a: "b" };
+  // const csvData = submissions?.map((row) => ({
   //   name: row.name,
   //   email: row.email,
   //   questionsSolved: row.questionsSolved,
@@ -104,38 +193,12 @@ const Leaderboard = ({ contest, setContest }) => {
   //   incorrectSubmissions: row.submissionDetails.incorrect,
   // }));
 
-  const csvReport = {
-    filename:
-      new Date().toLocaleDateString() +
-      new Date().toLocaleTimeString() +
-      "leaderboard.csv",
+  const [csvReport, setCsvReport] = useState("");
+  const x = {
+    filename: contest?.contestName + "_leaderboard.csv",
     headers: headers,
     data: csvData,
   };
-
-  const getSuspiciousUsers = async () => {
-    let jwt = getCookie("JWT_AUTH");
-    if (jwt.length === 0) {
-      navigate("/login");
-      return;
-    }
-
-    const data = {
-      contestId: contest._id.$oid,
-      authToken: jwt,
-      route: "contests/getSuspiciousIps",
-    };
-    try {
-      const response = await axios.post(baseURL, data);
-      console.log("Suspicious Ips", response.data.data);
-      setSuspiciousUsers(response.data.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  useEffect(() => {
-    getSuspiciousUsers();
-  }, []);
 
   return (
     <section className="w-11/12 mx-auto">
@@ -254,16 +317,29 @@ const Leaderboard = ({ contest, setContest }) => {
       <div className="mt-4 text-center">
         {/* TODO DATE CHANGE */}
         {submissions !== null && (
-          <CSVLink
-            {...csvReport}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Export to CSV
-          </CSVLink>
+          <div className="w-full flex justify-center gap-x-4">
+            <CSVLink
+              data={csvReport}
+              filename="table_data.csv"
+              className="bg-blue-500 hover:bg-blue-700 hover:scale-105 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300"
+            >
+              Export to CSV
+            </CSVLink>
+            <button
+              className="bg-green-600 hover:bg-green-700 hover:scale-105 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300"
+              onClick={() => setShowCreateCodePairSessionsModal(true)}
+            >
+              Create Code Pair Sessions
+            </button>
+          </div>
         )}
       </div>
 
-      <table className="table-auto my-10">
+      <table
+        className={`table-auto my-10 ${
+          Object.keys(suspiciousUsers).length !== 0 ? "" : "hidden"
+        }`}
+      >
         <thead>
           <tr className="text-xl font-semibold text-center text-gray-600">
             <td className="border w-40 px-4 py-2">IP</td>
@@ -307,6 +383,14 @@ const Leaderboard = ({ contest, setContest }) => {
           setOpen={setShowIndividualReport}
           candidateData={candidateData}
         />
+      )}
+      {showCreateCodePairSessionsModal && (
+        <div className="absolute top-0 left-0 w-screen h-screen">
+          <CreateCodePairSessionModal
+            submissions={submissions && submissions.map(({ email }) => email)}
+            close={setShowCreateCodePairSessionsModal}
+          />
+        </div>
       )}
     </section>
   );

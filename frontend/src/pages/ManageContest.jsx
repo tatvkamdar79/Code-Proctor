@@ -214,6 +214,7 @@ const ManageContest = () => {
       {state &&
         state?.newContest &&
         state.newContest &&
+        contest?.contestants.length === 0 &&
         !closeShowFirstTimePopup && (
           <div
             className={`absolute min-w-80 h- right-[8.4%] top-[17vh] bg-gray-200 bg-opacity-30 border border-gray-400 rounded-md p-2 opacity-80 ${

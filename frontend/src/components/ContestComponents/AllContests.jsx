@@ -37,7 +37,7 @@ const AllContestsComponent = () => {
       .post(baseURL, data)
       .then((response) => {
         setContests(response.data.data);
-        setFilteredContests(response.data.data);
+        setFilteredContests(response.data.data.allContests);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -47,12 +47,13 @@ const AllContestsComponent = () => {
   // );
 
   const handleSearchChange = (event) => {
-    const newFilteredContests = contests.filter((contest) =>
-      contest.contestName
-        .toLowerCase()
-        .includes(event.target.value.toLowerCase())
+    const allContests = contests["allContests"];
+    const newFilteredContests = allContests.filter((contest) =>
+      contest.contestName.toLowerCase().includes(event.target.value)
     );
+    console.log(newFilteredContests);
     setFilteredContests(newFilteredContests);
+    // setFilteredContests(newFilteredContests);
     setSearchQuery(event.target.value);
   };
 
@@ -63,6 +64,10 @@ const AllContestsComponent = () => {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  useEffect(() => {
+    console.log(filteredContests);
+  }, [filteredContests]);
 
   return (
     <div
@@ -133,7 +138,7 @@ const AllContestsComponent = () => {
               </thead>
               <tbody>
                 {filteredContests &&
-                  filteredContests[filter].map((contest, idx) => (
+                  filteredContests.map((contest, idx) => (
                     <tr
                       key={idx}
                       className="border-b cursor-pointer hover:bg-green-100 transition-all duration-300 bg-green-50"
@@ -184,7 +189,11 @@ const AllContestsComponent = () => {
           <ul className="flex flex-col gap-3 font-mono font-semibold text-xl text-white">
             <li>
               <button
-                onClick={() => setFilter("allContests")}
+                onClick={() => {
+                  setFilteredContests(contests?.allContests);
+                  console.log(contests?.allContests);
+                  setFilter("allContests");
+                }}
                 className={`px-4 py-2 transition-all duration-300 rounded-md ${
                   filter === "allContests"
                     ? "bg-gray-400"
@@ -196,7 +205,10 @@ const AllContestsComponent = () => {
             </li>
             <li>
               <button
-                onClick={() => setFilter("ongoingContests")}
+                onClick={() => {
+                  setFilteredContests(contests?.ongoingContests);
+                  setFilter("ongoingContests");
+                }}
                 className={`px-4 py-2 transition-all duration-300 rounded-md ${
                   filter === "ongoingContests"
                     ? "bg-gray-400"
@@ -208,7 +220,10 @@ const AllContestsComponent = () => {
             </li>
             <li>
               <button
-                onClick={() => setFilter("upcomingContests")}
+                onClick={() => {
+                  setFilteredContests(contests?.upcomingContests);
+                  setFilter("upcomingContests");
+                }}
                 className={`px-4 py-2 transition-all duration-300 rounded-md ${
                   filter === "upcomingContests"
                     ? "bg-gray-400"
@@ -220,7 +235,10 @@ const AllContestsComponent = () => {
             </li>
             <li>
               <button
-                onClick={() => setFilter("pastContests")}
+                onClick={() => {
+                  setFilteredContests(contests?.pastContests);
+                  setFilter("pastContests");
+                }}
                 className={`px-4 py-2 transition-all duration-300 rounded-md ${
                   filter === "pastContests"
                     ? "bg-gray-400"

@@ -147,6 +147,76 @@ const AddParticipants = ({ contest, setContest }) => {
       });
   }, []);
 
+  const parseCSV = (csvData) => {
+    console.log(csvData);
+    const rows = csvData.split("\n");
+    const header = rows[0].split(",");
+
+    const data = rows.slice(1).map((row) => {
+      const rowData = row.split(",");
+      return rowData.reduce((obj, value, index) => {
+        obj[header[index]] = value.trim();
+        return obj;
+      }, {});
+    });
+
+    console.log(data);
+    return data;
+  };
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const contents = e.target.result;
+      console.log(contents);
+      const csvData = contents.split("\n");
+
+      // console.log(csvData);
+
+      let headers = csvData[0].split(",");
+      headers = headers.map((header) => header.replace(/"/g, ""));
+
+      // console.log("headers", headers);
+
+      let rows = csvData.slice(1);
+      rows = rows.map((row) =>
+        row.split(",").map((field) => field.replace(/"/g, ""))
+      );
+      // console.log("rows", rows);
+
+      const emailPattern =
+        /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
+
+      const emails = [];
+
+      rows.map((row) => {
+        for (let field of row) {
+          let matchedEmail = field.match(emailPattern);
+          if (matchedEmail) {
+            emails.push(field);
+          }
+        }
+      });
+      console.log(emails);
+
+      let newEmailList = [...emailList];
+      for (let email of emails) {
+        newEmailList.push(email);
+      }
+
+      setEmailList(Array.from(new Set(newEmailList)));
+      setEmailInput("");
+      setMessage("");
+      setIsError(false);
+      // console.log(contents.split("\n")[0].split(",")[0].replace(/"/g, ""));
+      // parseCSV(contents);
+    };
+
+    // console.log(file && reader.readAsText(file));
+    // console.log(file);
+  };
+
   return (
     <div>
       <div className={`${loading && "blur-[3px]"}`}>
@@ -218,27 +288,44 @@ const AddParticipants = ({ contest, setContest }) => {
                   Add Email
                 </button>
               </div>
-              <div className="text-end">
-                <button
-                  type="submit"
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
-                  onClick={handleSaveUsers}
-                >
-                  Save Users
-                </button>
-                <Link
-                  to="/create-group"
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-[11px] px-4 rounded-md shadow mr-5"
-                >
-                  Create Group
-                </Link>
-                <button
-                  type="submit"
-                  className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
-                  onClick={handleAddFromExistingGroup}
-                >
-                  Add from existing Group
-                </button>
+              <div className="flex text-end gap-x-2">
+                <div className="flex flex-col justify-end place-items-center gap-y-2">
+                  <p className="font-semibold w-full text-start text-xl underline decoration-slate-300 underline-offset-2 text-gray-700">
+                    Import From CSV
+                  </p>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleFileUpload}
+                    id="csvUploader"
+                    className="bg-gray-200 hover:bg-orange-300 py-2"
+                  />
+                </div>
+                <div className="w-0.5 h-24 bg-gray-400" />
+                <div className="flex flex-col gap-y-2 justify-center place-items-center">
+                  <div className="flex justify-center place-items-center">
+                    <button
+                      type="submit"
+                      className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+                      onClick={handleSaveUsers}
+                    >
+                      Save Users
+                    </button>
+                    <Link
+                      to="/create-group"
+                      className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-[11px] px-4 rounded-md shadow mr-5"
+                    >
+                      Create Group
+                    </Link>
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md shadow mr-5"
+                    onClick={handleAddFromExistingGroup}
+                  >
+                    Add from existing Group
+                  </button>
+                </div>
                 {/* <div className="h-96">
                 <Modal
                 isOpen={isModalOpen}

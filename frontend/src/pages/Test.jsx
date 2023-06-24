@@ -46,7 +46,7 @@ const Test = () => {
       )
     ) {
       navigate("/thank-you-for-taking-the-test", {
-        state: { email: state.email },
+        state: { email: state?.email },
       });
     }
   }, []);
@@ -172,8 +172,8 @@ const Test = () => {
         if (localStorage.getItem("warning")) {
           if (Number(localStorage.getItem("warning")) > 1) {
             console.log("SWITCHED TAB", contest);
-            // await handleSwitchTabSubmit();
-            // navigate("/thank-you-for-taking-the-test");
+            await handleSwitchTabSubmit();
+            navigate("/thank-you-for-taking-the-test");
             return;
           }
         } else {
@@ -271,7 +271,7 @@ const Test = () => {
         console.log("HEROOOOOOOOOOOOOOOOOOOOOO");
         // contestStartTime;
         const now = new Date(Date.now());
-        now.setDate(now.getDate() + 1);
+        // now.setDate(now.getDate() + 1);
         now.setHours(now.getHours() + 5);
         now.setMinutes(now.getMinutes() + 30);
         // console.log(
@@ -524,8 +524,25 @@ const TestNavbar = ({
     alert("Time Up. Your Test Will Be Submitted");
     await handleSubmit();
   };
+
+  const remTime = (seconds) => {
+    var hours = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds % 3600) / 60);
+    var remainingSeconds = seconds % 60;
+
+    var formattedTime =
+      hours.toString().padStart(2, "0") +
+      ":" +
+      minutes.toString().padStart(2, "0") +
+      ":" +
+      remainingSeconds.toString().padStart(2, "0");
+
+    return formattedTime;
+  };
+
   useEffect(() => {
-    console.log("RT", remainingTime);
+    console.log("RT", remTime(remainingTime));
+    // console.log("RT", mins, seconds);
     if (!submitting && remainingTime <= 1) {
       handleTimeUpSubmit();
       setSubmitting(true);
