@@ -8,8 +8,14 @@ import OngoingContestsComponent from "../components/ContestComponents/OngoingCon
 import createChallengeGif from "../assets/createChallenge.gif";
 import createChallengeGif2 from "../assets/createChallengeGif2.gif";
 import createGroupGif from "../assets/createGroup.gif";
+import createContestGif from "../assets/createContest.gif";
+
+import manageContestGif from "../assets/manageContest.gif";
+
 import viewContestsGif from "../assets/viewContests.gif";
 import viewContestsGif2 from "../assets/viewContests2.gif";
+import viewChallengesGif from "../assets/viewChallenges.gif";
+import viewContestsGif3 from "../assets/viewContests3.gif";
 import goToNextPageGif from "../assets/goToNextPage.gif";
 import codePairGif from "../assets/codePair.gif";
 import axios from "axios";
@@ -71,11 +77,11 @@ const Home = ({ previousRooms }) => {
   }, []);
 
   return (
-    <div className="w-full h-[92.5vh] mx-auto overflow-y-scroll">
+    <div className="w-full h-[92.5vh] mx-auto">
       {/* <div className="w-1/2 bg-white border-r border-gray-400">
         <OngoingContestsComponent />
       </div> */}
-      <div className="w-full h-[94vh] mx-auto bg-white border-l border-gray-400 overflow-y-scroll">
+      <div className="w-full h-[94vh] mx-auto bg-white border-l border-gray-400">
         {/* CARDS */}
         <div className="font-semibold font-mono text-2xl text-gray-600 w-full my-5">
           <p className="w-11/12 mx-auto tracking-wider">Contest Properties</p>
@@ -93,9 +99,9 @@ const Home = ({ previousRooms }) => {
             to="/contest/all"
             className="w-96 h-52 rounded-3xl text-black bg-cyan-300 hover:text-black place-items-center p-5 hover:scale-105 transition-all duration-300 bg-repeat-round"
             style={{
-              backgroundImage:
-                // 'url("https://i.pinimg.com/originals/50/87/f7/5087f7b4124dcccf044f88005c5138b5.gif")',
-                'url("https://i.pinimg.com/originals/c2/43/60/c24360c72a275d401f4066b440e79a6f.gif")',
+              backgroundImage: `url(${viewContestsGif3})`,
+              // 'url("https://i.pinimg.com/originals/50/87/f7/5087f7b4124dcccf044f88005c5138b5.gif")',
+              // 'url("https://i.pinimg.com/originals/c2/43/60/c24360c72a275d401f4066b440e79a6f.gif")',
               // `url(${viewContestsGif})`,
               // `url(${viewContestsGif2})`,
             }}
@@ -134,8 +140,8 @@ const Home = ({ previousRooms }) => {
             className="w-96 h-52 rounded-3xl text-white bg-gradient-to-b from-cyan-600 to-cyan-400 hover:text-black place-items-center p-2 px-4 hover:scale-105 transition-all duration-300 bg-no-repeat bg-cover border border-cyan-700 relative"
             // onClick={() => alert("clicked")}
             style={{
-              backgroundImage:
-                'url("https://i.pinimg.com/originals/7f/b7/8a/7fb78a1d3212f65e72c33a5af4af6c3b.gif"',
+              backgroundImage: `url(${manageContestGif})`,
+              // 'url("https://i.pinimg.com/originals/7f/b7/8a/7fb78a1d3212f65e72c33a5af4af6c3b.gif"',
             }}
           >
             <div className="w-full flex flex-col mx-auto justify-center place-items-center gap-y-1 text-[#3a88b5]">
@@ -174,10 +180,9 @@ const Home = ({ previousRooms }) => {
           </div>
           <Link
             to={"/contest/create"}
-            className="w-96 h-52 rounded-3xl text-cyan-700 bg-gradient-tob from-sky-700 to-sky-400 hover:text-gray-700 p-2 px-4 hover:scale-105 transition-all duration-300 bg-no-repeat bg-cover border border-cyan-700 relative"
+            className="w-96 h-52 rounded-3xl text-cyan-700 hover:text-gray-700 p-2 px-4 hover:scale-105 transition-all duration-300 bg-no-repeat bg-cover border border-cyan-700 relative"
             style={{
-              backgroundImage:
-                'url("https://i.pinimg.com/originals/85/04/77/850477fed08bfe98598082bcd309ce70.gif")',
+              backgroundImage: `url(${createContestGif})`,
             }}
           >
             <div className="w-full h-14 flex flex-col mx-auto justify-between place-items-center">
@@ -205,9 +210,8 @@ const Home = ({ previousRooms }) => {
             to={"/challenge/create"}
             className="w-96 h-52 rounded-3xl text-gray-600 bg-gradient-to- from-emerald-700 to-emerald-400 hover:text-black place-items-center px-3 py-2 hover:scale-105 transition-all duration-300 bg-no-repeat bg-cover border border-gray-300"
             style={{
-              backgroundImage:
-                // 'url("https://i.pinimg.com/originals/10/88/13/108813b4ca5d4767cc4a6bafe030a5e9.gif")',
-                `url(${createChallengeGif2})`,
+              backgroundImage: `url(${createChallengeGif2})`,
+              // 'url("https://i.pinimg.com/originals/10/88/13/108813b4ca5d4767cc4a6bafe030a5e9.gif")',
               // backgroundImage:
               // 'url("https://i.pinimg.com/originals/20/36/4f/20364f89675f128c63fb4e86c85e372b.gif")',
             }}
@@ -225,8 +229,8 @@ const Home = ({ previousRooms }) => {
             to={"/challenge/all"}
             className="w-96 h-52 rounded-3xl text-white hover:text-black place-items-center px-3 py-2 hover:scale-105 transition-all duration-300 bg-repeat-round bg-contain border border-gray-300"
             style={{
-              backgroundImage:
-                'url("https://i.pinimg.com/originals/02/a5/c8/02a5c833657954c9bbb729d9f74982cf.gif")',
+              backgroundImage: `url(${viewChallengesGif})`,
+              // 'url("https://i.pinimg.com/originals/02/a5/c8/02a5c833657954c9bbb729d9f74982cf.gif")',
               // `url(${createChallengeGif})`,
               // 'url("https://i.pinimg.com/originals/94/bd/8c/94bd8ce9323b31164a02da507fca4aa5.gif")',
               // 'url("https://i.pinimg.com/originals/2d/62/23/2d62230ef5cc7d0af0eb7868c0cf4ac4.gif")',

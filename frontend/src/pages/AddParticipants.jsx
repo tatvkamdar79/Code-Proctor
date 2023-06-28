@@ -167,6 +167,10 @@ const AddParticipants = ({ contest, setContest }) => {
     const file = event.target.files[0];
     const reader = new FileReader();
 
+    if (file) {
+      reader.readAsText(file);
+    }
+
     reader.onload = (e) => {
       const contents = e.target.result;
       console.log(contents);
@@ -212,7 +216,6 @@ const AddParticipants = ({ contest, setContest }) => {
       // console.log(contents.split("\n")[0].split(",")[0].replace(/"/g, ""));
       // parseCSV(contents);
     };
-
     // console.log(file && reader.readAsText(file));
     // console.log(file);
   };

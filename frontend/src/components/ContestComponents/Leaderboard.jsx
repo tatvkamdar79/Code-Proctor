@@ -329,7 +329,7 @@ const Leaderboard = ({ contest, setContest }) => {
               className="bg-green-600 hover:bg-green-700 hover:scale-105 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300"
               onClick={() => setShowCreateCodePairSessionsModal(true)}
             >
-              Create Code Pair Sessions
+              Create Bulk Code Pair Sessions
             </button>
           </div>
         )}
@@ -387,6 +387,7 @@ const Leaderboard = ({ contest, setContest }) => {
       {showCreateCodePairSessionsModal && (
         <div className="absolute top-0 left-0 w-screen h-screen">
           <CreateCodePairSessionModal
+            contest={contest}
             submissions={submissions && submissions.map(({ email }) => email)}
             close={setShowCreateCodePairSessionsModal}
           />

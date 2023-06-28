@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full h-16 border border-black bg-black text-white">
+    <nav className="w-full h-16 border border-black bg-black text-white sticky top-0">
       <div className="w-11/12 h-full flex justify-between place-items-center mx-auto">
         <div className="flex gap-x-32">
           <p className="font-semibold text-3xl font-mono py-3">D B C</p>
