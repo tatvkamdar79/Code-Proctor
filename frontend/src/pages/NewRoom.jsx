@@ -115,6 +115,13 @@ const NewRoom = (props) => {
     "23:45",
   ];
 
+  const interviewers = [
+    { name: "Tatva K", email: "tatva.k@darwinbox.io" },
+    { name: "Aman J", email: "aman.j@darwinbox.io" },
+    { name: "Tatv K", email: "kamdartatv1@gmail.com" },
+    { name: "TK", email: "kamdartatv79@gmail.com" },
+  ];
+
   const handleSubmit = () => {
     if (
       roomName.length == 0 ||
@@ -180,10 +187,30 @@ const NewRoom = (props) => {
                   required
                   className="w-60 px-4 py-2 border rounded-md"
                 />
+                <div className="flex flex-col justify-center place-items-center mx-3">
+                  <p className="text-sm">Select From Interviewers</p>
+                  <select
+                    name="interivewers"
+                    id="interviewers"
+                    onChange={(e) => {
+                      console.log(e.target);
+                      let interviewerName = interviewers.filter(
+                        ({ name, email }) => email === e.target.value
+                      )[0].name;
+                      setInterviewer(interviewerName);
+                      setInterviewerEmail(e.target.value);
+                    }}
+                    className="px-2 py-1 mx-3 w-full"
+                  >
+                    {interviewers.map(({ name, email }, index) => (
+                      <option value={email}>{name}</option>
+                    ))}
+                  </select>
+                </div>
               </label>
             </div>
 
-            <div className="py-2 w-fit">
+            <div className="py-1 w-fit">
               <label className="flex place-items-center">
                 <p className="w-48 font-medium text-gray-600">
                   Email: <span className="text-red-500">*</span>
@@ -237,7 +264,7 @@ const NewRoom = (props) => {
             <p className="text-2xl font-semibold font-mono text-center border-b border-gray-300">
               Interview
             </p>
-            <div className="py-2 w-fit">
+            <div className="py-2.5 w-fit">
               <label className="flex place-items-center">
                 <p className="w-48 font-medium text-gray-600">
                   Interview Date<span className="text-red-500">*</span>

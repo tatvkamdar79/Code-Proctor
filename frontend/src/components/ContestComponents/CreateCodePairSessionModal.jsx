@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineCheck } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { baseURL } from "../../config/config";
 import { getCookie } from "../../Hooks/useCookies";
 
@@ -12,6 +12,7 @@ const CreateCodePairSessionModal = ({ contest, submissions, close }) => {
   const [codePairSessions, setCodePairSession] = useState([]);
   const [errorIndexes, setErrorIndexes] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPostRequestModel, setShowPostRequestModel] = useState(false);
 
   useEffect(() => {
     if (submissions) {
@@ -37,12 +38,16 @@ const CreateCodePairSessionModal = ({ contest, submissions, close }) => {
 
   const interviewers = ["tatva.k@darwinbox.io", "aman.j@darwinbox.io"];
 
-  const createCodePairSessionsInBulk = async () => {
+  const createCodePairSessionsInBulk = async (selectedIndexes) => {
     console.log(codePairSessions);
     let jwt = getCookie("JWT_AUTH");
     if (jwt.length === 0) {
       navigate("/login");
       return;
+    }
+
+    if (!validateCodePairSessions(selectedIndexes)) {
+      return false;
     }
 
     let contestName = contest.contestName;
@@ -55,12 +60,17 @@ const CreateCodePairSessionModal = ({ contest, submissions, close }) => {
       codePairSessions,
       title: `Code Pair Session for ${contestName}`,
     };
-
     const response = axios.post(baseURL, data);
+    setTimeout(() => {
+      setShowPostRequestModel(true);
+    }, 1000);
   };
 
   const validateCodePairSessions = (sessionIndexes) => {
-    if (sessionIndexes.length === 0) return false;
+    console.log(sessionIndexes);
+    if (sessionIndexes === undefined || sessionIndexes.length === 0) {
+      return false;
+    }
     for (let sessionIndex of sessionIndexes) {
       if (sessionIndex === -1) continue;
       if (
@@ -269,24 +279,19 @@ const CreateCodePairSessionModal = ({ contest, submissions, close }) => {
           <button
             className="font-semibold font-mono text-xl px-10 py-2 bg-green-600 rounded-lg text-gray-900 hover:px-32 hover:py-3.5 transition-all duration-500 hover:text-white"
             onClick={() => {
-              console.log(selected);
-              console.log(
-                selected.map((_, index) => {
-                  if (_ === 1) return index;
-                  else return -1;
-                })
-              );
-              if (
-                validateCodePairSessions(
-                  selected.map((_, index) => {
-                    if (_ === 1) return index;
-                    else return -1;
-                  })
-                )
-              ) {
+              console.log("selected", selected);
+              let selectedIndexes = [];
+              for (let i = 0; i < selected.length; i++) {
+                if (selected[i] === 1) selectedIndexes.push(i);
+              }
+              if (selectedIndexes.length === 0) {
+                return false;
+              }
+              console.log("Selected Indexes", selectedIndexes);
+              if (validateCodePairSessions(selectedIndexes)) {
                 console.log("All sessions Validated");
                 setErrorMessage("");
-                createCodePairSessionsInBulk();
+                createCodePairSessionsInBulk(selectedIndexes);
               } else {
                 console.log("Please fill out all the fields");
                 setErrorMessage("Please fill out all the fields");
@@ -297,6 +302,37 @@ const CreateCodePairSessionModal = ({ contest, submissions, close }) => {
           </button>
         </section>
       </div>
+      {showPostRequestModel && (
+        <div className="absolute w-1/3 h-1/3 bg-green-50 border-2 border-gray-600 rounded-xl p-3 flex flex-col justify-between py-10">
+          <div className="w-full">
+            <p className="text-2xl font-semibold font-mono text-center flex flex-col">
+              <span className="text-green-600 text-2xl w-full">
+                Code pair rooms are being created.
+              </span>
+              <br />
+              <span className="text-cyan-600 w-full">
+                Please feel free to work during this time.
+              </span>
+            </p>
+          </div>
+          <div className="w-full flex justify-evenly place-items-center my-4">
+            <button
+              className="px-4 py-2 rounded-lg bg-green-600 text-white font-semibold font-mono hover:scale-110 transition-all duration-300"
+              onClick={() => {
+                close(false);
+              }}
+            >
+              Stay on Leaderboard
+            </button>
+            <Link
+              to={"/codepair"}
+              className="px-4 py-2 rounded-lg bg-cyan-600 text-white font-semibold font-mono hover:scale-110 transition-all duration-300"
+            >
+              Take me to Code Pair Home
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
