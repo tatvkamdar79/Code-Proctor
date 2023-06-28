@@ -176,7 +176,7 @@ export default function PreTest() {
                     <li className="ml-7">
                       <p className="text-md mb-24 text-[#39444E]">
                         This is a sample test to help you get familiar with the
-                        HackerRank test environment.
+                        Darwinbox test environment.
                       </p>
                     </li>
                   </ol>
@@ -257,7 +257,7 @@ export default function PreTest() {
                               I agree not to copy code from any source,
                               including websites, books, or colleagues. I may
                               refer to language documentation or an IDE of my
-                              choice. I agree not to copy or share HackerRank's
+                              choice. I agree not to copy or share Darwinbox's
                               copyrighted assessment content or questions on any
                               website or forum.
                             </label>
@@ -277,7 +277,7 @@ export default function PreTest() {
                           </div>
                           <div>
                             <label htmlFor="agreement2" className="text-md">
-                              I agree to HackerRank's Terms of Service and
+                              I agree to Darwinbox's Terms of Service and
                               Privacy policy.
                             </label>
                           </div>
