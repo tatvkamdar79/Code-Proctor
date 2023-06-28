@@ -160,6 +160,7 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
 
   const handleDifficultyChange = (e) => {
     console.log(e.target.innerText);
+    let newDifficulty;
     if (difficulty == e.target.innerText) {
       setDifficulty("");
     } else {
@@ -168,6 +169,9 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
   };
 
   useEffect(() => {
+    if (searchResults === null) {
+      return;
+    }
     if (difficulty == "") {
       setVisibleQuestions(problems);
       setSearchResults(problems);
