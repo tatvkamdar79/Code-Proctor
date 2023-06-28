@@ -10,17 +10,70 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-monokai";
 
-const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
+const IndividualContestProgressReport = ({
+  contest,
+  setOpen,
+  candidateData,
+}) => {
   const [selected, setSelected] = useState(null);
   const [hoveringOverQuestionIndex, setHoveringOverQuestionIndex] = useState();
   const [hoveredText, setHoveredText] = useState("");
   const viewCodeRef = useRef(null);
+  const [unanswerQuestions, setUnansweredQuestions] = useState([]);
 
   useEffect(() => {
     if (selected !== null && viewCodeRef.current) {
       viewCodeRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [selected]);
+
+  console.log(candidateData);
+  console.log(contest.questions);
+
+  useEffect(() => {
+    if (candidateData.questions.length !== contest.questions.length) {
+      let contestQuestions = contest.questions.map((q) => q.title);
+      console.log("CQs", contestQuestions);
+      console.log(candidateData.questions);
+
+      let candidateQuestions = [];
+      for (let i = 0; i < candidateData.questions.length; i++) {
+        candidateQuestions.push(candidateData.questions[i].questionName);
+      }
+
+      let localUnanswerQuestions = [];
+      for (let i = 0; i < contestQuestions.length; i++) {
+        let questionName = contestQuestions[i];
+        if (candidateQuestions.indexOf(questionName) === -1) {
+          let temp = {
+            questionName: questionName,
+            timeSpentOnQuestion: 0,
+            code: "NA",
+            codeExecutionTime: 0,
+            correctSubmissions: 0,
+            incorrectSubmissions: 0,
+            totalTestCases: 0,
+            language: "python3",
+            testCasesPassed: 0,
+          };
+          localUnanswerQuestions.push(temp);
+        }
+      }
+      setUnansweredQuestions(localUnanswerQuestions);
+    }
+  }, []);
+
+  // let x = {
+  //   questionName: "Is Palindrome?",
+  //   timeSpentOnQuestion: 41143,
+  //   code: 'x = input()\nif(x == x[::-1]):\n    print("True")\nelse:\n    print("False")',
+  //   codeExecutionTime: 20,
+  //   correctSubmissions: 1,
+  //   incorrectSubmissions: 0,
+  //   totalTestCases: 4,
+  //   language: "python",
+  //   testCasesPassed: 4,
+  // };
 
   const totalQuestions = candidateData.questions.length;
   const questionNames = candidateData.questions.map(
@@ -145,13 +198,19 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
           <p className="flex justify-start place-items-center font-mono font-semibold w-5/6 mx-auto text-xl underline underline-offset-2">
             Time Analysis
           </p>
-          <Chart
-            options={chartOptions}
-            series={chartSeries}
-            type="donut"
-            width={420}
-            height={400}
-          />
+          {contest.questions.length === unanswerQuestions.length ? (
+            <p className="w-5/6 mx-auto h-80 font-semibold text-4xl text-center py-10">
+              No Data To Display
+            </p>
+          ) : (
+            <Chart
+              options={chartOptions}
+              series={chartSeries}
+              type="donut"
+              width={420}
+              height={400}
+            />
+          )}
           <div className="w-5/6 mx-auto">
             <p className="font-medium text-xl underline">Basic Details</p>
             <div className="flex flex-col gap-y-1 mx-2">
@@ -234,6 +293,39 @@ const IndividualContestProgressReport = ({ setOpen, candidateData }) => {
                   </td>
                   <td className="font-semibold text-lg font-mono px-6 py-4 border-2 border-green-500 border-t-0">
                     {Math.round(question.timeSpentOnQuestion / (1000 * 60))}{" "}
+                    mins
+                  </td>
+                  <td className="font-semibold text-lg font-mono px-6 py-4 border-2 border-green-500 border-t-0">
+                    {question.correctSubmissions}
+                  </td>
+                  <td className="font-semibold text-lg font-mono px-6 py-4 border-2 border-green-500 border-t-0">
+                    {question.incorrectSubmissions}
+                  </td>
+                  <td className="font-semibold text-lg font-mono px-6 py-4 border-2 border-green-500 border-t-0">
+                    {question.testCasesPassed} / {question.totalTestCases}
+                  </td>{" "}
+                  <td className="font-semibold text-lg font-mono px-6 py-4 border-2 border-green-500 border-t-0">
+                    {question.codeExecutionTime} ms
+                  </td>
+                </tr>
+              ))}
+              {unanswerQuestions.map((question, index) => (
+                <tr key={index}>
+                  <td className="font-semibold text-lg font-mono px-6 py-4 border-2 border-green-500 border-t-0">
+                    <div className="w-full flex flex-col">
+                      <div className="flex">
+                        <span className="w-6">{index + 1}.</span>
+                        <p>{question.questionName}</p>
+                      </div>
+                      <button
+                        className={`text-sm text-gray-100 rounded-md p-1 outline-none hover:scale-110 hover:bg-green-600 transition-all duration-300 shadow-lg shadow-gray-300 bg-stone-900`}
+                      >
+                        No Code
+                      </button>
+                    </div>
+                  </td>
+                  <td className="font-semibold text-lg font-mono px-6 py-4 border-2 border-green-500 border-t-0">
+                    {Math.round(question.timeSpentOnQuestion / (1000 * 60))}
                     mins
                   </td>
                   <td className="font-semibold text-lg font-mono px-6 py-4 border-2 border-green-500 border-t-0">

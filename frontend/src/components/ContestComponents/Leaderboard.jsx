@@ -385,6 +385,7 @@ const Leaderboard = ({ contest, setContest }) => {
       </div> */}
       {showIndividualReport && (
         <IndividualContestProgressReport
+          contest={contest}
           setOpen={setShowIndividualReport}
           candidateData={candidateData}
         />
