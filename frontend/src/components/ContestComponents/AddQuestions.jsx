@@ -14,9 +14,12 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
   const [selectedQuestions, setSelectedQuestions] = useState(contest.questions);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState(null);
+  const [visibleQuestions, setVisibleQuestions] = useState([]);
   const [problems, setProblems] = useState([]);
   const [changed, setChanged] = useState(false);
   const [savingChanges, setSavingChanges] = useState(false);
+  const [difficulty, setDifficulty] = useState("");
+  const [searchByTags, setSearchByTags] = useState(false);
 
   useEffect(() => {
     let jwt = getCookie("JWT_AUTH");
@@ -33,6 +36,7 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
       .then((response) => {
         console.log(response.data.data.allProblems);
         setProblems(response.data.data.allProblems);
+        setVisibleQuestions(response.data.data.allProblems);
         setSearchResults(response.data.data.allProblems);
       })
       .catch((err) => console.log(err));
@@ -112,10 +116,30 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
   };
 
   const handleSearch = (query) => {
-    const results = problems.filter((question) =>
-      question.title.toLowerCase().includes(query.toLowerCase())
-    );
-    setSearchResults(results);
+    if (query == "") {
+      setSearchResults(visibleQuestions);
+      return;
+    }
+    if (searchByTags) {
+      const tags = query.split(",");
+      for (let i = 0; i < tags.length; i++) {
+        tags[i] = tags[i].toLowerCase();
+      }
+      const results = visibleQuestions.filter((question) => {
+        for (const tag of question.tags) {
+          if (tags.indexOf(tag.toLowerCase()) != -1) {
+            return true;
+          }
+        }
+        return false;
+      });
+      setSearchResults(results);
+    } else {
+      const results = visibleQuestions.filter((question) =>
+        question.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchResults(results);
+    }
   };
 
   const handleAddQuestion = (question) => {
@@ -133,6 +157,30 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
       prevQuestions.filter((q) => q._id.$oid !== question._id.$oid)
     );
   };
+
+  const handleDifficultyChange = (e) => {
+    console.log(e.target.innerText);
+    if (difficulty == e.target.innerText) {
+      setDifficulty("");
+    } else {
+      setDifficulty(e.target.innerText);
+    }
+  };
+
+  useEffect(() => {
+    if (difficulty == "") {
+      setVisibleQuestions(problems);
+      setSearchResults(problems);
+    } else {
+      let lowerCaseDifficulty = difficulty.toLowerCase();
+      console.log(lowerCaseDifficulty);
+      const newProblems = problems.filter(
+        (problem) => problem.difficulty.toLowerCase() == lowerCaseDifficulty
+      );
+      setVisibleQuestions(newProblems);
+      setSearchResults(newProblems);
+    }
+  }, [difficulty]);
 
   return (
     <section className="w-11/12 mx-auto">
@@ -156,7 +204,52 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
               className="w-full h-full mx-auto px-4 py-2 border-2 border-gray-400 rounded-md outline-green-600"
             />
           </div>
-          <div className="flex w-full h-full justify-end pb-2">
+          <div class="w-[90%] flex justify-between ml-9 mt-2">
+            <div className="flex items-center space-x-4 w-1/2">
+              <label class="flex items-center">
+                <input type="button" class="hidden" />
+                <button
+                  class="py-2 px-4 rounded-md bg-green-500 text-white font-medium focus:bg-green-700 "
+                  onClick={handleDifficultyChange}
+                >
+                  Easy
+                </button>
+              </label>
+              <label class="flex items-center">
+                <input type="button" class="hidden" />
+                <button
+                  class="py-2 px-4 rounded-md bg-orange-500 text-white font-medium focus:bg-orange-700 "
+                  onClick={handleDifficultyChange}
+                >
+                  Medium
+                </button>
+              </label>
+              <label class="flex items-center">
+                <input type="button" class="hidden" />
+                <button
+                  class="py-2 px-4 rounded-md bg-red-500 text-white font-medium focus:bg-red-700 "
+                  onClick={handleDifficultyChange}
+                >
+                  Hard
+                </button>
+              </label>
+            </div>
+            <div className="flex">
+              <label class="flex">
+                <input type="button" class="hidden" />
+                <button
+                  class={`py-2 px-4 rounded-md ${
+                    searchByTags ? "bg-green-600" : "bg-green-500"
+                  } text-white font-medium`}
+                  onClick={(e) => setSearchByTags(!searchByTags)}
+                >
+                  Search by tags?
+                </button>
+              </label>
+            </div>
+          </div>
+
+          <div className="flex w-full justify-end pb-2 h-[35.5vh]">
             <div
               className={`w-[95%] h-[97%] mt-3.5 justify-self-end bg-white px-4 overflow-hidden ${
                 searchResults &&
@@ -203,7 +296,7 @@ const CreateContestAddQuestions = ({ contest, setContest }) => {
             </div>
           </div>
         </div>
-        <div className="w-full h-[50vh] border-gray-300 shadow-lg border overflow-hidden rounded-xl">
+        <div className="w-full h-[55vh] border-gray-300 shadow-lg border overflow-hidden rounded-xl">
           <div className="bg-gray-200 px-5 rounded-t-lg">
             <div className="flex justify-between place-items-center">
               <p className="font-semibold text-3xl font-mono">
