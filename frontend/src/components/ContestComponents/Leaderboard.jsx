@@ -335,42 +335,47 @@ const Leaderboard = ({ contest, setContest }) => {
         )}
       </div>
 
-      <table
-        className={`table-auto my-10 ${
-          Object.keys(suspiciousUsers).length !== 0 ? "" : "hidden"
-        }`}
-      >
-        <thead>
-          <tr className="text-xl font-semibold text-center text-gray-600">
-            <td className="border w-40 px-4 py-2">IP</td>
-            <td className="border w-40 px-4 py-2">Users</td>
-          </tr>
-        </thead>
-        <tbody>
-          {suspiciousUsers &&
-            Object.keys(suspiciousUsers).map((ip) => {
-              return (
-                <tr>
-                  <td className="border px-4 py-2 text-lg font-semibold w-36">
-                    {ip}
-                  </td>
-                  <td className="border px-4 py-2 font-serif font-semibold w-48">
-                    <ol className="flex flex-col gap-y-1">
-                      {suspiciousUsers[ip].map((user, index) => (
-                        <li
-                          key={index}
-                          className="px-1 border py-1 rounded-lg bg-gray-100 cursor-pointer hover:scale-105 transition-all duration-300"
-                        >
-                          {user}
-                        </li>
-                      ))}
-                    </ol>
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
+      <div className="my-10">
+        <p className="font-semibold font-mono text-2xl text-orange-600 underline">
+          Suspicious IP's
+        </p>
+        <table
+          className={`table-auto mb-10 ${
+            Object.keys(suspiciousUsers).length !== 0 ? "" : "hidden"
+          }`}
+        >
+          <thead>
+            <tr className="text-xl font-semibold text-center text-gray-600">
+              <td className="border border-gray-400 w-40 px-4 py-2">IP</td>
+              <td className="border border-gray-400 w-40 px-4 py-2">Users</td>
+            </tr>
+          </thead>
+          <tbody>
+            {suspiciousUsers &&
+              Object.keys(suspiciousUsers).map((ip) => {
+                return (
+                  <tr>
+                    <td className="border border-gray-300 px-4 py-2 text-lg font-semibold w-36">
+                      {ip}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 font-serif font-semibold w-48">
+                      <ol className="flex flex-col gap-y-1">
+                        {suspiciousUsers[ip].map((user, index) => (
+                          <li
+                            key={index}
+                            className="px-1 border border-gray-300 py-1 rounded-lg bg-gray-100 cursor-pointer hover:scale-105 transition-all duration-300"
+                          >
+                            {user}
+                          </li>
+                        ))}
+                      </ol>
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+      </div>
 
       {/* <div className="w-1/6 h-screen">
         {Object.keys(suspiciousUsers).map((ip) => {

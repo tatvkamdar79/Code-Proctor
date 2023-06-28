@@ -172,7 +172,9 @@ const Test = () => {
         if (localStorage.getItem("warning")) {
           if (Number(localStorage.getItem("warning")) > 1) {
             console.log("SWITCHED TAB", contest);
+            setSubmittingTest(true);
             await handleSwitchTabSubmit();
+            setSubmittingTest(false);
             navigate("/thank-you-for-taking-the-test");
             return;
           }
