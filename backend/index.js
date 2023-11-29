@@ -8,6 +8,24 @@ const bodyParser = require("body-parser");
 const exec = require("child_process").exec;
 const axios = require("axios");
 
+const url = 'mongodb+srv://aman:aman123@cluster0.nwokpx1.mongodb.net/?retryWrites=true&w=majority';
+
+const connectToDatabase = async () => {
+    try {
+        const db = await mongoose.connect(url);
+        console.log('Successfully connected to database');
+        return db;
+    } catch (err) {
+        console.log('error connecting to db', err);
+    }
+};
+
+const disconnectDatabase = async () => {
+    mongoose.connection.close();
+};
+
+connectToDatabase();
+
 app.use(cors());
 app.use(bodyParser());
 
@@ -63,29 +81,8 @@ server.listen(9000, () => {
   console.log("SERVER IS RUNNING");
 });
 
-// app.get("/", (req, res) => {
-//   res.send("ljkjdflksjfds");
-// });
-
-// app.post("/api/submit", (req, res) => {
-//   console.log(req.body);
-//   fs.writeFile("test.py", req.body.code, (err) => {
-//     if (err) throw err;
-//     else {
-//       console.log("The file is updated with the given data");
-//     }
-//   });
-
-//   exec("python3 test.py", (err, stdout, stderr) => {
-//     if (err) {
-//       console.log(err);
-//       res.json(stderr);
-//     } else {
-//       console.log(stderr);
-//       res.json({ output: stdout });
-//     }
-//   });
-// });
+// Routes
+app.use('/api/room', require('./routes/room.routes'));
 
 app.get("/", async (req, res) => {
   // console.log(req.body);
